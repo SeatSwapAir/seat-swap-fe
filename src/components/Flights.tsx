@@ -134,6 +134,8 @@ const Flights = () => {
     }
     setFlights(prevFlights)
   }
+
+ 
   return (
     <Card>
       <CardContent>
@@ -141,7 +143,7 @@ const Flights = () => {
           Flights
         </Typography>
         {flights.map((flight, index) => (
-          <FlightCard key={index} flight={flight} handleDelete={handleDelete} handleRemoveFlight={handleRemoveFlight}/>
+          <FlightCard key={index} flight={flight} handleDelete={handleDelete} handleRemoveFlight={handleRemoveFlight} />
         ))}
       </CardContent>
     </Card>

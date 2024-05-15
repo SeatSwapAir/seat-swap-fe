@@ -3,8 +3,10 @@ import CardContent from '@mui/material/CardContent';
 import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { FlightCardProps } from '../../lib/types';
+import { useState } from 'react';
 
 export default function FlightCard({
   flight: {
@@ -20,6 +22,9 @@ export default function FlightCard({
   handleDelete,
   handleRemoveFlight,
 }: FlightCardProps) {
+
+  const [showEditSeat, setShowEditSeat] = useState('');
+
   return (
     <Card>
       <CardContent>
@@ -46,8 +51,21 @@ export default function FlightCard({
                 onClick={handleDelete}
                 value={seat.number}
               >
+                
                 <DeleteIcon />
               </Button>
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={() => setShowEditSeat(seat.number)}
+                value={seat.number}
+              >
+                <EditIcon />
+                Edit Seats
+              </Button>
+              {showEditSeat === seat.number &&
+          <div>Hello</div>
+          }
             </Typography>
           ))}
           <Typography variant='h5'>Preferences</Typography>
