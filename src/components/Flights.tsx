@@ -123,6 +123,17 @@ const Flights = () => {
       });
     });
   };
+  const handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    const flightNumber = event.currentTarget.value;
+    let prevFlights = [...flights];
+    for (const flight of prevFlights) {
+      if (flight.flightNumber == flightNumber) {
+        let ind = prevFlights.indexOf(flight);
+        prevFlights.splice(ind, 1);
+      }
+    }
+    setFlights(prevFlights)
+  }
   return (
     <Card>
       <CardContent>
@@ -130,7 +141,7 @@ const Flights = () => {
           Flights
         </Typography>
         {flights.map((flight, index) => (
-          <FlightCard key={index} flight={flight} handleDelete={handleDelete} />
+          <FlightCard key={index} flight={flight} handleDelete={handleDelete} handleRemoveFlight={handleRemoveFlight}/>
         ))}
       </CardContent>
     </Card>

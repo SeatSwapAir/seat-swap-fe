@@ -28,4 +28,5 @@ export type FlightCardProps = {
     preferences: Preferences[];
   };
   handleDelete: React.MouseEventHandler<HTMLButtonElement>;
+  handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement>;
 };

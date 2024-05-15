@@ -18,6 +18,7 @@ export default function FlightCard({
     preferences,
   },
   handleDelete,
+  handleRemoveFlight,
 }: FlightCardProps) {
   return (
     <Card>
@@ -62,6 +63,15 @@ export default function FlightCard({
               {preference.sideBySide ? 'Side by Side' : 'No Side by Side'}
             </Typography>
           ))}
+          <Button
+                variant='contained'
+                color='primary'
+                onClick={handleRemoveFlight}
+                value={flightNumber}
+              >
+                <DeleteIcon />
+                Remove Flight
+              </Button>
         </Typography>
       </CardContent>
     </Card>
