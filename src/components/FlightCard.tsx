@@ -1,6 +1,9 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import { FlightCardProps } from '../../lib/types';
 
 export default function FlightCard({
@@ -14,6 +17,7 @@ export default function FlightCard({
     seats,
     preferences,
   },
+  handleDelete,
 }: FlightCardProps) {
   return (
     <Card>
@@ -35,6 +39,14 @@ export default function FlightCard({
             <Typography key={index} variant='body2'>
               Seat {seat.number} - {seat.location} - {seat.position} -{' '}
               {seat.extraLegroom ? 'Extra Legroom' : 'Standard Legroom'}
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={handleDelete}
+                value={seat.number}
+              >
+                <DeleteIcon />
+              </Button>
             </Typography>
           ))}
           <Typography variant='h5'>Preferences</Typography>
