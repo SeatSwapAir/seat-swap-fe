@@ -12,7 +12,8 @@ function App() {
     setIsLoggedIn(true);
   };
 
-  const handleLogout = () => {
+  const handleLogout: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
+    event.preventDefault()
     setIsLoggedIn(false);
   };
 
@@ -23,13 +24,12 @@ function App() {
         {isLoggedIn ? (
           <>
             <Flights />
-            <button onClick={handleLogout}>Logout</button>
           </>
         ) : (
           <button onClick={handleLogin}>Login</button>
         )}
       </div>
-      <Menu></Menu>
+      <Menu loggedInStatus={isLoggedIn} handleLogout={handleLogout}></Menu>
       <Routes>
         <Route path='/' element={<h1>Home</h1>} />
         <Route path='/login' element={<h1>Home</h1>} />
