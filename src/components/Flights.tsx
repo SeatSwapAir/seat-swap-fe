@@ -110,9 +110,19 @@ const mockFlights: FlightCardProps['flight'][] = [
     ],
   },
 ];
-
 const Flights = () => {
   const [flights, setFlights] = useState(mockFlights);
+  const handleDelete: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    const seatNumber = event.currentTarget.value;
+    setFlights((prevFlights) => {
+      return prevFlights.map((flight) => {
+        return {
+          ...flight,
+          seats: flight.seats.filter((seat) => seat.number !== seatNumber),
+        };
+      });
+    });
+  };
   return (
     <Card>
       <CardContent>
@@ -120,7 +130,7 @@ const Flights = () => {
           Flights
         </Typography>
         {flights.map((flight, index) => (
-          <FlightCard key={index} flight={flight} />
+          <FlightCard key={index} flight={flight} handleDelete={handleDelete} />
         ))}
       </CardContent>
     </Card>

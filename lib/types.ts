@@ -27,4 +27,5 @@ export type FlightCardProps = {
     seats: Seat[];
     preferences: Preferences[];
   };
+  handleDelete: React.MouseEventHandler<HTMLButtonElement>;
 };
