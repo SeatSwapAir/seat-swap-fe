@@ -2,11 +2,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { FlightCardProps } from '../../lib/types';
-import { useState } from 'react';
 
 export default function FlightCard({
   flight: {
