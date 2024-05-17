@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -72,13 +72,15 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-start',
 }));
 
-export default function PersistentDrawerRight({loggedInStatus, handleLogout}: {
-  loggedInStatus: boolean, handleLogout: React.MouseEventHandler<HTMLAnchorElement>
+export default function PersistentDrawerRight({
+  loggedInStatus,
+  handleLogout,
+}: {
+  loggedInStatus: boolean;
+  handleLogout: React.MouseEventHandler<HTMLAnchorElement>;
 }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -86,20 +88,23 @@ export default function PersistentDrawerRight({loggedInStatus, handleLogout}: {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  const handleLogoutAndClose = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    handleLogout(event);
+    setOpen(false);
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position='fixed' open={open}>
         <Toolbar>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
+          <Typography variant='h6' noWrap sx={{ flexGrow: 1 }} component='div'>
             Seat Swap
           </Typography>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
+            color='inherit'
+            aria-label='open drawer'
+            edge='end'
             onClick={handleDrawerOpen}
             sx={{ ...(open && { display: 'none' }) }}
           >
@@ -108,7 +113,7 @@ export default function PersistentDrawerRight({loggedInStatus, handleLogout}: {
         </Toolbar>
       </AppBar>
       <Main open={open}>
-      <DrawerHeader />
+        <DrawerHeader />
       </Main>
       <Drawer
         sx={{
@@ -118,49 +123,53 @@ export default function PersistentDrawerRight({loggedInStatus, handleLogout}: {
             width: drawerWidth,
           },
         }}
-        variant="persistent"
-        anchor="right"
+        variant='persistent'
+        anchor='right'
         open={open}
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            {theme.direction === 'rtl' ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
-            <Link to={`/account`}>
+          <Link to={`/account`} onClick={handleDrawerClose}>
             <ListItem key='account' disablePadding>
               <ListItemButton>
-              <ListItemIcon>
+                <ListItemIcon>
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary='Account' />
               </ListItemButton>
             </ListItem>
-            </Link>
-            <Link to ={`/reviews`}>
+          </Link>
+          <Link to={`/reviews`} onClick={handleDrawerClose}>
             <ListItem key='reviews' disablePadding>
               <ListItemButton>
-              <ListItemIcon>
+                <ListItemIcon>
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary='Reviews' />
               </ListItemButton>
             </ListItem>
-            </Link>
-            <Link to={`/defaultpreferences`}>
+          </Link>
+          <Link to={`/defaultpreferences`} onClick={handleDrawerClose}>
             <ListItem key={'defaultpreferences'} disablePadding>
               <ListItemButton>
-              <ListItemIcon>
+                <ListItemIcon>
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary='Your Preferences' />
               </ListItemButton>
             </ListItem>
-            </Link>
-            {loggedInStatus && (
-            <Link to={`/`} onClick={handleLogout}>
+          </Link>
+          {loggedInStatus && (
+            <Link to={`/`} onClick={handleLogoutAndClose}>
               <ListItem key={'logout'} disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
