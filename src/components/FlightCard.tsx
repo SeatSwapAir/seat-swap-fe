@@ -41,7 +41,11 @@ export default function FlightCard({
           <Typography variant='body1'>Arrival Time: {arrivalTime}</Typography>
           <Typography variant='h5'>Seats</Typography>
           {seats.map((seat, index) => (
-            <Seat key={index} seat={seat} handleDelete={handleDelete} />
+            <Seat
+              key={index + flightNumber}
+              seat={seat}
+              handleDelete={handleDelete}
+            />
           ))}
           <Typography variant='h5'>
             Preferences
@@ -50,20 +54,20 @@ export default function FlightCard({
               color='primary'
               onClick={() => setShowEditPref(!showEditPref)}
             >
-                        <EditIcon />
+              <EditIcon />
               Edit Preferences
             </Button>
           </Typography>
-            <Typography variant='body2'>
-              Location: {preferences.location} - Position: {preferences.position}{' '}
-              - {preferences.extraLegroom ? 'Extra Legroom' : 'Standard Legroom'}{' '}
-              -{' '}
-              {preferences.neighbouringRows
-                ? 'Neighbouring Rows'
-                : 'No Neighbouring Rows'}{' '}
-              - {preferences.sameRow ? 'Same Row' : 'Different Row'} -{' '}
-              {preferences.sideBySide ? 'Side by Side' : 'No Side by Side'}
-            </Typography>
+          <Typography variant='body2'>
+            Location: {preferences.location} - Position: {preferences.position}{' '}
+            - {preferences.extraLegroom ? 'Extra Legroom' : 'Standard Legroom'}{' '}
+            -{' '}
+            {preferences.neighbouringRows
+              ? 'Neighbouring Rows'
+              : 'No Neighbouring Rows'}{' '}
+            - {preferences.sameRow ? 'Same Row' : 'Different Row'} -{' '}
+            {preferences.sideBySide ? 'Side by Side' : 'No Side by Side'}
+          </Typography>
           {showEditPref && <div>Edit Preferences Here</div>}
           <Button
             variant='contained'
