@@ -24,6 +24,7 @@ export default function FlightCard({
 }: FlightCardProps) {
 
   const [showEditSeat, setShowEditSeat] = useState('');
+  const [showEditPref, setShowEditPref] = useState(false);
 
   return (
     <Card>
@@ -68,7 +69,13 @@ export default function FlightCard({
           }
             </Typography>
           ))}
-          <Typography variant='h5'>Preferences</Typography>
+          <Typography variant='h5'>Preferences
+          <Button
+          variant='contained'
+          color='primary'
+          onClick={() => setShowEditPref(!showEditPref)}
+          >Edit Preferences</Button>
+          </Typography>
           {preferences.map((preference, index) => (
             <Typography key={index} variant='body2'>
               Location: {preference.location} - Position: {preference.position}{' '}
@@ -81,6 +88,9 @@ export default function FlightCard({
               {preference.sideBySide ? 'Side by Side' : 'No Side by Side'}
             </Typography>
           ))}
+          {showEditPref &&
+          <div>Edit Preferences Here</div>
+          }
           <Button
                 variant='contained'
                 color='primary'
