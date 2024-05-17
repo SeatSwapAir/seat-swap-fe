@@ -34,7 +34,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         position: 'window',
       },
     ],
-    preferences: [
+    preferences: 
       {
         location: 'none',
         extraLegroom: false,
@@ -43,7 +43,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         sameRow: false,
         sideBySide: true,
       },
-    ],
+    
   },
   {
     flightNumber: 'W63321',
@@ -72,7 +72,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         position: 'middle',
       },
     ],
-    preferences: [
+    preferences: 
       {
         location: 'none',
         extraLegroom: false,
@@ -81,7 +81,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         sameRow: true,
         sideBySide: false,
       },
-    ],
+   
   },
   {
     flightNumber: 'U24832',
@@ -98,7 +98,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         position: 'middle',
       },
     ],
-    preferences: [
+    preferences: 
       {
         location: 'none',
         extraLegroom: false,
@@ -107,7 +107,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         sameRow: true,
         sideBySide: false,
       },
-    ],
+  
   },
 ];
 const Flights = () => {
@@ -134,7 +134,6 @@ const Flights = () => {
     }
     setFlights(prevFlights)
   }
-
  
   return (
     <Card>

@@ -23,9 +23,7 @@ export default function FlightCard({
   handleDelete,
   handleRemoveFlight,
 }: FlightCardProps) {
-  const [showEditSeat, setShowEditSeat] = useState('');
   const [showEditPref, setShowEditPref] = useState(false);
-
   return (
     <Card>
       <CardContent>
@@ -52,21 +50,20 @@ export default function FlightCard({
               color='primary'
               onClick={() => setShowEditPref(!showEditPref)}
             >
+                        <EditIcon />
               Edit Preferences
             </Button>
           </Typography>
-          {preferences.map((preference, index) => (
-            <Typography key={index} variant='body2'>
-              Location: {preference.location} - Position: {preference.position}{' '}
-              - {preference.extraLegroom ? 'Extra Legroom' : 'Standard Legroom'}{' '}
+            <Typography variant='body2'>
+              Location: {preferences.location} - Position: {preferences.position}{' '}
+              - {preferences.extraLegroom ? 'Extra Legroom' : 'Standard Legroom'}{' '}
               -{' '}
-              {preference.neighbouringRows
+              {preferences.neighbouringRows
                 ? 'Neighbouring Rows'
                 : 'No Neighbouring Rows'}{' '}
-              - {preference.sameRow ? 'Same Row' : 'Different Row'} -{' '}
-              {preference.sideBySide ? 'Side by Side' : 'No Side by Side'}
+              - {preferences.sameRow ? 'Same Row' : 'Different Row'} -{' '}
+              {preferences.sideBySide ? 'Side by Side' : 'No Side by Side'}
             </Typography>
-          ))}
           {showEditPref && <div>Edit Preferences Here</div>}
           <Button
             variant='contained'
