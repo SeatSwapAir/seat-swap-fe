@@ -34,16 +34,14 @@ const mockFlights: FlightCardProps['flight'][] = [
         position: 'window',
       },
     ],
-    preferences: 
-      {
-        location: 'none',
-        extraLegroom: false,
-        position: 'none',
-        neighbouringRows: true,
-        sameRow: false,
-        sideBySide: true,
-      },
-    
+    preferences: {
+      location: 'none',
+      extraLegroom: false,
+      position: 'none',
+      neighbouringRows: true,
+      sameRow: false,
+      sideBySide: true,
+    },
   },
   {
     flightNumber: 'W63321',
@@ -72,16 +70,14 @@ const mockFlights: FlightCardProps['flight'][] = [
         position: 'middle',
       },
     ],
-    preferences: 
-      {
-        location: 'none',
-        extraLegroom: false,
-        position: 'none',
-        neighbouringRows: false,
-        sameRow: true,
-        sideBySide: false,
-      },
-   
+    preferences: {
+      location: 'none',
+      extraLegroom: false,
+      position: 'none',
+      neighbouringRows: false,
+      sameRow: true,
+      sideBySide: false,
+    },
   },
   {
     flightNumber: 'U24832',
@@ -98,16 +94,14 @@ const mockFlights: FlightCardProps['flight'][] = [
         position: 'middle',
       },
     ],
-    preferences: 
-      {
-        location: 'none',
-        extraLegroom: false,
-        position: 'window',
-        neighbouringRows: true,
-        sameRow: true,
-        sideBySide: false,
-      },
-  
+    preferences: {
+      location: 'none',
+      extraLegroom: false,
+      position: 'window',
+      neighbouringRows: true,
+      sameRow: true,
+      sideBySide: false,
+    },
   },
 ];
 const Flights = () => {
@@ -123,7 +117,9 @@ const Flights = () => {
       });
     });
   };
-  const handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+  const handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
     const flightNumber = event.currentTarget.value;
     let prevFlights = [...flights];
     for (const flight of prevFlights) {
@@ -132,9 +128,9 @@ const Flights = () => {
         prevFlights.splice(ind, 1);
       }
     }
-    setFlights(prevFlights)
-  }
- 
+    setFlights(prevFlights);
+  };
+
   return (
     <Card>
       <CardContent>
@@ -142,7 +138,12 @@ const Flights = () => {
           Flights
         </Typography>
         {flights.map((flight, index) => (
-          <FlightCard key={index} flight={flight} handleDelete={handleDelete} handleRemoveFlight={handleRemoveFlight} />
+          <FlightCard
+            key={index + flight.flightNumber}
+            flight={flight}
+            handleDelete={handleDelete}
+            handleRemoveFlight={handleRemoveFlight}
+          />
         ))}
       </CardContent>
     </Card>
