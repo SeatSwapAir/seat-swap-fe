@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { FlightCardProps } from '../../lib/types';
 import { useState } from 'react';
+import Seat from './Seat';
 
 export default function FlightCard({
   flight: {
@@ -22,7 +23,6 @@ export default function FlightCard({
   handleDelete,
   handleRemoveFlight,
 }: FlightCardProps) {
-
   const [showEditSeat, setShowEditSeat] = useState('');
   const [showEditPref, setShowEditPref] = useState(false);
 
@@ -43,38 +43,17 @@ export default function FlightCard({
           <Typography variant='body1'>Arrival Time: {arrivalTime}</Typography>
           <Typography variant='h5'>Seats</Typography>
           {seats.map((seat, index) => (
-            <Typography key={index} variant='body2'>
-              Seat {seat.number} - {seat.location} - {seat.position} -{' '}
-              {seat.extraLegroom ? 'Extra Legroom' : 'Standard Legroom'}
-              <Button
-                variant='contained'
-                color='primary'
-                onClick={handleDelete}
-                value={seat.number}
-              >
-                
-                <DeleteIcon />
-              </Button>
-              <Button
-                variant='contained'
-                color='primary'
-                onClick={() => setShowEditSeat(seat.number)}
-                value={seat.number}
-              >
-                <EditIcon />
-                Edit Seats
-              </Button>
-              {showEditSeat === seat.number &&
-          <div>Hello</div>
-          }
-            </Typography>
+            <Seat key={index} seat={seat} handleDelete={handleDelete} />
           ))}
-          <Typography variant='h5'>Preferences
-          <Button
-          variant='contained'
-          color='primary'
-          onClick={() => setShowEditPref(!showEditPref)}
-          >Edit Preferences</Button>
+          <Typography variant='h5'>
+            Preferences
+            <Button
+              variant='contained'
+              color='primary'
+              onClick={() => setShowEditPref(!showEditPref)}
+            >
+              Edit Preferences
+            </Button>
           </Typography>
           {preferences.map((preference, index) => (
             <Typography key={index} variant='body2'>
@@ -88,18 +67,16 @@ export default function FlightCard({
               {preference.sideBySide ? 'Side by Side' : 'No Side by Side'}
             </Typography>
           ))}
-          {showEditPref &&
-          <div>Edit Preferences Here</div>
-          }
+          {showEditPref && <div>Edit Preferences Here</div>}
           <Button
-                variant='contained'
-                color='primary'
-                onClick={handleRemoveFlight}
-                value={flightNumber}
-              >
-                <DeleteIcon />
-                Remove Flight
-              </Button>
+            variant='contained'
+            color='primary'
+            onClick={handleRemoveFlight}
+            value={flightNumber}
+          >
+            <DeleteIcon />
+            Remove Flight
+          </Button>
         </Typography>
       </CardContent>
     </Card>
