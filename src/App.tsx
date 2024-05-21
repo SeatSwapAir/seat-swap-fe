@@ -7,7 +7,5 @@ function App() {
     <BrowserRouter>
       <AuthWrapper />
     </BrowserRouter>
-  );
-}
 
 export default App;
