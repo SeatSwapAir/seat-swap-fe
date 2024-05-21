@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -18,6 +18,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+
+import { AuthData } from '../auth/AuthWrapper';
 
 const drawerWidth = 240;
 
@@ -71,16 +73,12 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
   justifyContent: 'flex-start',
 }));
+// handleLogout: React.MouseEventHandler<HTMLAnchorElement>;
 
-export default function PersistentDrawerRight({
-  loggedInStatus,
-  handleLogout,
-}: {
-  loggedInStatus: boolean;
-  handleLogout: React.MouseEventHandler<HTMLAnchorElement>;
-}) {
+export default function Menu() {
+  const { user, logout } = AuthData();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -88,87 +86,84 @@ export default function PersistentDrawerRight({
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const handleLogoutAndClose = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    handleLogout(event);
+  const handleLogoutAndClose = () => {
+    logout();
     setOpen(false);
   };
 
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position='fixed' open={open}>
-        <Toolbar>
-          <Typography variant='h6' noWrap sx={{ flexGrow: 1 }} component='div'>
-            Seat Swap
-          </Typography>
-          <IconButton
-            color='inherit'
-            aria-label='open drawer'
-            edge='end'
-            onClick={handleDrawerOpen}
-            sx={{ ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Main open={open}>
-        <DrawerHeader />
-      </Main>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-          },
-        }}
-        variant='persistent'
-        anchor='right'
-        open={open}
+  const HamburgerMenuIcon = () => {
+    return (
+      <IconButton
+        color='inherit'
+        aria-label='open drawer'
+        edge='end'
+        onClick={handleDrawerOpen}
+        sx={{ ...(open && { display: 'none' }) }}
       >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          <Link to={`/account`} onClick={handleDrawerClose}>
-            <ListItem key='account' disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary='Account' />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-          <Link to={`/reviews`} onClick={handleDrawerClose}>
-            <ListItem key='reviews' disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary='Reviews' />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-          <Link to={`/defaultpreferences`} onClick={handleDrawerClose}>
-            <ListItem key={'defaultpreferences'} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary='Your Preferences' />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-          {loggedInStatus && (
+        <MenuIcon />
+      </IconButton>
+    );
+  };
+
+  const MenuDrawer = () => {
+    return (
+      <>
+        <Main open={open}>
+          <DrawerHeader />
+        </Main>
+        <Drawer
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+            },
+          }}
+          variant='persistent'
+          anchor='right'
+          open={open}
+        >
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            <Link to={`/account`} onClick={handleDrawerClose}>
+              <ListItem key='account' disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary='Account' />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+            <Link to={`/reviews`} onClick={handleDrawerClose}>
+              <ListItem key='reviews' disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary='Reviews' />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+            <Link to={`/defaultpreferences`} onClick={handleDrawerClose}>
+              <ListItem key={'defaultpreferences'} disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary='Your Preferences' />
+                </ListItemButton>
+              </ListItem>
+            </Link>
             <Link to={`/`} onClick={handleLogoutAndClose}>
               <ListItem key={'logout'} disablePadding>
                 <ListItemButton>
@@ -179,9 +174,24 @@ export default function PersistentDrawerRight({
                 </ListItemButton>
               </ListItem>
             </Link>
-          )}
-        </List>
-      </Drawer>
+          </List>
+        </Drawer>
+      </>
+    );
+  };
+
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position='fixed' open={open}>
+        <Toolbar>
+          <Typography variant='h6' noWrap sx={{ flexGrow: 1 }} component='div'>
+            Seat Swap
+          </Typography>
+          {user.isAuthenticated && <HamburgerMenuIcon />}
+        </Toolbar>
+      </AppBar>
+      {user.isAuthenticated && <MenuDrawer />}
     </Box>
   );
 }
