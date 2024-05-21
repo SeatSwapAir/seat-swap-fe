@@ -1,15 +1,11 @@
 import Flights from './Flights';
-
-const Home = ({
-  handleLogin,
-  isLoggedIn,
-}: {
-  handleLogin: () => void;
-  isLoggedIn: boolean;
-}) => {
+import { AuthData } from '../auth/AuthWrapper';
+import { Link } from 'react-router-dom';
+const Home = () => {
+  const { user } = AuthData();
   return (
     <div>
-      {isLoggedIn ? (
+      {user.isAuthenticated ? (
         <>
           <div style={{ marginTop: '5vh' }}></div>
           <Flights />
@@ -17,7 +13,10 @@ const Home = ({
       ) : (
         <>
           <h1 className='head1'>Welcome to SeatSwap!</h1>
-          <button onClick={handleLogin}>Login</button>
+
+          <Link to={'login'}>
+            <button>Login</button>
+          </Link>
         </>
       )}
     </div>
