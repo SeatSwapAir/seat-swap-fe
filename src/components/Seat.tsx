@@ -71,7 +71,7 @@ export default function Seat({
     setLegroom(event.target.checked);
   };
 
-  const doSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const doSubmit = () => {
     const newSeat = {
       number: rowNumber+seatLetter,
       location: location,
