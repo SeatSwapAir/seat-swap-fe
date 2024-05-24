@@ -78,12 +78,12 @@ export default function Seat({
       extraLegroom: legroom,
       position: position
     }
-    handleUpdateSeat(newSeat, flightNumber, seat.number)
+    handleUpdateSeat(newSeat, flightNumber, seat.number);
+    setShowEditSeat(false);
   }
 
   const seatForm = () => {
     return <>
-      <Typography variant='body2'>
       <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Row Number</InputLabel>
@@ -146,7 +146,6 @@ export default function Seat({
       onChange={toggleLegroom}/>} label="This seat has extra legroom" />
 
     <Button onClick={doSubmit}>Submit Changes</Button>
-      </Typography>
     </>
 }
 
