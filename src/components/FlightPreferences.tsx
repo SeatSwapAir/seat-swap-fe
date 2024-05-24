@@ -1,15 +1,19 @@
 import { useState } from 'react';
 
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, FormGroup, Typography } from '@mui/material';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import Switch from '@mui/material/Switch';
-import Checkbox from '@mui/material/Checkbox';
+import {
+  Box,
+  FormGroup,
+  Typography,
+  Button,
+  FormControl,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormLabel,
+  Switch,
+  Checkbox,
+} from '@mui/material';
 
 import { FlightCardProps, Preferences } from '../../lib/types';
 import { Location } from '../../lib/types';
@@ -26,7 +30,6 @@ export default function FlightPreferences({
   flightNumber: string;
   handleUpdatePreferences: FlightCardProps['handleUpdatePreferences'];
 }) {
-  console.log('🚀 ~ seats:', seats);
   const [showEditPref, setShowEditPref] = useState(false);
   const [location, setLocation] = useState<Location>(preferences.location);
   const [position, setPosition] = useState<Position>(preferences.position);
