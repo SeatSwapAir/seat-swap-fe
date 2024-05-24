@@ -15,10 +15,14 @@ import {
   Checkbox,
 } from '@mui/material';
 
-import { FlightCardProps, Preferences } from '../../lib/types';
-import { Location } from '../../lib/types';
-import { Position } from '../../lib/types';
-import { Seat } from '../../lib/types';
+import {
+  FlightCardProps,
+  Preferences,
+  Location,
+  Position,
+  Seat,
+} from '../../lib/types';
+
 export default function FlightPreferences({
   preferences,
   seats,
