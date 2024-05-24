@@ -36,11 +36,11 @@ export default function Seat({
   handleUpdateSeat: FlightCardProps['handleUpdateSeat']
 }) {
   const [showEditSeat, setShowEditSeat] = useState(false);
-  const [rowNumber, setRowNumber] = useState('');
-  const [seatLetter, setSeatLetter] = useState('');
-  const [location, setLocation] = useState<Location | ''>('');
-  const [position, setPosition] = useState<Position | ''>('');
-  const [legroom, setLegroom] = useState(false);
+  const [rowNumber, setRowNumber] = useState(seat.number.slice(0,-1));
+  const [seatLetter, setSeatLetter] = useState(seat.number.slice(-1));
+  const [location, setLocation] = useState<Location>(seat.location);
+  const [position, setPosition] = useState<Position>(seat.position);
+  const [legroom, setLegroom] = useState(seat.extraLegroom);
 
 
   const rows: Number[] = [];
