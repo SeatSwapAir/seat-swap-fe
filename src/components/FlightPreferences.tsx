@@ -14,11 +14,15 @@ import Checkbox from '@mui/material/Checkbox';
 import { Preferences } from '../../lib/types';
 import { Location } from '../../lib/types';
 import { Position } from '../../lib/types';
+import { Seat } from '../../lib/types';
 export default function FlightPreferences({
   preferences,
+  seats,
 }: {
   preferences: Preferences;
+  seats: Seat[];
 }) {
+  console.log('🚀 ~ seats:', seats);
   const [showEditPref, setShowEditPref] = useState(false);
   const [location, setLocation] = useState<Location>(preferences.location);
   const [position, setPosition] = useState<Position>(preferences.position);
@@ -185,12 +189,12 @@ export default function FlightPreferences({
         - {preferences.sameRow ? 'Same Row' : 'Different Row'} -{' '}
         {preferences.sideBySide ? 'Side by Side' : 'No Side by Side'}
       </Typography>
-      {showEditPref && (
-        <>
-          <SoloFlightPreferencesForm />
+      {showEditPref &&
+        (seats.length > 1 ? (
           <GroupFlightPreferencesForm />
-        </>
-      )}
+        ) : (
+          <SoloFlightPreferencesForm />
+        ))}
     </>
   );
 }
