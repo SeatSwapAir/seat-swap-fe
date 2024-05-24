@@ -20,18 +20,26 @@ import Switch from '@mui/material/Switch';
 import { Seat as SeatProps } from '../../lib/types';
 import { FlightCardProps } from '../../lib/types';
 
+import {Location} from '../../lib/types';
+import {Position} from '../../lib/types';
+
+
 export default function Seat({
   seat,
+  flightNumber,
   handleDelete,
+  handleUpdateSeat
 }: {
   seat: SeatProps;
+  flightNumber: string;
   handleDelete: FlightCardProps['handleDelete'];
+  handleUpdateSeat: FlightCardProps['handleUpdateSeat']
 }) {
   const [showEditSeat, setShowEditSeat] = useState(false);
   const [rowNumber, setRowNumber] = useState('');
   const [seatLetter, setSeatLetter] = useState('');
-  const [location, setLocation] = useState('');
-  const [position, setPosition] = useState('');
+  const [location, setLocation] = useState<Location | ''>('');
+  const [position, setPosition] = useState<Position | ''>('');
   const [legroom, setLegroom] = useState(false);
 
 
@@ -52,16 +60,26 @@ export default function Seat({
   }
 
   const doLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value)
+    setLocation(event.target.value as Location)
   }
 
   const doPosition = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPosition(event.target.value)
+    setPosition(event.target.value as Position)
   }
 
   const toggleLegroom = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLegroom(event.target.checked);
   };
+
+  const doSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const newSeat = {
+      number: rowNumber+seatLetter,
+      location: location,
+      extraLegroom: legroom,
+      position: position
+    }
+    handleUpdateSeat(newSeat, flightNumber, seat.number)
+  }
 
   const seatForm = () => {
     return <>
@@ -126,6 +144,8 @@ export default function Seat({
     </FormControl>
     <FormControlLabel control={<Switch checked={legroom}
       onChange={toggleLegroom}/>} label="This seat has extra legroom" />
+
+    <Button onClick={doSubmit}>Submit Changes</Button>
       </Typography>
     </>
 }

@@ -22,6 +22,7 @@ export default function FlightCard({
   },
   handleDelete,
   handleRemoveFlight,
+  handleUpdateSeat
 }: FlightCardProps) {
   const [showEditPref, setShowEditPref] = useState(false);
   return (
@@ -44,7 +45,9 @@ export default function FlightCard({
             <Seat
               key={index + flightNumber}
               seat={seat}
+              flightNumber={flightNumber}
               handleDelete={handleDelete}
+              handleUpdateSeat={handleUpdateSeat}
             />
           ))}
           <Typography variant='h5'>
