@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Typography } from '@mui/material';
 
 import FlightCard from './FlightCard';
 import { FlightCardProps } from '../../lib/types';
+import { Seat } from '../../lib/types';
 
 const mockFlights: FlightCardProps['flight'][] = [
   {
@@ -35,9 +36,9 @@ const mockFlights: FlightCardProps['flight'][] = [
       },
     ],
     preferences: {
-      location: 'none',
+      location: '',
       extraLegroom: false,
-      position: 'none',
+      position: '',
       neighbouringRows: true,
       sameRow: false,
       sideBySide: true,
@@ -71,9 +72,9 @@ const mockFlights: FlightCardProps['flight'][] = [
       },
     ],
     preferences: {
-      location: 'none',
+      location: '',
       extraLegroom: false,
-      position: 'none',
+      position: '',
       neighbouringRows: false,
       sameRow: true,
       sideBySide: false,
@@ -95,7 +96,7 @@ const mockFlights: FlightCardProps['flight'][] = [
       },
     ],
     preferences: {
-      location: 'none',
+      location: '',
       extraLegroom: false,
       position: 'window',
       neighbouringRows: true,
@@ -130,6 +131,20 @@ const Flights = () => {
     }
     setFlights(prevFlights);
   };
+  function handleUpdateSeat(seat:Seat, flightNumber:string, oldSeat:string):void {
+    setFlights((prevFlights) => {
+      return prevFlights.map((flight) => {
+        if (flight.flightNumber === flightNumber) {
+          const updatedSeats = flight.seats.map((s) => 
+            s.number === oldSeat ? seat : s
+          );
+          return { ...flight, seats: updatedSeats };
+        }
+        return flight;
+      });
+    });
+  }
+
 
   return (
     <Card>
@@ -143,6 +158,7 @@ const Flights = () => {
             flight={flight}
             handleDelete={handleDelete}
             handleRemoveFlight={handleRemoveFlight}
+            handleUpdateSeat={handleUpdateSeat}
           />
         ))}
       </CardContent>

@@ -1,5 +1,5 @@
-export type Position = 'window' | 'middle' | 'aisle' | 'none';
-export type Location = 'front' | 'middle' | 'back' | 'none';
+export type Position = 'window' | 'middle' | 'aisle' | '';
+export type Location = 'front' | 'middle' | 'back' | '';
 
 export type Seat = {
   number: string;
@@ -29,4 +29,5 @@ export type FlightCardProps = {
   };
   handleDelete: React.MouseEventHandler<HTMLButtonElement>;
   handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement>;
+  handleUpdateSeat: (seat: Seat, flightNumber:string, oldSeat:string) => void;
 };
