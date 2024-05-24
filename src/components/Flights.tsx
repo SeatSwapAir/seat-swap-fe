@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import { Typography } from '@mui/material';
 
 import FlightCard from './FlightCard';
-import { FlightCardProps } from '../../lib/types';
+import { FlightCardProps, Preferences } from '../../lib/types';
 import { Seat } from '../../lib/types';
 
 const mockFlights: FlightCardProps['flight'][] = [
@@ -131,11 +131,15 @@ const Flights = () => {
     }
     setFlights(prevFlights);
   };
-  function handleUpdateSeat(seat:Seat, flightNumber:string, oldSeat:string):void {
+  function handleUpdateSeat(
+    seat: Seat,
+    flightNumber: string,
+    oldSeat: string
+  ): void {
     setFlights((prevFlights) => {
       return prevFlights.map((flight) => {
         if (flight.flightNumber === flightNumber) {
-          const updatedSeats = flight.seats.map((s) => 
+          const updatedSeats = flight.seats.map((s) =>
             s.number === oldSeat ? seat : s
           );
           return { ...flight, seats: updatedSeats };
@@ -144,8 +148,19 @@ const Flights = () => {
       });
     });
   }
-
-
+  function handleUpdatePreferences(
+    updatedPreferences: Preferences,
+    flightNumber: string
+  ): void {
+    setFlights((prevFlights) => {
+      return prevFlights.map((flight) => {
+        if (flight.flightNumber === flightNumber) {
+          return { ...flight, preferences: updatedPreferences };
+        }
+        return flight;
+      });
+    });
+  }
   return (
     <Card>
       <CardContent>
@@ -159,6 +174,7 @@ const Flights = () => {
             handleDelete={handleDelete}
             handleRemoveFlight={handleRemoveFlight}
             handleUpdateSeat={handleUpdateSeat}
+            handleUpdatePreferences={handleUpdatePreferences}
           />
         ))}
       </CardContent>

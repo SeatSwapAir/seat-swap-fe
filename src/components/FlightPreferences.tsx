@@ -11,22 +11,26 @@ import FormLabel from '@mui/material/FormLabel';
 import Switch from '@mui/material/Switch';
 import Checkbox from '@mui/material/Checkbox';
 
-import { Preferences } from '../../lib/types';
+import { FlightCardProps, Preferences } from '../../lib/types';
 import { Location } from '../../lib/types';
 import { Position } from '../../lib/types';
 import { Seat } from '../../lib/types';
 export default function FlightPreferences({
   preferences,
   seats,
+  flightNumber,
+  handleUpdatePreferences,
 }: {
   preferences: Preferences;
   seats: Seat[];
+  flightNumber: string;
+  handleUpdatePreferences: FlightCardProps['handleUpdatePreferences'];
 }) {
   console.log('🚀 ~ seats:', seats);
   const [showEditPref, setShowEditPref] = useState(false);
   const [location, setLocation] = useState<Location>(preferences.location);
   const [position, setPosition] = useState<Position>(preferences.position);
-  const [legroom, setLegroom] = useState(preferences.extraLegroom);
+  const [extraLegroom, setExtraLegroom] = useState(preferences.extraLegroom);
   const [groupPreferences, setGroupPreferences] = useState({
     neighbouringRows: true,
     sameRow: false,
@@ -42,18 +46,21 @@ export default function FlightPreferences({
   };
 
   const toggleLegroom = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLegroom(event.target.checked);
+    setExtraLegroom(event.target.checked);
   };
 
   const doSubmit = () => {
-    // const newSeat = {
-    //   number: rowNumber+seatLetter,
-    //   location: location,
-    //   extraLegroom: legroom,
-    //   position: position
-    // }
-    // handleUpdateSeat(newSeat, flightNumber, seat.number);
-    // setShowEditSeat(false);
+    const isSoloFlignt = seats.length === 1;
+    const newPreferences = {
+      location: isSoloFlignt ? location : '',
+      extraLegroom: isSoloFlignt ? extraLegroom : false,
+      position: isSoloFlignt ? position : '',
+      neighbouringRows: isSoloFlignt ? false : neighbouringRows,
+      sameRow: isSoloFlignt ? false : sameRow,
+      sideBySide: isSoloFlignt ? false : sideBySide,
+    };
+    handleUpdatePreferences(newPreferences, flightNumber);
+    setShowEditPref(false);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -159,7 +166,7 @@ export default function FlightPreferences({
           </RadioGroup>
         </FormControl>
         <FormControlLabel
-          control={<Switch checked={legroom} onChange={toggleLegroom} />}
+          control={<Switch checked={extraLegroom} onChange={toggleLegroom} />}
           label='This seat has extra legroom'
         />
         <Button onClick={doSubmit}>Submit Changes</Button>
@@ -189,12 +196,11 @@ export default function FlightPreferences({
         - {preferences.sameRow ? 'Same Row' : 'Different Row'} -{' '}
         {preferences.sideBySide ? 'Side by Side' : 'No Side by Side'}
       </Typography>
-      {showEditPref &&
-        (seats.length > 1 ? (
-          <GroupFlightPreferencesForm />
-        ) : (
-          <SoloFlightPreferencesForm />
-        ))}
+      {showEditPref && seats.length === 0 && (
+        <p>Add seats to chooose preferences</p>
+      )}
+      {showEditPref && seats.length === 1 && <SoloFlightPreferencesForm />}
+      {showEditPref && seats.length > 1 && <GroupFlightPreferencesForm />}
     </>
   );
 }

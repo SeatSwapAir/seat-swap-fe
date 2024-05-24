@@ -30,4 +30,5 @@ export type FlightCardProps = {
   handleDelete: React.MouseEventHandler<HTMLButtonElement>;
   handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement>;
   handleUpdateSeat: (seat: Seat, flightNumber:string, oldSeat:string) => void;
+  handleUpdatePreferences: (preferences: Preferences,flightNumber: string) => void;
 };

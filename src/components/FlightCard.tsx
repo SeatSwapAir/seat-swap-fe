@@ -22,8 +22,8 @@ export default function FlightCard({
   handleDelete,
   handleRemoveFlight,
   handleUpdateSeat,
+  handleUpdatePreferences,
 }: FlightCardProps) {
-  console.log('🚀 ~ seats:', seats);
   return (
     <Card>
       <CardContent>
@@ -49,7 +49,12 @@ export default function FlightCard({
               handleUpdateSeat={handleUpdateSeat}
             />
           ))}
-          <FlightPreferences preferences={preferences} seats={seats} />
+          <FlightPreferences
+            preferences={preferences}
+            seats={seats}
+            flightNumber={flightNumber}
+            handleUpdatePreferences={handleUpdatePreferences}
+          />
           <Button
             variant='contained'
             color='primary'
