@@ -1,6 +1,17 @@
 export type Position = 'window' | 'middle' | 'aisle' | '';
 export type Location = 'front' | 'middle' | 'back' | '';
 
+export type User = {
+  email: string;
+  firstname: string;
+  lastname: string;
+  gender: string;
+  phone: number;
+  password: string;
+  rating: number;
+  created_at: string;
+};
+
 export type Seat = {
   number: string;
   location: Location;
