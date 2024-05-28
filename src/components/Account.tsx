@@ -19,7 +19,7 @@ export default function Account() {
   const [user, setUser] = useState(mockUser);
 
   const { email, firstname, lastname, gender, phone, rating, created_at } =
-    user;
+    mockUser;
 
   return (
     <Typography variant='body1'>
@@ -37,7 +37,6 @@ export default function Account() {
         gender={gender}
         phone={phone}
       />
-
       <Typography variant='h6'>
         Your account has been created on {created_at}
       </Typography>
