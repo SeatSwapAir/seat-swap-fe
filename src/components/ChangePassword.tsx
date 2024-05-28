@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
@@ -17,28 +16,28 @@ export default function ChangePassword() {
   };
   return (
     <>
-      <Typography>Current Password:</Typography>
       <TextField
+        InputLabelProps={{ shrink: true }}
         id='outlined-controlled'
-        label='Controlled'
+        label='Current Password'
         value={oldPassword}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setOldPassword(event.target.value);
         }}
       />
-      <Typography>New Password:</Typography>
       <TextField
+        InputLabelProps={{ shrink: true }}
         id='outlined-controlled'
-        label='Controlled'
+        label='New Password'
         value={newPassword}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setNewPassword(event.target.value);
         }}
       />
-      <Typography>Confirm New Password:</Typography>
       <TextField
+        InputLabelProps={{ shrink: true }}
         id='outlined-controlled'
-        label='Controlled'
+        label='Confirm New Password'
         value={confirmNewPassword}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setConfirmNewPassword(event.target.value);
