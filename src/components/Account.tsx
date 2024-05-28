@@ -19,9 +19,9 @@ export default function Account() {
     mockUser;
 
   return (
-    <Typography variant='body1'>
-      <Typography variant='h4'>Account Settings</Typography>
-      <Typography variant='h6'>
+    <>
+      <Typography>Account Settings</Typography>
+      <Typography>
         Hello {firstname} {lastname}!
       </Typography>
       <Typography component='legend'>Your rating is:</Typography>
@@ -34,9 +34,7 @@ export default function Account() {
         gender={gender}
         phone={phone}
       />
-      <Typography variant='h6'>
-        Your account has been created on {created_at}
-      </Typography>
-    </Typography>
+      <Typography>Your account has been created on {created_at}</Typography>
+    </>
   );
 }
