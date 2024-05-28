@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Typography, Rating } from '@mui/material';
 
 import { User } from '../../lib/types';
@@ -16,8 +15,6 @@ const mockUser: User = {
 };
 
 export default function Account() {
-  const [user, setUser] = useState(mockUser);
-
   const { email, firstname, lastname, gender, phone, rating, created_at } =
     mockUser;
 
