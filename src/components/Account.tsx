@@ -37,6 +37,10 @@ export default function Account() {
         gender={gender}
         phone={phone}
       />
+
+      <Typography variant='h6'>
+        Your account has been created on {created_at}
+      </Typography>
     </Typography>
   );
 }
