@@ -3,6 +3,7 @@ import Menu from '../components/Menu';
 import { Route, Routes } from 'react-router-dom';
 import Home from '../components/Home';
 import Login from '../components/Login';
+import Account from '../components/Account';
 
 type User = {
   name: string;
@@ -48,7 +49,7 @@ export const AuthWrapper = () => {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<h1>SignUp</h1>} />
-          <Route path='/account' element={<h1>Account</h1>} />
+          <Route path='/account' element={<Account/>} />
           <Route path='/defaultpreferences' element={<h1>Default Pref</h1>} />
           <Route path='/review' element={<h1>Review</h1>} />
           <Route path='/reviews' element={<h1>Reviews</h1>} />
