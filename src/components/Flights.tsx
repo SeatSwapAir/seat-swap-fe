@@ -1,104 +1,104 @@
-import { useState } from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { Typography } from '@mui/material';
+import { useState } from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import { Typography } from "@mui/material";
 
-import FlightCard from './FlightCard';
-import { FlightCardProps, Preferences } from '../../lib/types';
-import { Seat } from '../../lib/types';
+import FlightCard from "./FlightCard";
+import { FlightCardProps, Preferences } from "../../lib/types";
+import { Seat } from "../../lib/types";
 
-const mockFlights: FlightCardProps['flight'][] = [
+const mockFlights: FlightCardProps["flight"][] = [
   {
-    flightNumber: 'FR504',
-    departureAirport: 'STN',
-    arrivalAirport: 'BCN',
-    departureTime: '2024-05-14T08:30:00',
-    arrivalTime: '2024-05-14T11:45:00',
-    airline: 'Ryanair',
+    flightNumber: "FR504",
+    departureAirport: "STN",
+    arrivalAirport: "BCN",
+    departureTime: "2024-05-14T08:30:00",
+    arrivalTime: "2024-05-14T11:45:00",
+    airline: "Ryanair",
     seats: [
       {
-        number: '1A',
-        location: 'front',
+        number: "1A",
+        location: "front",
         extraLegroom: true,
-        position: 'aisle',
+        position: "aisle",
       },
       {
-        number: '10B',
-        location: 'middle',
+        number: "10B",
+        location: "middle",
         extraLegroom: false,
-        position: 'middle',
+        position: "middle",
       },
       {
-        number: '25C',
-        location: 'back',
+        number: "25C",
+        location: "back",
         extraLegroom: false,
-        position: 'window',
+        position: "window",
       },
     ],
     preferences: {
-      location: '',
+      location: "",
       extraLegroom: false,
-      position: '',
+      position: "",
       neighbouringRows: true,
       sameRow: false,
       sideBySide: true,
     },
   },
   {
-    flightNumber: 'W63321',
-    departureAirport: 'BUD',
-    arrivalAirport: 'CPH',
-    departureTime: '2024-05-14T15:00:00',
-    arrivalTime: '2024-05-14T16:50:00',
-    airline: 'Wizz Air',
+    flightNumber: "W63321",
+    departureAirport: "BUD",
+    arrivalAirport: "CPH",
+    departureTime: "2024-05-14T15:00:00",
+    arrivalTime: "2024-05-14T16:50:00",
+    airline: "Wizz Air",
     seats: [
       {
-        number: '30D',
-        location: 'back',
+        number: "30D",
+        location: "back",
         extraLegroom: false,
-        position: 'aisle',
+        position: "aisle",
       },
       {
-        number: '15A',
-        location: 'middle',
+        number: "15A",
+        location: "middle",
         extraLegroom: true,
-        position: 'window',
+        position: "window",
       },
       {
-        number: '5B',
-        location: 'front',
+        number: "5B",
+        location: "front",
         extraLegroom: false,
-        position: 'middle',
+        position: "middle",
       },
     ],
     preferences: {
-      location: '',
+      location: "",
       extraLegroom: false,
-      position: '',
+      position: "",
       neighbouringRows: false,
       sameRow: true,
       sideBySide: false,
     },
   },
   {
-    flightNumber: 'U24832',
-    departureAirport: 'CDG',
-    arrivalAirport: 'LIS',
-    departureTime: '2024-05-14T21:30:00',
-    arrivalTime: '2024-05-14T23:15:00',
-    airline: 'easyJet',
+    flightNumber: "U24832",
+    departureAirport: "CDG",
+    arrivalAirport: "LIS",
+    departureTime: "2024-05-14T21:30:00",
+    arrivalTime: "2024-05-14T23:15:00",
+    airline: "easyJet",
     seats: [
       {
-        number: '3C',
-        location: 'front',
+        number: "3C",
+        location: "front",
         extraLegroom: true,
-        position: 'middle',
+        position: "middle",
       },
     ],
     preferences: {
-      location: '',
+      location: "",
       extraLegroom: false,
-      position: 'window',
+      position: "window",
       neighbouringRows: true,
       sameRow: true,
       sideBySide: false,
@@ -153,6 +153,7 @@ const Flights = () => {
     flightNumber: string
   ): void {
     setFlights((prevFlights) => {
+      console.log(updatedPreferences);
       return prevFlights.map((flight) => {
         if (flight.flightNumber === flightNumber) {
           return { ...flight, preferences: updatedPreferences };
@@ -164,7 +165,7 @@ const Flights = () => {
   return (
     <Card>
       <CardContent>
-        <Typography variant='h2' gutterBottom>
+        <Typography variant="h2" gutterBottom>
           Flights
         </Typography>
         {flights.map((flight, index) => (
