@@ -134,6 +134,26 @@ export default function Menu() {
           </DrawerHeader>
           <Divider />
           <List>
+            <Link to={`/`} onClick={handleDrawerClose}>
+              <ListItem key='home' disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary='Home' />
+                </ListItemButton>
+              </ListItem>
+            </Link>{' '}
+            <Link to={`/`} onClick={handleDrawerClose}>
+              <ListItem key='flight' disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary='Flights' />
+                </ListItemButton>
+              </ListItem>
+            </Link>{' '}
             <Link to={`/account`} onClick={handleDrawerClose}>
               <ListItem key='account' disablePadding>
                 <ListItemButton>
