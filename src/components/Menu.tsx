@@ -143,7 +143,7 @@ export default function Menu() {
                   <ListItemText primary='Home' />
                 </ListItemButton>
               </ListItem>
-            </Link>{' '}
+            </Link>
             <Link to={`/`} onClick={handleDrawerClose}>
               <ListItem key='flight' disablePadding>
                 <ListItemButton>
@@ -153,7 +153,7 @@ export default function Menu() {
                   <ListItemText primary='Flights' />
                 </ListItemButton>
               </ListItem>
-            </Link>{' '}
+            </Link>
             <Link to={`/account`} onClick={handleDrawerClose}>
               <ListItem key='account' disablePadding>
                 <ListItemButton>
