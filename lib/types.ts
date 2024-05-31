@@ -27,8 +27,7 @@ export type Preferences = {
   sideBySide: boolean;
 };
 
-export type FlightCardProps = {
-  flight: {
+export type FlightProps = {
     flightNumber: string;
     departureAirport: string;
     arrivalAirport: string;
@@ -38,6 +37,10 @@ export type FlightCardProps = {
     seats: Seat[];
     preferences: Preferences;
   };
+
+
+export type FlightCardProps = {
+  flight: FlightProps;
   handleDelete: React.MouseEventHandler<HTMLButtonElement>;
   handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement>;
   handleUpdateSeat: (seat: Seat, flightNumber:string, oldSeat:string) => void;
