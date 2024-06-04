@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 
 import FlightCard from './FlightCard';
 import AddFlight from './AddFlight';
-import { FlightCardProps, Preferences } from '../../lib/types';
+import { FlightCardProps, FlightProps, Preferences } from '../../lib/types';
 import { Seat } from '../../lib/types';
 
 const mockFlights: FlightCardProps['flight'][] = [
@@ -122,15 +122,12 @@ const Flights = () => {
   const handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement> = (
     event
   ) => {
-    const flightNumber = event.currentTarget.value;
-    let prevFlights = [...flights];
-    for (const flight of prevFlights) {
-      if (flight.flightNumber == flightNumber) {
-        let ind = prevFlights.indexOf(flight);
-        prevFlights.splice(ind, 1);
-      }
-    }
-    setFlights(prevFlights);
+    const flightNumberAndDate = event.currentTarget.value;
+    const newFlights = flights.filter(
+      (flight) =>
+        flight.flightNumber + flight.departureTime !== flightNumberAndDate
+    );
+    setFlights(newFlights);
   };
   function handleUpdateSeat(
     seat: Seat,
@@ -163,6 +160,23 @@ const Flights = () => {
       });
     });
   }
+
+  function handleAddFlight(flight: FlightProps): void {
+    let exists = flights.filter(
+      (entry) =>
+        entry.flightNumber === flight.flightNumber &&
+        entry.departureTime === flight.departureTime
+    );
+    console.log(exists);
+    if (exists.length > 0) {
+      console.log('flight exists already');
+    } else {
+      const flightsCopy = [...flights];
+      flightsCopy.push(flight);
+      setFlights(flightsCopy);
+    }
+  }
+
   return (
     <Card>
       <CardContent>
@@ -177,9 +191,10 @@ const Flights = () => {
             handleRemoveFlight={handleRemoveFlight}
             handleUpdateSeat={handleUpdateSeat}
             handleUpdatePreferences={handleUpdatePreferences}
+            handleAddFlight={handleAddFlight}
           />
         ))}
-        <AddFlight />
+        <AddFlight handleAddFlight={handleAddFlight} />
       </CardContent>
     </Card>
   );
