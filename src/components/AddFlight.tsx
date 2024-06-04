@@ -5,13 +5,18 @@ import { useState } from 'react';
 import axios from 'axios';
 
 import { FlightProps } from '../../lib/types';
+import { FlightCardProps } from '../../lib/types';
 
-export default function AddFlight() {
+export default function AddFlight({
+  handleAddFlight,
+}: {
+  handleAddFlight: FlightCardProps['handleAddFlight'];
+}) {
   const [open, setOpen] = useState(false);
   const [flightNumberAndCarrierCode, setFlightNumberAndCarrierCode] =
     useState('FR9336');
   const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
-
+  console.log(flightDetails);
   const getToken = async () => {
     const bodyParameters = new URLSearchParams({
       grant_type: 'client_credentials',
@@ -37,7 +42,7 @@ export default function AddFlight() {
     const headers = { Authorization: `Bearer ${token}` };
     const carrierCode = flightNumberAndCarrierCode.slice(0, 2);
     const flightNumber = flightNumberAndCarrierCode.slice(2);
-    const scheduledDepartureDate = '2024-06-11';
+    const scheduledDepartureDate = '2024-06-18';
     const response = await axios.get(
       `https://test.api.amadeus.com/v2/schedule/flights?carrierCode=${carrierCode}&flightNumber=${flightNumber}&scheduledDepartureDate=${scheduledDepartureDate}`,
       {
@@ -74,6 +79,12 @@ export default function AddFlight() {
     });
   };
 
+  const doSubmitFlight = () => {
+    if (flightDetails) {
+      handleAddFlight(flightDetails);
+    }
+  };
+
   if (!open)
     return (
       <Button
@@ -104,7 +115,12 @@ export default function AddFlight() {
       >
         <CloseIcon /> Cancel
       </Button>
-      <Typography> {flightDetails?.airline}</Typography>
+      <Typography>
+        {' '}
+        {flightDetails?.airline} - {flightDetails?.departureAirport} -{'>'}{' '}
+        {flightDetails?.arrivalAirport}
+        <Button onClick={doSubmitFlight}>This is my flight!</Button>
+      </Typography>
     </>
   );
 }
