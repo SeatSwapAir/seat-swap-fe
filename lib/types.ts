@@ -42,7 +42,8 @@ export type FlightProps = {
 export type FlightCardProps = {
   flight: FlightProps;
   handleDelete: React.MouseEventHandler<HTMLButtonElement>;
-  handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement>;
+  handleRemoveFlight: ({flightNumber: string, departureTime:string});
   handleUpdateSeat: (seat: Seat, flightNumber:string, oldSeat:string) => void;
   handleUpdatePreferences: (preferences: Preferences,flightNumber: string) => void;
+  handleAddFlight: (flight: FlightProps) => void;
 };
