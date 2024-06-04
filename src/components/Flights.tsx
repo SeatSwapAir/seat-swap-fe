@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { Typography } from '@mui/material';
+import { Typography, CardContent, Card } from '@mui/material';
 
 import FlightCard from './FlightCard';
 import AddFlight from './AddFlight';
-import { FlightCardProps, FlightProps, Preferences } from '../../lib/types';
-import { Seat } from '../../lib/types';
+import {
+  FlightCardProps,
+  FlightProps,
+  Preferences,
+  Seat,
+} from '../../lib/types';
 
 const mockFlights: FlightCardProps['flight'][] = [
   {
