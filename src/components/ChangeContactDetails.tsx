@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
+import {
+  TextField,
+  Select,
+  SelectChangeEvent,
+  Button,
+  Box,
+  InputLabel,
+  MenuItem,
+  FormControl,
+} from '@mui/material';
 export default function ChangeContactDetails({
   email,
   firstname,

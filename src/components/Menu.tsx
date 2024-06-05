@@ -1,23 +1,27 @@
 import { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
+import {
+  Box,
+  Drawer,
+  Toolbar,
+  CssBaseline,
+  List,
+  Typography,
+  Divider,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  IconButton,
+  ListItemText,
+} from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import CssBaseline from '@mui/material/CssBaseline';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Inbox,
+  Menu as MenuIcon,
+} from '@mui/icons-material';
 
 import { AuthData } from '../auth/AuthWrapper';
 
@@ -125,11 +129,7 @@ export default function Menu() {
         >
           <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
+              {theme.direction === 'rtl' ? <ChevronLeft /> : <ChevronRight />}
             </IconButton>
           </DrawerHeader>
           <Divider />
@@ -138,7 +138,7 @@ export default function Menu() {
               <ListItem key='home' disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <InboxIcon />
+                    <Inbox />
                   </ListItemIcon>
                   <ListItemText primary='Home' />
                 </ListItemButton>
@@ -148,7 +148,7 @@ export default function Menu() {
               <ListItem key='flight' disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <InboxIcon />
+                    <Inbox />
                   </ListItemIcon>
                   <ListItemText primary='Flights' />
                 </ListItemButton>
@@ -158,7 +158,7 @@ export default function Menu() {
               <ListItem key='account' disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <InboxIcon />
+                    <Inbox />
                   </ListItemIcon>
                   <ListItemText primary='Account' />
                 </ListItemButton>
@@ -168,7 +168,7 @@ export default function Menu() {
               <ListItem key='reviews' disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <InboxIcon />
+                    <Inbox />
                   </ListItemIcon>
                   <ListItemText primary='Reviews' />
                 </ListItemButton>
@@ -178,7 +178,7 @@ export default function Menu() {
               <ListItem key={'defaultpreferences'} disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <InboxIcon />
+                    <Inbox />
                   </ListItemIcon>
                   <ListItemText primary='Your Preferences' />
                 </ListItemButton>
@@ -188,7 +188,7 @@ export default function Menu() {
               <ListItem key={'logout'} disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <InboxIcon />
+                    <Inbox />
                   </ListItemIcon>
                   <ListItemText primary='Logout' />
                 </ListItemButton>
