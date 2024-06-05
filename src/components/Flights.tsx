@@ -162,21 +162,14 @@ const Flights = () => {
       });
     });
   }
-
   function handleAddFlight(flight: FlightProps): void {
-    let exists = flights.filter(
-      (entry) =>
-        entry.flightNumber === flight.flightNumber &&
-        entry.departureTime === flight.departureTime
+    const exist = flights.some(
+      (flightObj) =>
+        flightObj.flightNumber === flight.flightNumber &&
+        flightObj.departureTime === flight.departureTime
     );
-    console.log(exists);
-    if (exists.length > 0) {
-      console.log('flight exists already');
-    } else {
-      const flightsCopy = [...flights];
-      flightsCopy.push(flight);
-      setFlights(flightsCopy);
-    }
+    if (exist) return console.log('flight exists already');
+    setFlights([...flights, flight]);
   }
 
   return (
