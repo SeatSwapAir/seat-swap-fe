@@ -1,10 +1,10 @@
 import { TextField, Button, Typography } from '@mui/material';
 import { Add, Close } from '@mui/icons-material';
-
 import { useState } from 'react';
 import axios from 'axios';
 
-import { FlightProps, FlightCardProps } from '../../lib/types';
+import { FlightProps } from '../../lib/types';
+import { FlightCardProps } from '../../lib/types';
 
 export default function AddFlight({
   handleAddFlight,
@@ -115,6 +115,7 @@ export default function AddFlight({
         <Close /> Cancel
       </Button>
       <Typography>
+        {' '}
         {flightDetails?.airline} - {flightDetails?.departureAirport} -{'>'}{' '}
         {flightDetails?.arrivalAirport}
         <Button onClick={doSubmitFlight}>This is my flight!</Button>
