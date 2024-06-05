@@ -1,10 +1,14 @@
+import { useState } from 'react';
+
 import { TextField, Button, Typography } from '@mui/material';
 import { Add, Close } from '@mui/icons-material';
-import { useState } from 'react';
-import axios from 'axios';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import { FlightProps } from '../../lib/types';
-import { FlightCardProps } from '../../lib/types';
+import axios from 'axios';
+import { Dayjs } from 'dayjs';
+
+import { FlightProps, FlightCardProps } from '../../lib/types';
 
 export default function AddFlight({
   handleAddFlight,
@@ -15,7 +19,7 @@ export default function AddFlight({
   const [flightNumberAndCarrierCode, setFlightNumberAndCarrierCode] =
     useState('FR9336');
   const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
-  console.log(flightDetails);
+  const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
   const getToken = async () => {
     const bodyParameters = new URLSearchParams({
       grant_type: 'client_credentials',
@@ -41,7 +45,7 @@ export default function AddFlight({
     const headers = { Authorization: `Bearer ${token}` };
     const carrierCode = flightNumberAndCarrierCode.slice(0, 2);
     const flightNumber = flightNumberAndCarrierCode.slice(2);
-    const scheduledDepartureDate = '2024-06-18';
+    const scheduledDepartureDate = departureDate?.format('YYYY-MM-DD');
     const response = await axios.get(
       `https://test.api.amadeus.com/v2/schedule/flights?carrierCode=${carrierCode}&flightNumber=${flightNumber}&scheduledDepartureDate=${scheduledDepartureDate}`,
       {
@@ -106,6 +110,14 @@ export default function AddFlight({
           setFlightNumberAndCarrierCode(event.target.value);
         }}
       />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          format='DD-MM-YYYY'
+          value={departureDate}
+          label='Date'
+          onChange={(newDate) => setDepartureDate(newDate)}
+        />
+      </LocalizationProvider>
       <Button onClick={findFlightDetails}>Find flight Details</Button>
       <Button
         onClick={() => {
@@ -115,8 +127,7 @@ export default function AddFlight({
         <Close /> Cancel
       </Button>
       <Typography>
-        {' '}
-        {flightDetails?.airline} - {flightDetails?.departureAirport} -{'>'}{' '}
+        {flightDetails?.airline} - {flightDetails?.departureAirport} -{'>'}
         {flightDetails?.arrivalAirport}
         <Button onClick={doSubmitFlight}>This is my flight!</Button>
       </Typography>
