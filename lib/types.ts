@@ -11,7 +11,6 @@ export type User = {
   created_at: string;
 };
 
-
 export type Seat = {
   number: string;
   location: Location;
@@ -38,12 +37,15 @@ export type FlightProps = {
     preferences: Preferences;
   };
 
-
 export type FlightCardProps = {
   flight: FlightProps;
   handleDelete: React.MouseEventHandler<HTMLButtonElement>;
   handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement>;
   handleUpdateSeat: (seat: Seat, flightNumber:string, oldSeat:string) => void;
   handleUpdatePreferences: (preferences: Preferences,flightNumber: string) => void;
-  handleAddFlight: (flight: FlightProps) => void;
 };
+export type AddFlightProps = {
+  handleAddFlight: (flight: FlightProps) => boolean;
+  checkIfFlightIsThere: (flightNumber: string | null, departureTime: string) => boolean 
+
+}
