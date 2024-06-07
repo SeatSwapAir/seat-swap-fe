@@ -5,14 +5,13 @@ import { Add, Close } from '@mui/icons-material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import axios from 'axios';
 import { Dayjs } from 'dayjs';
+import { v4 as uuidv4 } from 'uuid';
 
 import { FlightProps, FlightCardProps, AddFlightProps } from '../../lib/types';
 
+import { getToken, getFlightDetails } from '../api/amadeusAPI';
 import SeatForm from './SeatForm';
-
-import { v4 as uuidv4 } from 'uuid';
 
 export default function AddFlight({
   handleAddFlight,
@@ -26,31 +25,8 @@ export default function AddFlight({
   const [flightNumberAndCarrierCode, setFlightNumberAndCarrierCode] =
     useState('FR9336');
   const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
-  console.log('🚀 ~ flightDetails:', flightDetails);
   const [isFlightAdded, setIsFlightAdded] = useState(false);
-  // console.log('🚀 ~ isFlightAdded:', isFlightAdded);
   const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
-  const getToken = async () => {
-    const bodyParameters = new URLSearchParams({
-      grant_type: 'client_credentials',
-      client_id: import.meta.env.VITE_AMADEUS_API_KEY,
-      client_secret: import.meta.env.VITE_AMADEUS_API_SECRET,
-    });
-    try {
-      const response = await axios.post(
-        `https://test.api.amadeus.com/v1/security/oauth2/token`,
-        bodyParameters,
-        {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        }
-      );
-      return response.data.access_token;
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  console.log('🚀 ~ FLOGHT NOT ADDED:', !isFlightAdded);
 
   const handleUpdateSeat: FlightCardProps['handleUpdateSeat'] = (newSeat) => {
     if (!flightDetails) return;
@@ -87,50 +63,20 @@ export default function AddFlight({
     const carrierCode = flightNumberAndCarrierCode.slice(0, 2);
     const flightNumber = flightNumberAndCarrierCode.slice(2);
     const scheduledDepartureDate = departureDate?.format('YYYY-MM-DD');
-    const response = await axios.get(
-      `https://test.api.amadeus.com/v2/schedule/flights?carrierCode=${carrierCode}&flightNumber=${flightNumber}&scheduledDepartureDate=${scheduledDepartureDate}`,
-      {
-        headers,
-      }
+    const response = await getFlightDetails(
+      carrierCode,
+      flightNumber,
+      scheduledDepartureDate,
+      headers
     );
-    const airline = await axios.get(
-      `https://test.api.amadeus.com/v1/reference-data/airlines?airlineCodes=${carrierCode}`,
-      {
-        headers,
-      }
-    );
-    setFlightDetails({
-      flightNumber:
-        response.data.data[0].flightDesignator.carrierCode +
-        response.data.data[0].flightDesignator.flightNumber,
-      departureAirport: response.data.data[0].flightPoints[0].iataCode,
-      arrivalAirport: response.data.data[0].flightPoints[1].iataCode,
-      departureTime:
-        response.data.data[0].flightPoints[0].departure.timings[0].value,
-      arrivalTime:
-        response.data.data[0].flightPoints[1].arrival.timings[0].value,
-      airline: airline.data.data[0].commonName,
-      seats: [],
-      preferences: {
-        location: '',
-        extraLegroom: false,
-        position: '',
-        neighbouringRows: false,
-        sameRow: true,
-        sideBySide: false,
-      },
-    });
+    if (!response) return;
+    setFlightDetails(response);
     setIsFlightAdded(
-      checkIfFlightIsThere(
-        response.data.data[0].flightDesignator.carrierCode +
-          response.data.data[0].flightDesignator.flightNumber,
-        response.data.data[0].flightPoints[0].departure.timings[0].value
-      )
+      checkIfFlightIsThere(response.flightNumber, response.arrivalTime)
     );
   };
 
   const doSubmitFlight = () => {
-    console.log('🚀 ~ doSubmitFlight ~ flightDetails:', flightDetails);
     if (flightDetails) {
       setIsFlightAdded(handleAddFlight(flightDetails));
     }
