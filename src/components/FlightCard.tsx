@@ -40,6 +40,7 @@ export default function FlightCard({
           {seats.map((seat, index) => (
             <Seat
               key={index + flightNumber}
+              seatIndex={index + flightNumber}
               seat={seat}
               flightNumber={flightNumber}
               handleDelete={handleDelete}

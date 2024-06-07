@@ -8,17 +8,27 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import axios from 'axios';
 import { Dayjs } from 'dayjs';
 
-import { FlightProps, FlightCardProps } from '../../lib/types';
+import { FlightProps, FlightCardProps, AddFlightProps } from '../../lib/types';
+
+import SeatForm from './SeatForm';
+
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AddFlight({
   handleAddFlight,
+  checkIfFlightIsThere,
 }: {
-  handleAddFlight: FlightCardProps['handleAddFlight'];
+  handleAddFlight: AddFlightProps['handleAddFlight'];
+  checkIfFlightIsThere: AddFlightProps['checkIfFlightIsThere'];
 }) {
   const [open, setOpen] = useState(false);
+  const [showFlightForms, setShowFlightForms] = useState(false);
   const [flightNumberAndCarrierCode, setFlightNumberAndCarrierCode] =
     useState('FR9336');
   const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
+  console.log('🚀 ~ flightDetails:', flightDetails);
+  const [isFlightAdded, setIsFlightAdded] = useState(false);
+  // console.log('🚀 ~ isFlightAdded:', isFlightAdded);
   const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
   const getToken = async () => {
     const bodyParameters = new URLSearchParams({
@@ -40,6 +50,37 @@ export default function AddFlight({
     }
   };
 
+  console.log('🚀 ~ FLOGHT NOT ADDED:', !isFlightAdded);
+
+  const handleUpdateSeat: FlightCardProps['handleUpdateSeat'] = (newSeat) => {
+    if (!flightDetails) return;
+    const updatedSeats =
+      flightDetails.seats.map((s) => (s.id === newSeat.id ? newSeat : s)) ?? [];
+    setFlightDetails({ ...flightDetails, seats: updatedSeats });
+  };
+
+  const doAddSeat = () => {
+    setFlightDetails((prevDetails) => {
+      if (!prevDetails) return prevDetails;
+      return {
+        ...prevDetails,
+        seats: [
+          ...prevDetails?.seats,
+          {
+            number: '',
+            location: '',
+            extraLegroom: false,
+            position: '',
+            id: uuidv4(),
+          },
+        ],
+      };
+    });
+  };
+
+  const doSeatFormChange = () => {
+    setShowFlightForms(false);
+  };
   const findFlightDetails = async () => {
     const token = await getToken();
     const headers = { Authorization: `Bearer ${token}` };
@@ -58,7 +99,6 @@ export default function AddFlight({
         headers,
       }
     );
-
     setFlightDetails({
       flightNumber:
         response.data.data[0].flightDesignator.carrierCode +
@@ -80,11 +120,19 @@ export default function AddFlight({
         sideBySide: false,
       },
     });
+    setIsFlightAdded(
+      checkIfFlightIsThere(
+        response.data.data[0].flightDesignator.carrierCode +
+          response.data.data[0].flightDesignator.flightNumber,
+        response.data.data[0].flightPoints[0].departure.timings[0].value
+      )
+    );
   };
 
   const doSubmitFlight = () => {
+    console.log('🚀 ~ doSubmitFlight ~ flightDetails:', flightDetails);
     if (flightDetails) {
-      handleAddFlight(flightDetails);
+      setIsFlightAdded(handleAddFlight(flightDetails));
     }
   };
 
@@ -126,11 +174,32 @@ export default function AddFlight({
       >
         <Close /> Cancel
       </Button>
-      <Typography>
-        {flightDetails?.airline} - {flightDetails?.departureAirport} -{'>'}
-        {flightDetails?.arrivalAirport}
-        <Button onClick={doSubmitFlight}>This is my flight!</Button>
-      </Typography>
+      {flightDetails !== null && (
+        <Typography>
+          {flightDetails?.airline} - {flightDetails?.departureAirport} -{'>'}
+          {flightDetails?.arrivalAirport}
+          {!isFlightAdded && !showFlightForms && (
+            <Button onClick={() => setShowFlightForms(true)}>
+              This is my flight!
+            </Button>
+          )}
+          {isFlightAdded && ' This flight has already been added'}
+        </Typography>
+      )}
+      {showFlightForms && (
+        <>
+          {flightDetails?.seats.map((seat, index) => (
+            <SeatForm
+              key={index}
+              seat={seat}
+              flightNumber={flightDetails.flightNumber}
+              handleUpdateSeat={handleUpdateSeat}
+              doSeatFormChange={doSeatFormChange}
+            />
+          ))}
+          <Button onClick={doAddSeat}>Add Seat</Button>
+        </>
+      )}
     </>
   );
 }

@@ -3,12 +3,7 @@ import { Typography, CardContent, Card } from '@mui/material';
 
 import FlightCard from './FlightCard';
 import AddFlight from './AddFlight';
-import {
-  FlightCardProps,
-  FlightProps,
-  Preferences,
-  Seat,
-} from '../../lib/types';
+import { FlightCardProps, AddFlightProps } from '../../lib/types';
 
 const mockFlights: FlightCardProps['flight'][] = [
   {
@@ -24,18 +19,21 @@ const mockFlights: FlightCardProps['flight'][] = [
         location: 'front',
         extraLegroom: true,
         position: 'aisle',
+        id: '23423423',
       },
       {
         number: '10B',
         location: 'middle',
         extraLegroom: false,
         position: 'middle',
+        id: '3463546435',
       },
       {
         number: '25C',
         location: 'back',
         extraLegroom: false,
         position: 'window',
+        id: '325325345',
       },
     ],
     preferences: {
@@ -60,18 +58,21 @@ const mockFlights: FlightCardProps['flight'][] = [
         location: 'back',
         extraLegroom: false,
         position: 'aisle',
+        id: '23423235',
       },
       {
         number: '15A',
         location: 'middle',
         extraLegroom: true,
         position: 'window',
+        id: '1243235',
       },
       {
         number: '5B',
         location: 'front',
         extraLegroom: false,
         position: 'middle',
+        id: '23545346',
       },
     ],
     preferences: {
@@ -96,6 +97,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         location: 'front',
         extraLegroom: true,
         position: 'middle',
+        id: '2354532346',
       },
     ],
     preferences: {
@@ -110,6 +112,26 @@ const mockFlights: FlightCardProps['flight'][] = [
 ];
 const Flights = () => {
   const [flights, setFlights] = useState(mockFlights);
+
+  const checkIfFlightIsThere: AddFlightProps['checkIfFlightIsThere'] = (
+    flightNumber,
+    departureTime
+  ) => {
+    console.log('🚀 ~ Flights ~ flightNumber:', flightNumber);
+
+    console.log(
+      flights.some(
+        (flightObj) =>
+          flightObj.flightNumber === flightNumber &&
+          flightObj.departureTime === departureTime
+      )
+    );
+    return flights.some(
+      (flightObj) =>
+        flightObj.flightNumber === flightNumber &&
+        flightObj.departureTime === departureTime
+    );
+  };
   const handleDelete: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     const seatNumber = event.currentTarget.value;
     setFlights((prevFlights) => {
@@ -131,27 +153,26 @@ const Flights = () => {
     );
     setFlights(newFlights);
   };
-  function handleUpdateSeat(
-    seat: Seat,
-    flightNumber: string,
-    oldSeat: string
-  ): void {
+  const handleUpdateSeat: FlightCardProps['handleUpdateSeat'] = (
+    seat,
+    flightNumber
+  ) => {
     setFlights((prevFlights) => {
       return prevFlights.map((flight) => {
         if (flight.flightNumber === flightNumber) {
           const updatedSeats = flight.seats.map((s) =>
-            s.number === oldSeat ? seat : s
+            s.id === seat.id ? seat : s
           );
           return { ...flight, seats: updatedSeats };
         }
         return flight;
       });
     });
-  }
-  function handleUpdatePreferences(
-    updatedPreferences: Preferences,
-    flightNumber: string
-  ): void {
+  };
+  const handleUpdatePreferences: FlightCardProps['handleUpdatePreferences'] = (
+    updatedPreferences,
+    flightNumber
+  ) => {
     setFlights((prevFlights) => {
       console.log(updatedPreferences);
       return prevFlights.map((flight) => {
@@ -161,17 +182,15 @@ const Flights = () => {
         return flight;
       });
     });
-  }
-  function handleAddFlight(flight: FlightProps): void {
-    const exist = flights.some(
-      (flightObj) =>
-        flightObj.flightNumber === flight.flightNumber &&
-        flightObj.departureTime === flight.departureTime
-    );
-    if (exist) return console.log('flight exists already');
+  };
+  const handleAddFlight: AddFlightProps['handleAddFlight'] = (flight) => {
+    if (checkIfFlightIsThere(flight.flightNumber, flight.departureTime)) {
+      console.log('flight exists already');
+      return true;
+    }
     setFlights([...flights, flight]);
-  }
-
+    return true;
+  };
   return (
     <Card>
       <CardContent>
@@ -186,10 +205,12 @@ const Flights = () => {
             handleRemoveFlight={handleRemoveFlight}
             handleUpdateSeat={handleUpdateSeat}
             handleUpdatePreferences={handleUpdatePreferences}
-            handleAddFlight={handleAddFlight}
           />
         ))}
-        <AddFlight handleAddFlight={handleAddFlight} />
+        <AddFlight
+          checkIfFlightIsThere={checkIfFlightIsThere}
+          handleAddFlight={handleAddFlight}
+        />
       </CardContent>
     </Card>
   );
