@@ -13,6 +13,7 @@ export default function Seat({
   handleDelete,
   handleUpdateSeat,
 }: {
+  seatIndex: string;
   seat: SeatProps;
   flightNumber: string;
   handleUpdateSeat: FlightCardProps['handleUpdateSeat'];
@@ -23,7 +24,6 @@ export default function Seat({
   const doSeatFormChange = () => {
     setShowEditSeat(false);
   };
-
   return (
     <>
       <Typography variant='body2'>

@@ -19,18 +19,21 @@ const mockFlights: FlightCardProps['flight'][] = [
         location: 'front',
         extraLegroom: true,
         position: 'aisle',
+        id: '23423423',
       },
       {
         number: '10B',
         location: 'middle',
         extraLegroom: false,
         position: 'middle',
+        id: '3463546435',
       },
       {
         number: '25C',
         location: 'back',
         extraLegroom: false,
         position: 'window',
+        id: '325325345',
       },
     ],
     preferences: {
@@ -55,18 +58,21 @@ const mockFlights: FlightCardProps['flight'][] = [
         location: 'back',
         extraLegroom: false,
         position: 'aisle',
+        id: '23423235',
       },
       {
         number: '15A',
         location: 'middle',
         extraLegroom: true,
         position: 'window',
+        id: '1243235',
       },
       {
         number: '5B',
         location: 'front',
         extraLegroom: false,
         position: 'middle',
+        id: '23545346',
       },
     ],
     preferences: {
@@ -91,6 +97,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         location: 'front',
         extraLegroom: true,
         position: 'middle',
+        id: '2354532346',
       },
     ],
     preferences: {
@@ -148,14 +155,13 @@ const Flights = () => {
   };
   const handleUpdateSeat: FlightCardProps['handleUpdateSeat'] = (
     seat,
-    flightNumber,
-    oldSeat
+    flightNumber
   ) => {
     setFlights((prevFlights) => {
       return prevFlights.map((flight) => {
         if (flight.flightNumber === flightNumber) {
           const updatedSeats = flight.seats.map((s) =>
-            s.number === oldSeat ? seat : s
+            s.id === seat.id ? seat : s
           );
           return { ...flight, seats: updatedSeats };
         }

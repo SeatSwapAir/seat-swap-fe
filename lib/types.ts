@@ -16,6 +16,7 @@ export type Seat = {
   location: Location;
   extraLegroom: boolean;
   position: Position;
+  id: string;
 };
 export type Preferences = {
   location: Location;
