@@ -48,5 +48,8 @@ export type FlightCardProps = {
 export type AddFlightProps = {
   handleAddFlight: (flight: FlightProps) => boolean;
   checkIfFlightIsThere: (flightNumber: string | null, departureTime: string) => boolean 
-
 }
+export type GetToken = () => Promise<string>;
+export type GetFlightDetails = (carrierCode: string, flightNumber:string, scheduledDepartureDate: string | undefined,headers: object) => Promise<FlightProps | void> 
+
+export type GetAirlineName = (carrierCode: string, headers: object) =>  Promise<string | void>

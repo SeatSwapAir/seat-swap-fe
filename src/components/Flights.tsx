@@ -117,15 +117,6 @@ const Flights = () => {
     flightNumber,
     departureTime
   ) => {
-    console.log('🚀 ~ Flights ~ flightNumber:', flightNumber);
-
-    console.log(
-      flights.some(
-        (flightObj) =>
-          flightObj.flightNumber === flightNumber &&
-          flightObj.departureTime === departureTime
-      )
-    );
     return flights.some(
       (flightObj) =>
         flightObj.flightNumber === flightNumber &&
@@ -185,7 +176,6 @@ const Flights = () => {
   };
   const handleAddFlight: AddFlightProps['handleAddFlight'] = (flight) => {
     if (checkIfFlightIsThere(flight.flightNumber, flight.departureTime)) {
-      console.log('flight exists already');
       return true;
     }
     setFlights([...flights, flight]);
