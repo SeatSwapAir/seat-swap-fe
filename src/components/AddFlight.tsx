@@ -72,8 +72,16 @@ export default function AddFlight({
       checkIfFlightIsThere(response.flightNumber, response.arrivalTime)
     );
   };
-  const handleDelete = () => {
-    console.log('DELETE CLICKED');
+  const handleDelete = (id: string): void => {
+    setFlightDetails((prevFlightDetails) => {
+      if (!prevFlightDetails) return prevFlightDetails;
+      return {
+        ...prevFlightDetails,
+        seats: prevFlightDetails.seats.filter((seat) => {
+          seat.id !== id;
+        }),
+      };
+    });
   };
   const showEditSeat = (id: string): void => {
     setFlightDetails((prevFlightDetails) => {
