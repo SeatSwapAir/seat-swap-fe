@@ -20,6 +20,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         extraLegroom: true,
         position: 'aisle',
         id: '23423423',
+        isEditing: false,
       },
       {
         number: '10B',
@@ -27,6 +28,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         extraLegroom: false,
         position: 'middle',
         id: '3463546435',
+        isEditing: false,
       },
       {
         number: '25C',
@@ -34,6 +36,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         extraLegroom: false,
         position: 'window',
         id: '325325345',
+        isEditing: false,
       },
     ],
     preferences: {
@@ -59,6 +62,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         extraLegroom: false,
         position: 'aisle',
         id: '23423235',
+        isEditing: false,
       },
       {
         number: '15A',
@@ -66,6 +70,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         extraLegroom: true,
         position: 'window',
         id: '1243235',
+        isEditing: false,
       },
       {
         number: '5B',
@@ -73,6 +78,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         extraLegroom: false,
         position: 'middle',
         id: '23545346',
+        isEditing: false,
       },
     ],
     preferences: {
@@ -98,6 +104,7 @@ const mockFlights: FlightCardProps['flight'][] = [
         extraLegroom: true,
         position: 'middle',
         id: '2354532346',
+        isEditing: false,
       },
     ],
     preferences: {
