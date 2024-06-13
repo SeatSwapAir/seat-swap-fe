@@ -19,7 +19,7 @@ export default function Seat({
   seat: SeatProps;
   flightNumber: string;
   handleUpdateSeat: FlightCardProps['handleUpdateSeat'];
-  handleDelete: FlightCardProps['handleDelete'];
+  handleDelete: (id: string) => void;
   showEditSeat: showEditSeat;
 }) {
   return (
@@ -31,7 +31,7 @@ export default function Seat({
           <Button
             variant='contained'
             color='primary'
-            onClick={handleDelete}
+            onClick={() => handleDelete(seat.id)}
             value={seat.number}
           >
             <Delete />

@@ -130,13 +130,12 @@ const Flights = () => {
         flightObj.departureTime === departureTime
     );
   };
-  const handleDelete: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-    const seatNumber = event.currentTarget.value;
+  const handleDelete = (seatId: string): void => {
     setFlights((prevFlights) => {
       return prevFlights.map((flight) => {
         return {
           ...flight,
-          seats: flight.seats.filter((seat) => seat.number !== seatNumber),
+          seats: flight.seats.filter((seat) => seat.id !== seatId),
         };
       });
     });
