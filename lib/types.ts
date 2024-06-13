@@ -17,6 +17,7 @@ export type Seat = {
   extraLegroom: boolean;
   position: Position;
   id: string;
+  isEditing: boolean;
 };
 export type Preferences = {
   location: Location;
@@ -45,6 +46,7 @@ export type FlightCardProps = {
   handleUpdateSeat: (seat: Seat, flightNumber:string, oldSeat:string) => void;
   handleUpdatePreferences: (preferences: Preferences,flightNumber: string) => void;
 };
+export type showEditSeat = (id:string) => void;
 export type AddFlightProps = {
   handleAddFlight: (flight: FlightProps) => boolean;
   checkIfFlightIsThere: (flightNumber: string | null, departureTime: string) => boolean 

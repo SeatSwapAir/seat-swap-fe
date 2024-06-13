@@ -1,7 +1,7 @@
 import { Typography, Button, CardContent, Card } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { FlightCardProps } from '../../lib/types';
+import { FlightCardProps, showEditSeat } from '../../lib/types';
 import Seat from './Seat';
 import FlightPreferences from './FlightPreferences';
 
@@ -21,6 +21,9 @@ export default function FlightCard({
   handleUpdateSeat,
   handleUpdatePreferences,
 }: FlightCardProps) {
+  const showEditSeat: showEditSeat = (id) => {
+    console.log('🚀 ~ id:', id);
+  };
   return (
     <Card>
       <CardContent>
@@ -40,11 +43,11 @@ export default function FlightCard({
           {seats.map((seat, index) => (
             <Seat
               key={index + flightNumber}
-              seatIndex={index + flightNumber}
               seat={seat}
               flightNumber={flightNumber}
               handleDelete={handleDelete}
               handleUpdateSeat={handleUpdateSeat}
+              showEditSeat={showEditSeat}
             />
           ))}
           <FlightPreferences

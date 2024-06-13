@@ -25,12 +25,10 @@ export default function SeatForm({
   seat,
   flightNumber,
   handleUpdateSeat,
-  doSeatFormChange,
 }: {
   seat: SeatProps;
   flightNumber: string;
   handleUpdateSeat: FlightCardProps['handleUpdateSeat'];
-  doSeatFormChange: () => void;
 }) {
   const [rowNumber, setRowNumber] = useState(seat.number.slice(0, -1));
   const [seatLetter, setSeatLetter] = useState(seat.number.slice(-1));
@@ -72,10 +70,9 @@ export default function SeatForm({
       extraLegroom: legroom,
       position: position,
       id: seat.id,
+      isEditing: false,
     };
-    console.log(newSeat);
     handleUpdateSeat(newSeat, flightNumber, seat.number);
-    doSeatFormChange();
   };
 
   return (

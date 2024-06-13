@@ -11,10 +11,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { FlightProps, FlightCardProps, AddFlightProps } from '../../lib/types';
 
 import { getToken, getFlightDetails } from '../api/amadeusAPI';
-import SeatForm from './SeatForm';
+import Seat from './Seat';
 
 export default function AddFlight({
-  handleAddFlight,
   checkIfFlightIsThere,
 }: {
   handleAddFlight: AddFlightProps['handleAddFlight'];
@@ -48,15 +47,13 @@ export default function AddFlight({
             extraLegroom: false,
             position: '',
             id: uuidv4(),
+            isEditing: true,
           },
         ],
       };
     });
   };
 
-  const doSeatFormChange = () => {
-    setShowFlightForms(false);
-  };
   const findFlightDetails = async () => {
     const token = await getToken();
     const headers = { Authorization: `Bearer ${token}` };
@@ -75,11 +72,28 @@ export default function AddFlight({
       checkIfFlightIsThere(response.flightNumber, response.arrivalTime)
     );
   };
-
-  const doSubmitFlight = () => {
-    if (flightDetails) {
-      setIsFlightAdded(handleAddFlight(flightDetails));
-    }
+  const handleDelete = () => {
+    console.log('DELETE CLICKED');
+  };
+  const showEditSeat = (id: string): void => {
+    setFlightDetails((prevFlightDetails) => {
+      if (!prevFlightDetails) return prevFlightDetails;
+      const updatedSeats = prevFlightDetails.seats.map((seat) => {
+        if (seat.id === id) {
+          console.log('🚀 ~ updatedSeats ~ seat.id :', seat.id);
+          console.log('🚀 ~ updatedSeats ~ seat.isEditing :', seat.isEditing);
+          return {
+            ...seat,
+            isEditing: !seat.isEditing,
+          };
+        }
+        return seat;
+      });
+      return {
+        ...prevFlightDetails,
+        seats: updatedSeats,
+      };
+    });
   };
 
   if (!open)
@@ -134,13 +148,14 @@ export default function AddFlight({
       )}
       {showFlightForms && (
         <>
-          {flightDetails?.seats.map((seat, index) => (
-            <SeatForm
-              key={index}
+          {flightDetails?.seats.map((seat) => (
+            <Seat
+              key={uuidv4()}
               seat={seat}
               flightNumber={flightDetails.flightNumber}
+              handleDelete={handleDelete}
               handleUpdateSeat={handleUpdateSeat}
-              doSeatFormChange={doSeatFormChange}
+              showEditSeat={showEditSeat}
             />
           ))}
           <Button onClick={doAddSeat}>Add Seat</Button>
