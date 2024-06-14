@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import { GetToken, GetFlightDetails, GetAirlineName } from '../../lib/types';
 
  export const getToken: GetToken  = async () => {
@@ -32,6 +33,7 @@ export const getFlightDetails: GetFlightDetails = async (carrierCode, flightNumb
     const airline = await getAirlineName(carrierCode, headers)
     if(!airline) throw new Error('Failed to retrieve airline name');
     return {
+      id: uuidv4(),
       flightNumber:
         response.data.data[0].flightDesignator.carrierCode +
         response.data.data[0].flightDesignator.flightNumber,
