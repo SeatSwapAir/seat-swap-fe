@@ -1,7 +1,7 @@
 import { Typography, Button, CardContent, Card } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { FlightCardProps } from '../../lib/types';
+import { FlightCardProps, FlightProps } from '../../lib/types';
 import Seat from './Seat';
 import FlightForm from './FlightForm';
 import FlightPreferences from './FlightPreferences';
@@ -12,8 +12,8 @@ export default function FlightCard({
   handleDelete,
   handleRemoveFlight,
   handleUpdatePreferences,
+  handleSubmitFlightChanges,
 }: FlightCardProps) {
-  const [flightDetails, setFlightDetails] = useState(flight);
   const [isEditing, setIsEditing] = useState(false);
   const {
     flightNumber,
@@ -24,16 +24,12 @@ export default function FlightCard({
     airline,
     seats,
     preferences,
-  } = flightDetails;
+  } = flight;
 
-  const handleUpdateSeat: FlightCardProps['handleUpdateSeat'] = (newSeat) => {
-    console.log('working');
-    if (!flightDetails) return;
-    const updatedSeats =
-      flightDetails.seats.map((s) => (s.id === newSeat.id ? newSeat : s)) ?? [];
-    setFlightDetails({ ...flightDetails, seats: updatedSeats });
+  const doSubmitFlightChanges = (flightDetails: FlightProps) => {
+    handleSubmitFlightChanges(flightDetails);
+    setIsEditing(false);
   };
-
   return (
     <Card>
       <CardContent>
@@ -59,7 +55,6 @@ export default function FlightCard({
                   seat={seat}
                   flightNumber={flightNumber}
                   handleDelete={handleDelete}
-                  handleUpdateSeat={handleUpdateSeat}
                 />
               ))}
               <FlightPreferences
@@ -70,7 +65,12 @@ export default function FlightCard({
               />
             </>
           )}
-          {isEditing && <FlightForm flight={flightDetails} />}
+          {isEditing && (
+            <FlightForm
+              flight={flight}
+              handleSubmitFlightChanges={doSubmitFlightChanges}
+            />
+          )}
           <Button
             variant='contained'
             color='primary'

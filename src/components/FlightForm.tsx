@@ -5,9 +5,14 @@ import SeatForm from './SeatForm2';
 import SoloFlightPreferencesForm from './SoloFlightPreferences2';
 import GroupFlightPreferencesForm from './GroupFlightPreferences2';
 import { Button } from '@mui/material';
-export default function FlightForm({ flight }: { flight: FlightProps }) {
+export default function FlightForm({
+  flight,
+  handleSubmitFlightChanges,
+}: {
+  flight: FlightProps;
+  handleSubmitFlightChanges: (flightDetails: FlightProps) => void;
+}) {
   const [flightDetails, setFlightDetails] = useState(flight);
-  console.log(flightDetails);
 
   const { flightNumber, seats, preferences } = flightDetails;
 
@@ -73,6 +78,9 @@ export default function FlightForm({ flight }: { flight: FlightProps }) {
         />
       )}
       <Button onClick={handleAddSeat}>Add Seat</Button>
+      <Button onClick={() => handleSubmitFlightChanges(flightDetails)}>
+        Submit
+      </Button>
     </>
   );
 }
