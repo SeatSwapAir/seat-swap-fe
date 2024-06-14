@@ -123,7 +123,7 @@ const mockFlights: FlightCardProps['flight'][] = [
 ];
 const Flights = () => {
   const [flights, setFlights] = useState(mockFlights);
-  console.log(flights);
+  console.log('🚀 ~ Flights ~ flights:', flights);
   const checkIfFlightIsThere: AddFlightProps['checkIfFlightIsThere'] = (
     flightNumber,
     departureTime
@@ -191,6 +191,20 @@ const Flights = () => {
     setFlights([...flights, flight]);
     return true;
   };
+  const handleSubmitFlightChanges: FlightCardProps['handleSubmitFlightChanges'] =
+    (flightDetails) => {
+      const newFlights = flights.map((flight) => {
+        if (flight.id === flightDetails.id) {
+          return {
+            ...flight,
+            preferences: flightDetails.preferences,
+            seats: flightDetails.seats,
+          };
+        }
+        return flight;
+      });
+      setFlights(newFlights);
+    };
   return (
     <Card>
       <CardContent>
@@ -205,6 +219,7 @@ const Flights = () => {
             handleRemoveFlight={handleRemoveFlight}
             handleUpdateSeat={handleUpdateSeat}
             handleUpdatePreferences={handleUpdatePreferences}
+            handleSubmitFlightChanges={handleSubmitFlightChanges}
           />
         ))}
         <AddFlight
