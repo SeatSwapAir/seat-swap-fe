@@ -37,6 +37,7 @@ export type FlightProps = {
     airline: string;
     seats: Seat[];
     preferences: Preferences;
+    id: string
   };
 
 export type FlightCardProps = {

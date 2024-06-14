@@ -163,7 +163,6 @@ export default function AddFlight({
               flightNumber={flightDetails.flightNumber}
               handleDelete={handleDelete}
               handleUpdateSeat={handleUpdateSeat}
-              showEditSeat={showEditSeat}
             />
           ))}
           <Button onClick={doAddSeat}>Add Seat</Button>

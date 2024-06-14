@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { Typography, CardContent, Card } from '@mui/material';
 
 import FlightCard from './FlightCard';
@@ -7,6 +8,7 @@ import { FlightCardProps, AddFlightProps } from '../../lib/types';
 
 const mockFlights: FlightCardProps['flight'][] = [
   {
+    id: uuidv4(),
     flightNumber: 'FR504',
     departureAirport: 'STN',
     arrivalAirport: 'BCN',
@@ -49,6 +51,7 @@ const mockFlights: FlightCardProps['flight'][] = [
     },
   },
   {
+    id: uuidv4(),
     flightNumber: 'W63321',
     departureAirport: 'BUD',
     arrivalAirport: 'CPH',
@@ -91,6 +94,7 @@ const mockFlights: FlightCardProps['flight'][] = [
     },
   },
   {
+    id: uuidv4(),
     flightNumber: 'U24832',
     departureAirport: 'CDG',
     arrivalAirport: 'LIS',
@@ -119,7 +123,7 @@ const mockFlights: FlightCardProps['flight'][] = [
 ];
 const Flights = () => {
   const [flights, setFlights] = useState(mockFlights);
-
+  console.log(flights);
   const checkIfFlightIsThere: AddFlightProps['checkIfFlightIsThere'] = (
     flightNumber,
     departureTime
@@ -193,9 +197,9 @@ const Flights = () => {
         <Typography variant='h2' gutterBottom>
           Flights
         </Typography>
-        {flights.map((flight, index) => (
+        {flights.map((flight) => (
           <FlightCard
-            key={index + flight.flightNumber}
+            key={flight.id}
             flight={flight}
             handleDelete={handleDelete}
             handleRemoveFlight={handleRemoveFlight}
