@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import {
   FlightProps,
-  Preferences,
-  Seat,
-  Location,
-  Position,
+  PreferencesProps,
+  SeatProps,
+  LocationProps,
+  PositionProps,
 } from '../../lib/types';
 import SeatForm from './SeatForm2';
 import SoloFlightPreferencesForm from './SoloFlightPreferences2';
@@ -22,7 +22,7 @@ export default function FlightForm({
 
   const { flightNumber, seats, preferences } = flightDetails;
 
-  const handleUpdateSeat = (newSeat: Seat): void => {
+  const handleUpdateSeat = (newSeat: SeatProps): void => {
     if (!flightDetails) return;
     const updatedSeats = flightDetails.seats.map((s) =>
       s.id === newSeat.id ? newSeat : s
@@ -30,7 +30,7 @@ export default function FlightForm({
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
 
-  const handleUpdatePreferences = (newPreferences: Preferences): void => {
+  const handleUpdatePreferences = (newPreferences: PreferencesProps): void => {
     if (!flightDetails) return;
     setFlightDetails({ ...flightDetails, preferences: newPreferences });
   };
@@ -42,7 +42,6 @@ export default function FlightForm({
   };
 
   const handleAddSeat = () => {
-    //look wy we dont add preference here
     setFlightDetails((prevDetails) => {
       if (!prevDetails) return prevDetails;
       return {
@@ -78,14 +77,14 @@ export default function FlightForm({
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
 
-  const handleChangeSeatLocation = (id: string, newLocation: Location) => {
+  const handleChangeSeatLocation = (id: string, newLocation: LocationProps) => {
     if (!flightDetails) return;
     const updatedSeats = flightDetails.seats.map((s) =>
       s.id === id ? { ...s, location: newLocation } : s
     );
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
-  const handleChangeSeatPosition = (id: string, newPosition: Position) => {
+  const handleChangeSeatPosition = (id: string, newPosition: PositionProps) => {
     if (!flightDetails) return;
     const updatedSeats = flightDetails.seats.map((s) =>
       s.id === id ? { ...s, position: newPosition } : s

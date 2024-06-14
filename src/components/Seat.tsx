@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-import { Seat as SeatProps } from '../../lib/types';
+import { SeatProps } from '../../lib/types';
 
 export default function Seat({
   seat,

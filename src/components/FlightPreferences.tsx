@@ -1,11 +1,11 @@
 import { Typography } from '@mui/material';
 
-import { Preferences } from '../../lib/types';
+import { PreferencesProps } from '../../lib/types';
 
 export default function FlightPreferences({
   preferences,
 }: {
-  preferences: Preferences;
+  preferences: PreferencesProps;
 }) {
   return (
     <>

@@ -1,7 +1,7 @@
-export type Position = 'window' | 'middle' | 'aisle' | '';
-export type Location = 'front' | 'middle' | 'back' | '';
+export type PositionProps = 'window' | 'middle' | 'aisle' | '';
+export type LocationProps = 'front' | 'middle' | 'back' | '';
 
-export type User = {
+export type UserProps = {
   email: string;
   firstname: string;
   lastname: string;
@@ -11,18 +11,18 @@ export type User = {
   created_at: string;
 };
 
-export type Seat = {
+export type SeatProps = {
   number: string;
-  location: Location;
+  location: LocationProps;
   extraLegroom: boolean;
-  position: Position;
+  position: PositionProps;
   id: string;
   isEditing: boolean;
 };
-export type Preferences = {
-  location: Location;
+export type PreferencesProps = {
+  location: LocationProps;
   extraLegroom: boolean;
-  position: Position;
+  position: PositionProps;
   neighbouringRows: boolean;
   sameRow: boolean;
   sideBySide: boolean;
@@ -35,16 +35,16 @@ export type FlightProps = {
     departureTime: string;
     arrivalTime: string;
     airline: string;
-    seats: Seat[];
-    preferences: Preferences;
+    seats: SeatProps[];
+    preferences: PreferencesProps;
     id: string
   };
 
 export type FlightCardProps = {
   flight: FlightProps;
   handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement>;
-  handleUpdateSeat: (seat: Seat, flightNumber:string, oldSeat:string) => void;
-  handleUpdatePreferences: (preferences: Preferences,flightNumber: string) => void;
+  handleUpdateSeat: (seat: SeatProps, flightNumber:string, oldSeat:string) => void;
+  handleUpdatePreferences: (preferences: PreferencesProps,flightNumber: string) => void;
   handleSubmitFlightChanges: (flight: FlightProps) => void;
 };
 export type showEditSeat = (id:string) => void;
