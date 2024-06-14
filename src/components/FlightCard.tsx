@@ -9,9 +9,7 @@ import { useState } from 'react';
 
 export default function FlightCard({
   flight,
-  handleDelete,
   handleRemoveFlight,
-  handleUpdatePreferences,
   handleSubmitFlightChanges,
 }: FlightCardProps) {
   const [isEditing, setIsEditing] = useState(false);
@@ -56,15 +54,9 @@ export default function FlightCard({
                   key={index + flightNumber}
                   seat={seat}
                   flightNumber={flightNumber}
-                  handleDelete={handleDelete}
                 />
               ))}
-              <FlightPreferences
-                preferences={preferences}
-                seats={seats}
-                flightNumber={flightNumber}
-                handleUpdatePreferences={handleUpdatePreferences}
-              />
+              <FlightPreferences preferences={preferences} />
             </>
           )}
           {isEditing && (

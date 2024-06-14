@@ -123,7 +123,6 @@ const mockFlights: FlightCardProps['flight'][] = [
 ];
 const Flights = () => {
   const [flights, setFlights] = useState(mockFlights);
-  console.log('🚀 ~ Flights ~ flights:', flights);
   const checkIfFlightIsThere: AddFlightProps['checkIfFlightIsThere'] = (
     flightNumber,
     departureTime
@@ -133,16 +132,6 @@ const Flights = () => {
         flightObj.flightNumber === flightNumber &&
         flightObj.departureTime === departureTime
     );
-  };
-  const handleDelete = (seatId: string): void => {
-    setFlights((prevFlights) => {
-      return prevFlights.map((flight) => {
-        return {
-          ...flight,
-          seats: flight.seats.filter((seat) => seat.id !== seatId),
-        };
-      });
-    });
   };
   const handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement> = (
     event
@@ -215,7 +204,6 @@ const Flights = () => {
           <FlightCard
             key={flight.id}
             flight={flight}
-            handleDelete={handleDelete}
             handleRemoveFlight={handleRemoveFlight}
             handleUpdateSeat={handleUpdateSeat}
             handleUpdatePreferences={handleUpdatePreferences}
