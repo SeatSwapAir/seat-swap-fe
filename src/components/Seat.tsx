@@ -1,11 +1,7 @@
 import { Typography, Button } from '@mui/material';
-import { Delete, Edit } from '@mui/icons-material';
+import { Delete } from '@mui/icons-material';
 
-import {
-  FlightCardProps,
-  Seat as SeatProps,
-  showEditSeat,
-} from '../../lib/types';
+import { FlightCardProps, Seat as SeatProps } from '../../lib/types';
 
 import SeatForm from './SeatForm';
 
@@ -14,13 +10,11 @@ export default function Seat({
   flightNumber,
   handleDelete,
   handleUpdateSeat,
-  showEditSeat,
 }: {
   seat: SeatProps;
   flightNumber: string;
   handleUpdateSeat: FlightCardProps['handleUpdateSeat'];
   handleDelete: (id: string) => void;
-  showEditSeat: showEditSeat;
 }) {
   return (
     <>
@@ -35,14 +29,6 @@ export default function Seat({
             value={seat.number}
           >
             <Delete />
-          </Button>
-          <Button
-            variant='contained'
-            color='primary'
-            onClick={() => showEditSeat(seat.id)}
-          >
-            <Edit />
-            Edit Seats
           </Button>
         </Typography>
       )}

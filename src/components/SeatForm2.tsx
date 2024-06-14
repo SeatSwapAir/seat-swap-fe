@@ -1,0 +1,157 @@
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useState } from 'react';
+
+import {
+  Box,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormLabel,
+  Switch,
+} from '@mui/material';
+
+import { Seat as SeatProps, Location, Position } from '../../lib/types';
+
+export default function SeatForm({
+  seat,
+  handleUpdateSeat,
+}: {
+  seat: SeatProps;
+  flightNumber: string;
+  handleUpdateSeat: (newSeat: SeatProps) => void;
+}) {
+  const [rowNumber, setRowNumber] = useState(seat.number.slice(0, -1));
+  const [seatLetter, setSeatLetter] = useState(seat.number.slice(-1));
+  const [location, setLocation] = useState<Location>(seat.location);
+  const [position, setPosition] = useState<Position>(seat.position);
+  const [legroom, setLegroom] = useState(seat.extraLegroom);
+
+  const newSeat = {
+    number: rowNumber + seatLetter,
+    location: location,
+    extraLegroom: legroom,
+    position: position,
+    id: seat.id,
+    isEditing: false,
+  };
+
+  const rows: Number[] = [];
+  const letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+
+  for (let i = 0; i < 66; i++) {
+    rows.push(i);
+  }
+
+  const doRowNumber = (event: SelectChangeEvent<string>) => {
+    setRowNumber(event.target.value);
+    handleUpdateSeat(newSeat);
+  };
+
+  const doSeatLetter = (event: SelectChangeEvent<string>) => {
+    setSeatLetter(event.target.value);
+    handleUpdateSeat(newSeat);
+  };
+
+  const doLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLocation(event.target.value as Location);
+    handleUpdateSeat(newSeat);
+  };
+
+  const doPosition = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPosition(event.target.value as Position);
+    handleUpdateSeat(newSeat);
+  };
+
+  const toggleLegroom = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLegroom(event.target.checked);
+    handleUpdateSeat(newSeat);
+  };
+
+  return (
+    <>
+      <Box sx={{ minWidth: 120 }}>
+        <FormControl fullWidth>
+          <InputLabel id='demo-simple-select-label'>Row Number</InputLabel>
+          <Select
+            labelId='demo-simple-select-label'
+            id='demo-simple-select'
+            value={rowNumber}
+            label='Row Number'
+            onChange={doRowNumber}
+          >
+            {rows.map((row) => (
+              <MenuItem key={row.toString()} value={row.toString()}>
+                {row.toString()}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+      <Box sx={{ minWidth: 120 }}>
+        <FormControl fullWidth>
+          <InputLabel id='demo-simple-select-label'>Seat Letter</InputLabel>
+          <Select
+            labelId='demo-simple-select-label'
+            id='demo-simple-select'
+            value={seatLetter}
+            label='Seat Letter'
+            onChange={doSeatLetter}
+          >
+            {letters.map((letter) => (
+              <MenuItem key={letter} value={letter}>
+                {letter}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+      <FormControl>
+        <FormLabel id='demo-controlled-radio-buttons-group'>Location</FormLabel>
+        <RadioGroup
+          aria-labelledby='demo-controlled-radio-buttons-group'
+          name='controlled-radio-buttons-group'
+          value={location}
+          onChange={doLocation}
+        >
+          <FormControlLabel
+            value='front'
+            control={<Radio />}
+            label='Front of plane'
+          />
+          <FormControlLabel
+            value='middle'
+            control={<Radio />}
+            label='Middle of plane'
+          />
+          <FormControlLabel
+            value='back'
+            control={<Radio />}
+            label='Back of plane'
+          />
+        </RadioGroup>
+      </FormControl>
+      <FormControl>
+        <FormLabel id='demo-controlled-radio-buttons-group'>
+          Seat Position
+        </FormLabel>
+        <RadioGroup
+          aria-labelledby='demo-controlled-radio-buttons-group'
+          name='controlled-radio-buttons-group'
+          value={position}
+          onChange={doPosition}
+        >
+          <FormControlLabel value='window' control={<Radio />} label='Window' />
+          <FormControlLabel value='middle' control={<Radio />} label='Middle' />
+          <FormControlLabel value='aisle' control={<Radio />} label='Aisle' />
+        </RadioGroup>
+      </FormControl>
+      <FormControlLabel
+        control={<Switch checked={legroom} onChange={toggleLegroom} />}
+        label='This seat has extra legroom'
+      />
+    </>
+  );
+}
