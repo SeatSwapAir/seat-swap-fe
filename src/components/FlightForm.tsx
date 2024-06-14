@@ -21,6 +21,14 @@ export default function FlightForm({ flight }: { flight: FlightProps }) {
     setFlightDetails({ ...flightDetails, preferences: newPreferences });
   };
 
+  const handleDeleteSeat = (id: string): void => {
+    console.log('🚀 ~ handleDeleteSeat ~ id:', id);
+
+    if (!flightDetails) return;
+    const updatedSeats = flightDetails.seats.filter((s) => s.id !== id);
+    setFlightDetails({ ...flightDetails, seats: updatedSeats });
+  };
+
   return (
     <>
       {seats.map((seat) => (
@@ -29,6 +37,7 @@ export default function FlightForm({ flight }: { flight: FlightProps }) {
           seat={seat}
           flightNumber={flightNumber}
           handleUpdateSeat={handleUpdateSeat}
+          handleDeleteSeat={handleDeleteSeat}
         />
       ))}
       {seats.length === 1 && (

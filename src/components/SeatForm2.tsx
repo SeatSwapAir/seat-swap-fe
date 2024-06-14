@@ -11,6 +11,7 @@ import {
   FormControlLabel,
   FormLabel,
   Switch,
+  Button,
 } from '@mui/material';
 
 import { Seat as SeatProps, Location, Position } from '../../lib/types';
@@ -18,10 +19,12 @@ import { Seat as SeatProps, Location, Position } from '../../lib/types';
 export default function SeatForm({
   seat,
   handleUpdateSeat,
+  handleDeleteSeat,
 }: {
   seat: SeatProps;
   flightNumber: string;
   handleUpdateSeat: (newSeat: SeatProps) => void;
+  handleDeleteSeat: (id: string) => void;
 }) {
   const [rowNumber, setRowNumber] = useState(seat.number.slice(0, -1));
   const [seatLetter, setSeatLetter] = useState(seat.number.slice(-1));
@@ -152,6 +155,7 @@ export default function SeatForm({
         control={<Switch checked={legroom} onChange={toggleLegroom} />}
         label='This seat has extra legroom'
       />
+      <Button onClick={() => handleDeleteSeat(seat.id)}>Delete</Button>
     </>
   );
 }
