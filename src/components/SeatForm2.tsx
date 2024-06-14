@@ -1,6 +1,4 @@
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useState } from 'react';
-
 import {
   Box,
   InputLabel,
@@ -18,29 +16,23 @@ import { Seat as SeatProps, Location, Position } from '../../lib/types';
 
 export default function SeatForm({
   seat,
-  handleUpdateSeat,
   handleDeleteSeat,
+  handleChangeSeatRowNumber,
+  handleChangeSeatLetter,
+  handleChangeSeatLocation,
+  handleChangeSeatPosition,
+  handleChangeSeatLegroom,
 }: {
   seat: SeatProps;
   flightNumber: string;
   handleUpdateSeat: (newSeat: SeatProps) => void;
   handleDeleteSeat: (id: string) => void;
+  handleChangeSeatRowNumber: (id: string, newNumber: string) => void;
+  handleChangeSeatLetter: (id: string, newLetter: string) => void;
+  handleChangeSeatLocation: (id: string, newLocation: Location) => void;
+  handleChangeSeatPosition: (id: string, newPosition: Position) => void;
+  handleChangeSeatLegroom: (id: string, newLegroom: boolean) => void;
 }) {
-  const [rowNumber, setRowNumber] = useState(seat.number.slice(0, -1));
-  const [seatLetter, setSeatLetter] = useState(seat.number.slice(-1));
-  const [location, setLocation] = useState<Location>(seat.location);
-  const [position, setPosition] = useState<Position>(seat.position);
-  const [legroom, setLegroom] = useState(seat.extraLegroom);
-
-  const newSeat = {
-    number: rowNumber + seatLetter,
-    location: location,
-    extraLegroom: legroom,
-    position: position,
-    id: seat.id,
-    isEditing: false,
-  };
-
   const rows: Number[] = [];
   const letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
@@ -49,28 +41,26 @@ export default function SeatForm({
   }
 
   const doRowNumber = (event: SelectChangeEvent<string>) => {
-    setRowNumber(event.target.value);
-    handleUpdateSeat(newSeat);
+    handleChangeSeatRowNumber(seat.id, event.target.value);
   };
 
   const doSeatLetter = (event: SelectChangeEvent<string>) => {
-    setSeatLetter(event.target.value);
-    handleUpdateSeat(newSeat);
+    handleChangeSeatLetter(seat.id, event.target.value);
   };
 
   const doLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value as Location);
-    handleUpdateSeat(newSeat);
+    const location = event.target.value as Location;
+    handleChangeSeatLocation(seat.id, location);
   };
 
   const doPosition = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPosition(event.target.value as Position);
-    handleUpdateSeat(newSeat);
+    const position = event.target.value as Position;
+    handleChangeSeatPosition(seat.id, position);
   };
 
   const toggleLegroom = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLegroom(event.target.checked);
-    handleUpdateSeat(newSeat);
+    const legroom = event.target.checked;
+    handleChangeSeatLegroom(seat.id, legroom);
   };
 
   return (
@@ -81,7 +71,7 @@ export default function SeatForm({
           <Select
             labelId='demo-simple-select-label'
             id='demo-simple-select'
-            value={rowNumber}
+            value={seat.number.slice(0, -1)}
             label='Row Number'
             onChange={doRowNumber}
           >
@@ -99,7 +89,7 @@ export default function SeatForm({
           <Select
             labelId='demo-simple-select-label'
             id='demo-simple-select'
-            value={seatLetter}
+            value={seat.number.slice(-1)}
             label='Seat Letter'
             onChange={doSeatLetter}
           >
@@ -116,7 +106,7 @@ export default function SeatForm({
         <RadioGroup
           aria-labelledby='demo-controlled-radio-buttons-group'
           name='controlled-radio-buttons-group'
-          value={location}
+          value={seat.location}
           onChange={doLocation}
         >
           <FormControlLabel
@@ -143,7 +133,7 @@ export default function SeatForm({
         <RadioGroup
           aria-labelledby='demo-controlled-radio-buttons-group'
           name='controlled-radio-buttons-group'
-          value={position}
+          value={seat.position}
           onChange={doPosition}
         >
           <FormControlLabel value='window' control={<Radio />} label='Window' />
@@ -152,7 +142,9 @@ export default function SeatForm({
         </RadioGroup>
       </FormControl>
       <FormControlLabel
-        control={<Switch checked={legroom} onChange={toggleLegroom} />}
+        control={
+          <Switch checked={seat.extraLegroom} onChange={toggleLegroom} />
+        }
         label='This seat has extra legroom'
       />
       <Button onClick={() => handleDeleteSeat(seat.id)}>Delete</Button>

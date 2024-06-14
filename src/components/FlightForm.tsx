@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { FlightProps, Preferences, Seat } from '../../lib/types';
+import {
+  FlightProps,
+  Preferences,
+  Seat,
+  Location,
+  Position,
+} from '../../lib/types';
 import SeatForm from './SeatForm2';
 import SoloFlightPreferencesForm from './SoloFlightPreferences2';
 import GroupFlightPreferencesForm from './GroupFlightPreferences2';
@@ -18,8 +24,9 @@ export default function FlightForm({
 
   const handleUpdateSeat = (newSeat: Seat): void => {
     if (!flightDetails) return;
-    const updatedSeats =
-      flightDetails.seats.map((s) => (s.id === newSeat.id ? newSeat : s)) ?? [];
+    const updatedSeats = flightDetails.seats.map((s) =>
+      s.id === newSeat.id ? newSeat : s
+    );
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
 
@@ -35,6 +42,7 @@ export default function FlightForm({
   };
 
   const handleAddSeat = () => {
+    //look wy we dont add preference here
     setFlightDetails((prevDetails) => {
       if (!prevDetails) return prevDetails;
       return {
@@ -54,6 +62,44 @@ export default function FlightForm({
     });
   };
 
+  const handleChangeSeatRowNumber = (id: string, newNumber: string) => {
+    if (!flightDetails) return;
+    const updatedSeats = flightDetails.seats.map((s) =>
+      s.id === id ? { ...s, number: newNumber + s.number.slice(-1) } : s
+    );
+    setFlightDetails({ ...flightDetails, seats: updatedSeats });
+  };
+
+  const handleChangeSeatLetter = (id: string, newLetter: string) => {
+    if (!flightDetails) return;
+    const updatedSeats = flightDetails.seats.map((s) =>
+      s.id === id ? { ...s, number: s.number.slice(0, 1) + newLetter } : s
+    );
+    setFlightDetails({ ...flightDetails, seats: updatedSeats });
+  };
+
+  const handleChangeSeatLocation = (id: string, newLocation: Location) => {
+    if (!flightDetails) return;
+    const updatedSeats = flightDetails.seats.map((s) =>
+      s.id === id ? { ...s, location: newLocation } : s
+    );
+    setFlightDetails({ ...flightDetails, seats: updatedSeats });
+  };
+  const handleChangeSeatPosition = (id: string, newPosition: Position) => {
+    if (!flightDetails) return;
+    const updatedSeats = flightDetails.seats.map((s) =>
+      s.id === id ? { ...s, position: newPosition } : s
+    );
+    setFlightDetails({ ...flightDetails, seats: updatedSeats });
+  };
+
+  const handleChangeSeatLegroom = (id: string, newLegroom: boolean) => {
+    if (!flightDetails) return;
+    const updatedSeats = flightDetails.seats.map((s) =>
+      s.id === id ? { ...s, extraLegroom: newLegroom } : s
+    );
+    setFlightDetails({ ...flightDetails, seats: updatedSeats });
+  };
   return (
     <>
       {seats.map((seat) => (
@@ -63,6 +109,11 @@ export default function FlightForm({
           flightNumber={flightNumber}
           handleUpdateSeat={handleUpdateSeat}
           handleDeleteSeat={handleDeleteSeat}
+          handleChangeSeatRowNumber={handleChangeSeatRowNumber}
+          handleChangeSeatLetter={handleChangeSeatLetter}
+          handleChangeSeatLocation={handleChangeSeatLocation}
+          handleChangeSeatPosition={handleChangeSeatPosition}
+          handleChangeSeatLegroom={handleChangeSeatLegroom}
         />
       ))}
       {seats.length === 1 && (
