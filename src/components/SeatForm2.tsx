@@ -12,7 +12,7 @@ import {
   Button,
 } from '@mui/material';
 
-import { Seat as SeatProps, Location, Position } from '../../lib/types';
+import { SeatProps, LocationProps, PositionProps } from '../../lib/types';
 
 export default function SeatForm({
   seat,
@@ -29,8 +29,8 @@ export default function SeatForm({
   handleDeleteSeat: (id: string) => void;
   handleChangeSeatRowNumber: (id: string, newNumber: string) => void;
   handleChangeSeatLetter: (id: string, newLetter: string) => void;
-  handleChangeSeatLocation: (id: string, newLocation: Location) => void;
-  handleChangeSeatPosition: (id: string, newPosition: Position) => void;
+  handleChangeSeatLocation: (id: string, newLocation: LocationProps) => void;
+  handleChangeSeatPosition: (id: string, newPosition: PositionProps) => void;
   handleChangeSeatLegroom: (id: string, newLegroom: boolean) => void;
 }) {
   const rows: Number[] = [];
@@ -49,12 +49,12 @@ export default function SeatForm({
   };
 
   const doLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const location = event.target.value as Location;
-    handleChangeSeatLocation(seat.id, location);
+    const newLocation = event.target.value as LocationProps;
+    handleChangeSeatLocation(seat.id, newLocation);
   };
 
   const doPosition = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const position = event.target.value as Position;
+    const position = event.target.value as PositionProps;
     handleChangeSeatPosition(seat.id, position);
   };
 
