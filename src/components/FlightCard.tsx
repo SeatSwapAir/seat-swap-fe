@@ -35,7 +35,9 @@ export default function FlightCard({
       <CardContent>
         <Typography variant='h4' component='div' gutterBottom>
           {airline} - Flight {flightNumber}
-          <Button onClick={() => setIsEditing(true)}>Edit Flight</Button>
+          {!isEditing && (
+            <Button onClick={() => setIsEditing(true)}>Edit Flight</Button>
+          )}
           <Typography variant='body1'>
             Departure Airport: {departureAirport}
           </Typography>
