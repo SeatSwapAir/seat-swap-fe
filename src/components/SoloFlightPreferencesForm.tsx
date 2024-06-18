@@ -1,12 +1,11 @@
-import { useState } from 'react';
 import {
   FormControl,
   Radio,
   RadioGroup,
   FormLabel,
   FormControlLabel,
-  Button,
   Switch,
+  Typography,
 } from '@mui/material';
 
 import {
@@ -16,54 +15,39 @@ import {
 } from '../../lib/types';
 
 export default function SoloFlightPreferencesForm({
-  handleUpdatePreferences,
-  flightNumber,
+  handleChangeLegroomPreferences,
+  handleChangePositionPreferences,
+  handleChangeLocationPreferences,
   preferences,
 }: {
-  handleUpdatePreferences: (
-    newPreferences: PreferencesProps,
-    flightNumber: string
-  ) => void;
-  flightNumber: string;
+  handleUpdatePreferences: (newPreferences: PreferencesProps) => void;
+  handleChangeLegroomPreferences: (newLegroom: boolean) => void;
+  handleChangePositionPreferences: (newPosition: PositionProps) => void;
+  handleChangeLocationPreferences: (newLocation: LocationProps) => void;
+
   preferences: PreferencesProps;
 }) {
-  const [location, setLocation] = useState<LocationProps>(preferences.location);
-  const [position, setPosition] = useState<PositionProps>(preferences.position);
-  const [extraLegroom, setExtraLegroom] = useState(preferences.extraLegroom);
-
   const doLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value as LocationProps);
+    handleChangeLocationPreferences(event.target.value as LocationProps);
   };
 
   const doPosition = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPosition(event.target.value as PositionProps);
+    handleChangePositionPreferences(event.target.value as PositionProps);
   };
 
   const toggleLegroom = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setExtraLegroom(event.target.checked);
-  };
-
-  const doSubmit = () => {
-    const newPreferences = {
-      location: location as LocationProps,
-      extraLegroom: extraLegroom,
-      position: position as PositionProps,
-      neighbouringRows: false,
-      sameRow: false,
-      sideBySide: false,
-    };
-
-    handleUpdatePreferences(newPreferences, flightNumber);
+    handleChangeLegroomPreferences(event.target.checked);
   };
 
   return (
     <>
+      <Typography>Preferences</Typography>
       <FormControl>
         <FormLabel id='demo-controlled-radio-buttons-group'>Location</FormLabel>
         <RadioGroup
           aria-labelledby='demo-controlled-radio-buttons-group'
           name='controlled-radio-buttons-group'
-          value={location}
+          value={preferences.location}
           onChange={doLocation}
         >
           <FormControlLabel
@@ -90,7 +74,7 @@ export default function SoloFlightPreferencesForm({
         <RadioGroup
           aria-labelledby='demo-controlled-radio-buttons-group'
           name='controlled-radio-buttons-group'
-          value={position}
+          value={preferences.position}
           onChange={doPosition}
         >
           <FormControlLabel value='window' control={<Radio />} label='Window' />
@@ -99,10 +83,12 @@ export default function SoloFlightPreferencesForm({
         </RadioGroup>
       </FormControl>
       <FormControlLabel
-        control={<Switch checked={extraLegroom} onChange={toggleLegroom} />}
-        label='This seat has extra legroom'
+        control={
+          <Switch checked={preferences.extraLegroom} onChange={toggleLegroom} />
+        }
+        label='Extra legroom preferred'
       />
-      <Button onClick={doSubmit}>Submit Changes</Button>
+      {/* <Button onClick={doSubmit}>Submit Changes</Button> */}
     </>
   );
 }

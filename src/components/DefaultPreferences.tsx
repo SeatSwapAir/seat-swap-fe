@@ -20,13 +20,25 @@ export default function DefaultPreferences() {
     sideBySide: false,
   };
 
+  const handleChangeLegroomPreferences = (newLegroom: boolean) => {
+    console.log(newLegroom);
+  };
+  const handleChangePositionPreferences = (newPosition: PositionProps) => {
+    console.log(newPosition);
+  };
+  const handleChangeLocationPreferences = (newLocation: LocationProps) => {
+    console.log(newLocation);
+  };
+
   return (
     <>
       <Typography>Default Preferences Settings</Typography>
       <SoloFlightPreferencesForm
+        handleChangeLegroomPreferences={handleChangeLegroomPreferences}
+        handleChangePositionPreferences={handleChangePositionPreferences}
+        handleChangeLocationPreferences={handleChangeLocationPreferences}
         preferences={mockPreferences}
         handleUpdatePreferences={handleUpdatePreferences}
-        flightNumber='13'
       />
     </>
   );

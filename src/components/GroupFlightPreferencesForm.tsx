@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -6,63 +5,47 @@ import {
   Box,
   Checkbox,
   FormGroup,
-  Button,
+  Typography,
 } from '@mui/material';
 
-import {
-  PreferencesProps,
-  LocationProps,
-  PositionProps,
-} from '../../lib/types';
+import { PreferencesProps } from '../../lib/types';
 
 export default function GroupFlightPreferencesForm({
-  handleUpdatePreferences,
-  flightNumber,
+  handleChangeGroupPreferences,
   preferences,
 }: {
-  handleUpdatePreferences: (
-    newPreferences: PreferencesProps,
-    flightNumber: string
-  ) => void;
-  flightNumber: string;
+  handleUpdatePreferences: (newPreferences: PreferencesProps) => void;
+  handleChangeGroupPreferences: (newGroupPreferences: {
+    neighbouringRows: boolean;
+    sameRow: boolean;
+    sideBySide: boolean;
+  }) => void;
   preferences: PreferencesProps;
 }) {
-  const [groupPreferences, setGroupPreferences] = useState({
+  const groupPreferences = {
     neighbouringRows: preferences.neighbouringRows,
     sameRow: preferences.sameRow,
     sideBySide: preferences.sideBySide,
-  });
-  const { neighbouringRows, sameRow, sideBySide } = groupPreferences;
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setGroupPreferences({
-      ...groupPreferences,
-      [event.target.name]: event.target.checked,
-    });
   };
 
-  const doSubmit = () => {
-    const newPreferences = {
-      location: '' as LocationProps,
-      extraLegroom: false,
-      position: '' as PositionProps,
-      neighbouringRows: neighbouringRows,
-      sameRow: sameRow,
-      sideBySide: sideBySide,
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedGroupPreferences = {
+      ...groupPreferences,
+      [event.target.name]: event.target.checked,
     };
-
-    handleUpdatePreferences(newPreferences, flightNumber);
+    handleChangeGroupPreferences(updatedGroupPreferences);
   };
 
   return (
     <Box sx={{ display: 'flex' }}>
+      <Typography>Preferences</Typography>
       <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
         <FormLabel component='legend'>Seating Proximity</FormLabel>
         <FormGroup>
           <FormControlLabel
             control={
               <Checkbox
-                checked={neighbouringRows}
+                checked={preferences.neighbouringRows}
                 onChange={handleChange}
                 name='neighbouringRows'
               />
@@ -72,7 +55,7 @@ export default function GroupFlightPreferencesForm({
           <FormControlLabel
             control={
               <Checkbox
-                checked={sameRow}
+                checked={preferences.sameRow}
                 onChange={handleChange}
                 name='sameRow'
               />
@@ -82,14 +65,13 @@ export default function GroupFlightPreferencesForm({
           <FormControlLabel
             control={
               <Checkbox
-                checked={sideBySide}
+                checked={preferences.sideBySide}
                 onChange={handleChange}
                 name='sideBySide'
               />
             }
             label='Side by side'
           />
-          <Button onClick={doSubmit}>Submit Changes</Button>
         </FormGroup>
       </FormControl>
     </Box>

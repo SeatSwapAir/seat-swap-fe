@@ -7,9 +7,9 @@ import {
   LocationProps,
   PositionProps,
 } from '../../lib/types';
-import SeatForm from './SeatForm2';
-import SoloFlightPreferencesForm from './SoloFlightPreferences2';
-import GroupFlightPreferencesForm from './GroupFlightPreferences2';
+import SeatForm from './SeatForm';
+import SoloFlightPreferencesForm from './SoloFlightPreferencesForm';
+import GroupFlightPreferencesForm from './GroupFlightPreferencesForm';
 import { Button } from '@mui/material';
 export default function FlightForm({
   flight,
