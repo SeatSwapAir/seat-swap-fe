@@ -8,35 +8,39 @@ import {
   Switch,
 } from '@mui/material';
 
-import { Preferences, Location, Position } from '../../lib/types';
+import {
+  PreferencesProps,
+  LocationProps,
+  PositionProps,
+} from '../../lib/types';
 
 export default function SoloFlightPreferencesForm({
   handleUpdatePreferences,
   preferences,
 }: {
-  handleUpdatePreferences: (newPreferences: Preferences) => void;
-  preferences: Preferences;
+  handleUpdatePreferences: (newPreferences: PreferencesProps) => void;
+  preferences: PreferencesProps;
 }) {
-  const [location, setLocation] = useState<Location>(preferences.location);
-  const [position, setPosition] = useState<Position>(preferences.position);
+  const [location, setLocation] = useState<LocationProps>(preferences.location);
+  const [position, setPosition] = useState<PositionProps>(preferences.position);
   const [extraLegroom, setExtraLegroom] = useState(preferences.extraLegroom);
 
   const newPreferences = {
-    location: location as Location,
+    location: location as LocationProps,
     extraLegroom: extraLegroom,
-    position: position as Position,
+    position: position as PositionProps,
     neighbouringRows: false,
     sameRow: false,
     sideBySide: false,
   };
 
   const doLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value as Location);
+    setLocation(event.target.value as LocationProps);
     handleUpdatePreferences(newPreferences);
   };
 
   const doPosition = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPosition(event.target.value as Position);
+    setPosition(event.target.value as PositionProps);
     handleUpdatePreferences(newPreferences);
   };
 

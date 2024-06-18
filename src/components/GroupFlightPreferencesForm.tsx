@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -7,9 +7,13 @@ import {
   Checkbox,
   FormGroup,
   Button,
-} from "@mui/material";
+} from '@mui/material';
 
-import { Preferences, Location, Position } from "../../lib/types";
+import {
+  PreferencesProps,
+  LocationProps,
+  PositionProps,
+} from '../../lib/types';
 
 export default function GroupFlightPreferencesForm({
   handleUpdatePreferences,
@@ -17,11 +21,11 @@ export default function GroupFlightPreferencesForm({
   preferences,
 }: {
   handleUpdatePreferences: (
-    newPreferences: Preferences,
+    newPreferences: PreferencesProps,
     flightNumber: string
   ) => void;
   flightNumber: string;
-  preferences: Preferences;
+  preferences: PreferencesProps;
 }) {
   const [groupPreferences, setGroupPreferences] = useState({
     neighbouringRows: preferences.neighbouringRows,
@@ -39,9 +43,9 @@ export default function GroupFlightPreferencesForm({
 
   const doSubmit = () => {
     const newPreferences = {
-      location: "" as Location,
+      location: '' as LocationProps,
       extraLegroom: false,
-      position: "" as Position,
+      position: '' as PositionProps,
       neighbouringRows: neighbouringRows,
       sameRow: sameRow,
       sideBySide: sideBySide,
@@ -51,39 +55,39 @@ export default function GroupFlightPreferencesForm({
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-        <FormLabel component="legend">Seating Proximity</FormLabel>
+    <Box sx={{ display: 'flex' }}>
+      <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
+        <FormLabel component='legend'>Seating Proximity</FormLabel>
         <FormGroup>
           <FormControlLabel
             control={
               <Checkbox
                 checked={neighbouringRows}
                 onChange={handleChange}
-                name="neighbouringRows"
+                name='neighbouringRows'
               />
             }
-            label="Neigbouring Rows OK"
+            label='Neigbouring Rows OK'
           />
           <FormControlLabel
             control={
               <Checkbox
                 checked={sameRow}
                 onChange={handleChange}
-                name="sameRow"
+                name='sameRow'
               />
             }
-            label="Same row OK"
+            label='Same row OK'
           />
           <FormControlLabel
             control={
               <Checkbox
                 checked={sideBySide}
                 onChange={handleChange}
-                name="sideBySide"
+                name='sideBySide'
               />
             }
-            label="Side by side"
+            label='Side by side'
           />
           <Button onClick={doSubmit}>Submit Changes</Button>
         </FormGroup>

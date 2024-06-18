@@ -15,9 +15,9 @@ import {
 } from '@mui/material';
 
 import {
-  Seat as SeatProps,
-  Location,
-  Position,
+  SeatProps,
+  LocationProps,
+  PositionProps,
   FlightCardProps,
 } from '../../lib/types';
 
@@ -32,8 +32,8 @@ export default function SeatForm({
 }) {
   const [rowNumber, setRowNumber] = useState(seat.number.slice(0, -1));
   const [seatLetter, setSeatLetter] = useState(seat.number.slice(-1));
-  const [location, setLocation] = useState<Location>(seat.location);
-  const [position, setPosition] = useState<Position>(seat.position);
+  const [location, setLocation] = useState<LocationProps>(seat.location);
+  const [position, setPosition] = useState<PositionProps>(seat.position);
   const [legroom, setLegroom] = useState(seat.extraLegroom);
 
   const rows: Number[] = [];
@@ -52,11 +52,11 @@ export default function SeatForm({
   };
 
   const doLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value as Location);
+    setLocation(event.target.value as LocationProps);
   };
 
   const doPosition = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPosition(event.target.value as Position);
+    setPosition(event.target.value as PositionProps);
   };
 
   const toggleLegroom = (event: React.ChangeEvent<HTMLInputElement>) => {

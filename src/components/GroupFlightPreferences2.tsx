@@ -8,14 +8,14 @@ import {
   FormGroup,
 } from '@mui/material';
 
-import { Preferences, Location, Position } from '../../lib/types';
+import { PreferencesProps, LocationProps, PositionProps } from '../../lib/types';
 
 export default function GroupFlightPreferencesForm({
   handleUpdatePreferences,
   preferences,
 }: {
-  handleUpdatePreferences: (newPreferences: Preferences) => void;
-  preferences: Preferences;
+  handleUpdatePreferences: (newPreferences: PreferencesProps) => void;
+  preferences: PreferencesProps;
 }) {
   const [groupPreferences, setGroupPreferences] = useState({
     neighbouringRows: preferences.neighbouringRows,
@@ -25,9 +25,9 @@ export default function GroupFlightPreferencesForm({
   const { neighbouringRows, sameRow, sideBySide } = groupPreferences;
 
   const newPreferences = {
-    location: '' as Location,
+    location: '' as LocationProps,
     extraLegroom: false,
-    position: '' as Position,
+    position: '' as PositionProps,
     neighbouringRows: neighbouringRows,
     sameRow: sameRow,
     sideBySide: sideBySide,

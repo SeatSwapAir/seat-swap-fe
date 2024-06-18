@@ -1,16 +1,20 @@
-import { Position, Preferences, Location } from "../../lib/types";
-import { Typography } from "@mui/material";
-import SoloFlightPreferencesForm from "./SoloFlightPreferencesForm";
+import {
+  PositionProps,
+  PreferencesProps,
+  LocationProps,
+} from '../../lib/types';
+import { Typography } from '@mui/material';
+import SoloFlightPreferencesForm from './SoloFlightPreferencesForm';
 
 export default function DefaultPreferences() {
-  const handleUpdatePreferences = (newPreferences: Preferences) => {
+  const handleUpdatePreferences = (newPreferences: PreferencesProps) => {
     console.log(newPreferences);
   };
 
   const mockPreferences = {
-    location: "" as Location,
+    location: '' as LocationProps,
     extraLegroom: false,
-    position: "window" as Position,
+    position: 'window' as PositionProps,
     neighbouringRows: true,
     sameRow: true,
     sideBySide: false,
@@ -22,7 +26,7 @@ export default function DefaultPreferences() {
       <SoloFlightPreferencesForm
         preferences={mockPreferences}
         handleUpdatePreferences={handleUpdatePreferences}
-        flightNumber="13"
+        flightNumber='13'
       />
     </>
   );

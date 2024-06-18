@@ -11,11 +11,11 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { User } from '../../lib/types';
+import { UserProps } from '../../lib/types';
 import ChangePassword from './ChangePassword';
 import ChangeContactDetails from './ChangeContactDetails';
 
-const mockUser: User = {
+const mockUser: UserProps = {
   email: 'testuser@gmail.com',
   firstname: 'Bob',
   lastname: 'Marley',
