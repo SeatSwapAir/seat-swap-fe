@@ -62,6 +62,7 @@ export default function AddFlight({
     setFlightDetails(null);
     setFlightNumberAndCarrierCode('');
     setDepartureDate(null);
+    setOpen(false);
   };
 
   return (
@@ -84,13 +85,15 @@ export default function AddFlight({
         />
       </LocalizationProvider>
       <Button onClick={findFlightDetails}>Find flight Details</Button>
-      <Button
-        onClick={() => {
-          setOpen(false);
-        }}
-      >
-        <Close /> Cancel
-      </Button>
+      {showFlightForms && (
+        <Button
+          onClick={() => {
+            setOpen(false);
+          }}
+        >
+          <Close /> Cancel
+        </Button>
+      )}
       {flightDetails !== null && (
         <>
           <Typography>
