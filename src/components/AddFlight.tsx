@@ -59,6 +59,9 @@ export default function AddFlight({
 
   const handleSubmitFlightChanges = (flightDetails: FlightProps): void => {
     handleAddFlight(flightDetails);
+    setFlightDetails(null);
+    setFlightNumberAndCarrierCode('');
+    setDepartureDate(null);
   };
 
   return (
