@@ -19,7 +19,6 @@ export default function FlightForm({
   handleSubmitFlightChanges: (flightDetails: FlightProps) => void;
 }) {
   const [flightDetails, setFlightDetails] = useState(flight);
-
   const { flightNumber, seats, preferences } = flightDetails;
 
   const handleUpdateSeat = (newSeat: SeatProps): void => {
@@ -49,7 +48,7 @@ export default function FlightForm({
         seats: [
           ...prevDetails?.seats,
           {
-            number: '',
+            number: '1A',
             location: '',
             extraLegroom: false,
             position: '',
@@ -99,6 +98,49 @@ export default function FlightForm({
     );
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
+
+  const handleChangeLegroomPreferences = (newLegroom: boolean) => {
+    if (!flightDetails) return;
+    const updatedPreferences = {
+      ...flightDetails.preferences,
+      extraLegroom: newLegroom,
+    };
+    setFlightDetails({ ...flightDetails, preferences: updatedPreferences });
+  };
+
+  const handleChangePositionPreferences = (newPosition: PositionProps) => {
+    if (!flightDetails) return;
+    const updatedPreferences = {
+      ...flightDetails.preferences,
+      position: newPosition,
+    };
+    setFlightDetails({ ...flightDetails, preferences: updatedPreferences });
+  };
+
+  const handleChangeLocationPreferences = (newLocation: LocationProps) => {
+    if (!flightDetails) return;
+    const updatedPreferences = {
+      ...flightDetails.preferences,
+      location: newLocation,
+    };
+    setFlightDetails({ ...flightDetails, preferences: updatedPreferences });
+  };
+
+  const handleChangeGroupPreferences = (newGroupPreferences: {
+    neighbouringRows: boolean;
+    sameRow: boolean;
+    sideBySide: boolean;
+  }) => {
+    if (!flightDetails) return;
+    const updatedPreferences = {
+      ...flightDetails.preferences,
+      neighbouringRows: newGroupPreferences.neighbouringRows,
+      sameRow: newGroupPreferences.sameRow,
+      sideBySide: newGroupPreferences.sideBySide,
+    };
+    setFlightDetails({ ...flightDetails, preferences: updatedPreferences });
+  };
+
   return (
     <>
       {seats.map((seat) => (
@@ -117,6 +159,9 @@ export default function FlightForm({
       ))}
       {seats.length === 1 && (
         <SoloFlightPreferencesForm
+          handleChangeLegroomPreferences={handleChangeLegroomPreferences}
+          handleChangePositionPreferences={handleChangePositionPreferences}
+          handleChangeLocationPreferences={handleChangeLocationPreferences}
           preferences={preferences}
           handleUpdatePreferences={handleUpdatePreferences}
         />
@@ -124,6 +169,7 @@ export default function FlightForm({
       {seats.length > 1 && (
         <GroupFlightPreferencesForm
           preferences={preferences}
+          handleChangeGroupPreferences={handleChangeGroupPreferences}
           handleUpdatePreferences={handleUpdatePreferences}
         />
       )}

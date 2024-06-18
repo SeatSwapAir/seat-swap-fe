@@ -6,15 +6,15 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { Dayjs } from 'dayjs';
-import { v4 as uuidv4 } from 'uuid';
 
 import { FlightProps, AddFlightProps } from '../../lib/types';
 
 import { getToken, getFlightDetails } from '../api/amadeusAPI';
-import Seat from './Seat';
+import FlightForm from './FlightForm';
 
 export default function AddFlight({
   checkIfFlightIsThere,
+  handleAddFlight,
 }: {
   handleAddFlight: AddFlightProps['handleAddFlight'];
   checkIfFlightIsThere: AddFlightProps['checkIfFlightIsThere'];
@@ -26,26 +26,6 @@ export default function AddFlight({
   const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
   const [isFlightAdded, setIsFlightAdded] = useState(false);
   const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
-
-  const doAddSeat = () => {
-    setFlightDetails((prevDetails) => {
-      if (!prevDetails) return prevDetails;
-      return {
-        ...prevDetails,
-        seats: [
-          ...prevDetails?.seats,
-          {
-            number: '',
-            location: '',
-            extraLegroom: false,
-            position: '',
-            id: uuidv4(),
-            isEditing: true,
-          },
-        ],
-      };
-    });
-  };
 
   const findFlightDetails = async () => {
     const token = await getToken();
@@ -77,6 +57,10 @@ export default function AddFlight({
       </Button>
     );
 
+  const handleSubmitFlightChanges = (flightDetails: FlightProps): void => {
+    handleAddFlight(flightDetails);
+  };
+
   return (
     <>
       <TextField
@@ -105,27 +89,23 @@ export default function AddFlight({
         <Close /> Cancel
       </Button>
       {flightDetails !== null && (
-        <Typography>
-          {flightDetails?.airline} - {flightDetails?.departureAirport} -{'>'}
-          {flightDetails?.arrivalAirport}
-          {!isFlightAdded && !showFlightForms && (
-            <Button onClick={() => setShowFlightForms(true)}>
-              This is my flight!
-            </Button>
-          )}
-          {isFlightAdded && ' This flight has already been added'}
-        </Typography>
-      )}
-      {showFlightForms && (
         <>
-          {flightDetails?.seats.map((seat) => (
-            <Seat
-              key={uuidv4()}
-              seat={seat}
-              flightNumber={flightDetails.flightNumber}
+          <Typography>
+            {flightDetails?.airline} - {flightDetails?.departureAirport} -{'>'}
+            {flightDetails?.arrivalAirport}
+            {!isFlightAdded && !showFlightForms && (
+              <Button onClick={() => setShowFlightForms(true)}>
+                This is my flight!
+              </Button>
+            )}
+            {isFlightAdded && ' This flight has already been added'}
+          </Typography>
+          {showFlightForms && (
+            <FlightForm
+              flight={flightDetails}
+              handleSubmitFlightChanges={handleSubmitFlightChanges}
             />
-          ))}
-          <Button onClick={doAddSeat}>Add Seat</Button>
+          )}
         </>
       )}
     </>

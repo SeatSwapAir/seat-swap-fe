@@ -164,7 +164,6 @@ const Flights = () => {
     flightNumber
   ) => {
     setFlights((prevFlights) => {
-      console.log(updatedPreferences);
       return prevFlights.map((flight) => {
         if (flight.flightNumber === flightNumber) {
           return { ...flight, preferences: updatedPreferences };
