@@ -8,7 +8,11 @@ import {
   FormGroup,
 } from '@mui/material';
 
-import { PreferencesProps, LocationProps, PositionProps } from '../../lib/types';
+import {
+  PreferencesProps,
+  LocationProps,
+  PositionProps,
+} from '../../lib/types';
 
 export default function GroupFlightPreferencesForm({
   handleUpdatePreferences,
@@ -22,6 +26,7 @@ export default function GroupFlightPreferencesForm({
     sameRow: preferences.sameRow,
     sideBySide: preferences.sideBySide,
   });
+  console.log('test');
   const { neighbouringRows, sameRow, sideBySide } = groupPreferences;
 
   const newPreferences = {
