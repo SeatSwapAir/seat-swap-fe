@@ -6,9 +6,14 @@ import {
   Box,
   Checkbox,
   FormGroup,
+  Typography,
 } from '@mui/material';
 
-import { PreferencesProps, LocationProps, PositionProps } from '../../lib/types';
+import {
+  PreferencesProps,
+  LocationProps,
+  PositionProps,
+} from '../../lib/types';
 
 export default function GroupFlightPreferencesForm({
   handleUpdatePreferences,
@@ -43,6 +48,7 @@ export default function GroupFlightPreferencesForm({
 
   return (
     <Box sx={{ display: 'flex' }}>
+      <Typography>Preferences</Typography>
       <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
         <FormLabel component='legend'>Seating Proximity</FormLabel>
         <FormGroup>

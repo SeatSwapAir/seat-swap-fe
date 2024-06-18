@@ -6,6 +6,7 @@ import {
   FormLabel,
   FormControlLabel,
   Switch,
+  Typography,
 } from '@mui/material';
 
 import {
@@ -51,6 +52,7 @@ export default function SoloFlightPreferencesForm({
 
   return (
     <>
+      <Typography>Preferences</Typography>
       <FormControl>
         <FormLabel id='demo-controlled-radio-buttons-group'>Location</FormLabel>
         <RadioGroup
