@@ -8,7 +8,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FlightProps, FlightCardProps, AddFlightProps } from '../../lib/types';
+import { FlightProps, AddFlightProps } from '../../lib/types';
 
 import { getToken, getFlightDetails } from '../api/amadeusAPI';
 import Seat from './Seat';
@@ -26,13 +26,6 @@ export default function AddFlight({
   const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
   const [isFlightAdded, setIsFlightAdded] = useState(false);
   const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
-
-  const handleUpdateSeat: FlightCardProps['handleUpdateSeat'] = (newSeat) => {
-    if (!flightDetails) return;
-    const updatedSeats =
-      flightDetails.seats.map((s) => (s.id === newSeat.id ? newSeat : s)) ?? [];
-    setFlightDetails({ ...flightDetails, seats: updatedSeats });
-  };
 
   const doAddSeat = () => {
     setFlightDetails((prevDetails) => {
@@ -71,37 +64,6 @@ export default function AddFlight({
     setIsFlightAdded(
       checkIfFlightIsThere(response.flightNumber, response.arrivalTime)
     );
-  };
-  const handleDelete = (id: string): void => {
-    setFlightDetails((prevFlightDetails) => {
-      if (!prevFlightDetails) return prevFlightDetails;
-      return {
-        ...prevFlightDetails,
-        seats: prevFlightDetails.seats.filter((seat) => {
-          seat.id !== id;
-        }),
-      };
-    });
-  };
-  const showEditSeat = (id: string): void => {
-    setFlightDetails((prevFlightDetails) => {
-      if (!prevFlightDetails) return prevFlightDetails;
-      const updatedSeats = prevFlightDetails.seats.map((seat) => {
-        if (seat.id === id) {
-          console.log('🚀 ~ updatedSeats ~ seat.id :', seat.id);
-          console.log('🚀 ~ updatedSeats ~ seat.isEditing :', seat.isEditing);
-          return {
-            ...seat,
-            isEditing: !seat.isEditing,
-          };
-        }
-        return seat;
-      });
-      return {
-        ...prevFlightDetails,
-        seats: updatedSeats,
-      };
-    });
   };
 
   if (!open)
@@ -161,7 +123,6 @@ export default function AddFlight({
               key={uuidv4()}
               seat={seat}
               flightNumber={flightDetails.flightNumber}
-              handleDelete={handleDelete}
             />
           ))}
           <Button onClick={doAddSeat}>Add Seat</Button>
