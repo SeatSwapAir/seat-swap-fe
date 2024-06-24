@@ -14,11 +14,11 @@ export default function FlightCard({
 }: FlightCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const {
-    flightNumber,
-    departureAirport,
-    arrivalAirport,
-    departureTime,
-    arrivalTime,
+    flightnumber,
+    departureairport,
+    arrivalairport,
+    departuretime,
+    arrivaltime,
     airline,
     seats,
     preferences,
@@ -32,28 +32,28 @@ export default function FlightCard({
     <Card>
       <CardContent>
         <Typography variant='h4' component='div' gutterBottom>
-          {airline} - Flight {flightNumber}
+          {airline} - Flight {flightnumber}
           {!isEditing && (
             <Button onClick={() => setIsEditing(true)}>Edit Flight</Button>
           )}
           <Typography variant='body1'>
-            Departure Airport: {departureAirport}
+            Departure Airport: {departureairport}
           </Typography>
           <Typography variant='body1'>
-            Arrival Airport: {arrivalAirport}
+            Arrival Airport: {arrivalairport}
           </Typography>
           <Typography variant='body1'>
-            Departure Time: {departureTime}
+            Departure Time: {departuretime}
           </Typography>
-          <Typography variant='body1'>Arrival Time: {arrivalTime}</Typography>
+          <Typography variant='body1'>Arrival Time: {arrivaltime}</Typography>
           <Typography variant='h5'>Seats</Typography>
           {!isEditing && (
             <>
               {seats.map((seat, index) => (
                 <Seat
-                  key={index + flightNumber}
+                  key={index + flightnumber}
                   seat={seat}
-                  flightNumber={flightNumber}
+                  flightNumber={flightnumber}
                 />
               ))}
               <FlightPreferences preferences={preferences} />
@@ -69,7 +69,7 @@ export default function FlightCard({
             variant='contained'
             color='primary'
             onClick={handleRemoveFlight}
-            value={flightNumber + departureTime}
+            value={flightnumber + departuretime}
           >
             <DeleteIcon />
             Remove Flight
