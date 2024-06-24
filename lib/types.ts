@@ -29,11 +29,11 @@ export type PreferencesProps = {
 };
 
 export type FlightProps = {
-    flightNumber: string;
-    departureAirport: string;
-    arrivalAirport: string;
-    departureTime: string;
-    arrivalTime: string;
+    flightnumber: string;
+    departureairport: string;
+    arrivalairport: string;
+    departuretime: string;
+    arrivaltime: string;
     airline: string;
     seats: SeatProps[];
     preferences: PreferencesProps;

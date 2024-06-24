@@ -19,7 +19,7 @@ export default function FlightForm({
   handleSubmitFlightChanges: (flightDetails: FlightProps) => void;
 }) {
   const [flightDetails, setFlightDetails] = useState(flight);
-  const { flightNumber, seats, preferences } = flightDetails;
+  const { flightnumber, seats, preferences } = flightDetails;
 
   const handleUpdateSeat = (newSeat: SeatProps): void => {
     if (!flightDetails) return;
@@ -147,7 +147,7 @@ export default function FlightForm({
         <SeatForm
           key={seat.id}
           seat={seat}
-          flightNumber={flightNumber}
+          flightNumber={flightnumber}
           handleUpdateSeat={handleUpdateSeat}
           handleDeleteSeat={handleDeleteSeat}
           handleChangeSeatRowNumber={handleChangeSeatRowNumber}

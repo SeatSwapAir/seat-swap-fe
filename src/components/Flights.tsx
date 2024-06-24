@@ -5,15 +5,17 @@ import { Typography, CardContent, Card } from '@mui/material';
 import FlightCard from './FlightCard';
 import AddFlight from './AddFlight';
 import { FlightCardProps, AddFlightProps } from '../../lib/types';
+import { getFlightsByUserId } from '../api/seatSwapAPI';
+import { useQuery } from '@tanstack/react-query';
 
 const mockFlights: FlightCardProps['flight'][] = [
   {
     id: uuidv4(),
-    flightNumber: 'FR504',
-    departureAirport: 'STN',
-    arrivalAirport: 'BCN',
-    departureTime: '2024-05-14T08:30:00',
-    arrivalTime: '2024-05-14T11:45:00',
+    flightnumber: 'FR504',
+    departureairport: 'STN',
+    arrivalairport: 'BCN',
+    departuretime: '2024-05-14T08:30:00',
+    arrivaltime: '2024-05-14T11:45:00',
     airline: 'Ryanair',
     seats: [
       {
@@ -52,11 +54,11 @@ const mockFlights: FlightCardProps['flight'][] = [
   },
   {
     id: uuidv4(),
-    flightNumber: 'W63321',
-    departureAirport: 'BUD',
-    arrivalAirport: 'CPH',
-    departureTime: '2024-05-14T15:00:00',
-    arrivalTime: '2024-05-14T16:50:00',
+    flightnumber: 'W63321',
+    departureairport: 'BUD',
+    arrivalairport: 'CPH',
+    departuretime: '2024-05-14T15:00:00',
+    arrivaltime: '2024-05-14T16:50:00',
     airline: 'Wizz Air',
     seats: [
       {
@@ -95,11 +97,11 @@ const mockFlights: FlightCardProps['flight'][] = [
   },
   {
     id: uuidv4(),
-    flightNumber: 'U24832',
-    departureAirport: 'CDG',
-    arrivalAirport: 'LIS',
-    departureTime: '2024-05-14T21:30:00',
-    arrivalTime: '2024-05-14T23:15:00',
+    flightnumber: 'U24832',
+    departureairport: 'CDG',
+    arrivalairport: 'LIS',
+    departuretime: '2024-05-14T21:30:00',
+    arrivaltime: '2024-05-14T23:15:00',
     airline: 'easyJet',
     seats: [
       {
@@ -123,14 +125,19 @@ const mockFlights: FlightCardProps['flight'][] = [
 ];
 const Flights = () => {
   const [flights, setFlights] = useState(mockFlights);
+  const { data: flightsData, isSuccess } = useQuery({
+    queryFn: () => getFlightsByUserId(2),
+    queryKey: ['getFlightsByUser'],
+  });
+
   const checkIfFlightIsThere: AddFlightProps['checkIfFlightIsThere'] = (
     flightNumber,
     departureTime
   ) => {
     return flights.some(
       (flightObj) =>
-        flightObj.flightNumber === flightNumber &&
-        flightObj.departureTime === departureTime
+        flightObj.flightnumber === flightNumber &&
+        flightObj.departuretime === departureTime
     );
   };
   const handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement> = (
@@ -139,7 +146,7 @@ const Flights = () => {
     const flightNumberAndDate = event.currentTarget.value;
     const newFlights = flights.filter(
       (flight) =>
-        flight.flightNumber + flight.departureTime !== flightNumberAndDate
+        flight.flightnumber + flight.departuretime !== flightNumberAndDate
     );
     setFlights(newFlights);
   };
@@ -149,7 +156,7 @@ const Flights = () => {
   ) => {
     setFlights((prevFlights) => {
       return prevFlights.map((flight) => {
-        if (flight.flightNumber === flightNumber) {
+        if (flight.flightnumber === flightNumber) {
           const updatedSeats = flight.seats.map((s) =>
             s.id === seat.id ? seat : s
           );
@@ -165,7 +172,7 @@ const Flights = () => {
   ) => {
     setFlights((prevFlights) => {
       return prevFlights.map((flight) => {
-        if (flight.flightNumber === flightNumber) {
+        if (flight.flightnumber === flightNumber) {
           return { ...flight, preferences: updatedPreferences };
         }
         return flight;
@@ -173,7 +180,7 @@ const Flights = () => {
     });
   };
   const handleAddFlight: AddFlightProps['handleAddFlight'] = (flight) => {
-    if (checkIfFlightIsThere(flight.flightNumber, flight.departureTime)) {
+    if (checkIfFlightIsThere(flight.flightnumber, flight.departuretime)) {
       return true;
     }
     setFlights([...flights, flight]);
@@ -199,16 +206,19 @@ const Flights = () => {
         <Typography variant='h2' gutterBottom>
           Flights
         </Typography>
-        {flights.map((flight) => (
-          <FlightCard
-            key={flight.id}
-            flight={flight}
-            handleRemoveFlight={handleRemoveFlight}
-            handleUpdateSeat={handleUpdateSeat}
-            handleUpdatePreferences={handleUpdatePreferences}
-            handleSubmitFlightChanges={handleSubmitFlightChanges}
-          />
-        ))}
+        {isSuccess &&
+          flightsData.map((flight) => {
+            return (
+              <FlightCard
+                key={flight.id}
+                flight={flight}
+                handleRemoveFlight={handleRemoveFlight}
+                handleUpdateSeat={handleUpdateSeat}
+                handleUpdatePreferences={handleUpdatePreferences}
+                handleSubmitFlightChanges={handleSubmitFlightChanges}
+              />
+            );
+          })}
         <AddFlight
           checkIfFlightIsThere={checkIfFlightIsThere}
           handleAddFlight={handleAddFlight}

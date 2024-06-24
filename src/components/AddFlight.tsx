@@ -42,7 +42,7 @@ export default function AddFlight({
     if (!response) return;
     setFlightDetails(response);
     setIsFlightAdded(
-      checkIfFlightIsThere(response.flightNumber, response.arrivalTime)
+      checkIfFlightIsThere(response.flightnumber, response.arrivaltime)
     );
   };
 
@@ -97,8 +97,8 @@ export default function AddFlight({
       {flightDetails !== null && (
         <>
           <Typography>
-            {flightDetails?.airline} - {flightDetails?.departureAirport} -{'>'}
-            {flightDetails?.arrivalAirport}
+            {flightDetails?.airline} - {flightDetails?.departureairport} -{'>'}
+            {flightDetails?.arrivalairport}
             {!isFlightAdded && !showFlightForms && (
               <Button onClick={() => setShowFlightForms(true)}>
                 This is my flight!
