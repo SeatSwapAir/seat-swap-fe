@@ -7,7 +7,7 @@ const apiUrl = axios.create({
 
 export const getFlightsByUserId = (user_id:Number):Promise<FlightProps[]> => {
   return apiUrl
-  .get(`/flights/${user_id}`)
+  .get(`users/${user_id}/flights`)
   .then((res) => {
     return res.data.flights;
   })
