@@ -14,6 +14,7 @@ export default function FlightCard({
 }: FlightCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const {
+    id,
     flightnumber,
     departureairport,
     arrivalairport,
@@ -69,7 +70,7 @@ export default function FlightCard({
             variant='contained'
             color='primary'
             onClick={handleRemoveFlight}
-            value={flightnumber + departuretime}
+            value={id}
           >
             <DeleteIcon />
             Remove Flight
