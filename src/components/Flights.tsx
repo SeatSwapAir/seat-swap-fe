@@ -4,9 +4,12 @@ import { Typography, CardContent, Card } from '@mui/material';
 
 import FlightCard from './FlightCard';
 import AddFlight from './AddFlight';
-import { FlightCardProps, AddFlightProps } from '../../lib/types';
-import { getFlightsByUserId } from '../api/seatSwapAPI';
-import { useQuery } from '@tanstack/react-query';
+import { FlightCardProps, AddFlightProps, FlightProps } from '../../lib/types';
+import {
+  getFlightsByUserId,
+  deleteFlightByUserFlightId,
+} from '../api/seatSwapAPI';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const mockFlights: FlightCardProps['flight'][] = [
   {
@@ -124,81 +127,113 @@ const mockFlights: FlightCardProps['flight'][] = [
   },
 ];
 const Flights = () => {
-  const [flights, setFlights] = useState(mockFlights);
-  const { data: flightsData, isSuccess } = useQuery({
+  // const [flights, setFlights] = useState(mockFlights);
+  const {
+    data: flightsData,
+    isSuccess,
+    error,
+  } = useQuery({
     queryFn: () => getFlightsByUserId(2),
     queryKey: ['getFlightsByUser'],
   });
+  console.log(error);
+
+  const useOptimisticDeleteFlight = function () {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: deleteFlightByUserFlightId,
+      onMutate: async (user_flight_id: Number) => {
+        await queryClient.cancelQueries({ queryKey: ['getFlightsByUser'] });
+        const previousFlights = queryClient.getQueryData(['getFlightsByUser']);
+        queryClient.setQueryData(['getFlightsByUser'], (old: FlightProps[]) =>
+          old.filter((f) => Number(f.id) !== user_flight_id)
+        );
+        return { previousFlights };
+      },
+      onError: (context: { previousFlights: FlightProps[] }) => {
+        queryClient.setQueryData(['getFlightsByUser'], context.previousFlights);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] });
+      },
+    });
+  };
+
+  const deleteFlightMutation = useOptimisticDeleteFlight();
 
   const checkIfFlightIsThere: AddFlightProps['checkIfFlightIsThere'] = (
     flightNumber,
     departureTime
   ) => {
-    return flights.some(
-      (flightObj) =>
-        flightObj.flightnumber === flightNumber &&
-        flightObj.departuretime === departureTime
-    );
+    return true;
+    // flights.some(
+    //   (flightObj) =>
+    //     flightObj.flightnumber === flightNumber &&
+    //     flightObj.departuretime === departureTime
+    // );
   };
   const handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement> = (
     event
   ) => {
     const flightNumberAndDate = event.currentTarget.value;
-    const newFlights = flights.filter(
-      (flight) =>
-        flight.flightnumber + flight.departuretime !== flightNumberAndDate
-    );
-    setFlights(newFlights);
+    // const newFlights = flights.filter(
+    //   (flight) =>
+    //     flight.flightnumber + flight.departuretime !== flightNumberAndDate
+    // );
+    // setFlights(newFlights);
+    // useOptimisticDeleteFlight.mutate(Number(event.currentTarget.value));
+    const user_flight_id = Number(event.currentTarget.value);
+    deleteFlightMutation.mutate(user_flight_id);
   };
   const handleUpdateSeat: FlightCardProps['handleUpdateSeat'] = (
     seat,
     flightNumber
   ) => {
-    setFlights((prevFlights) => {
-      return prevFlights.map((flight) => {
-        if (flight.flightnumber === flightNumber) {
-          const updatedSeats = flight.seats.map((s) =>
-            s.id === seat.id ? seat : s
-          );
-          return { ...flight, seats: updatedSeats };
-        }
-        return flight;
-      });
-    });
+    // setFlights((prevFlights) => {
+    //   return prevFlights.map((flight) => {
+    //     if (flight.flightnumber === flightNumber) {
+    //       const updatedSeats = flight.seats.map((s) =>
+    //         s.id === seat.id ? seat : s
+    //       );
+    //       return { ...flight, seats: updatedSeats };
+    //     }
+    //     return flight;
+    //   });
+    // });
   };
   const handleUpdatePreferences: FlightCardProps['handleUpdatePreferences'] = (
     updatedPreferences,
     flightNumber
   ) => {
-    setFlights((prevFlights) => {
-      return prevFlights.map((flight) => {
-        if (flight.flightnumber === flightNumber) {
-          return { ...flight, preferences: updatedPreferences };
-        }
-        return flight;
-      });
-    });
+    // setFlights((prevFlights) => {
+    //   return prevFlights.map((flight) => {
+    //     if (flight.flightnumber === flightNumber) {
+    //       return { ...flight, preferences: updatedPreferences };
+    //     }
+    //     return flight;
+    //   });
+    // });
   };
   const handleAddFlight: AddFlightProps['handleAddFlight'] = (flight) => {
     if (checkIfFlightIsThere(flight.flightnumber, flight.departuretime)) {
       return true;
     }
-    setFlights([...flights, flight]);
+    // setFlights([...flights, flight]);
     return true;
   };
   const handleSubmitFlightChanges: FlightCardProps['handleSubmitFlightChanges'] =
     (flightDetails) => {
-      const newFlights = flights.map((flight) => {
-        if (flight.id === flightDetails.id) {
-          return {
-            ...flight,
-            preferences: flightDetails.preferences,
-            seats: flightDetails.seats,
-          };
-        }
-        return flight;
-      });
-      setFlights(newFlights);
+      // const newFlights = flights.map((flight) => {
+      //   if (flight.id === flightDetails.id) {
+      //     return {
+      //       ...flight,
+      //       preferences: flightDetails.preferences,
+      //       seats: flightDetails.seats,
+      //     };
+      //   }
+      //   return flight;
+      // });
+      // setFlights(newFlights);
     };
   return (
     <Card>
