@@ -10,6 +10,7 @@ import {
   deleteFlightByUserFlightId,
 } from '../api/seatSwapAPI';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 
 const mockFlights: FlightCardProps['flight'][] = [
   {
@@ -132,11 +133,13 @@ const Flights = () => {
     data: flightsData,
     isSuccess,
     error,
+    isError,
   } = useQuery({
     queryFn: () => getFlightsByUserId(2),
     queryKey: ['getFlightsByUser'],
   });
-  console.log(error);
+
+  console.log(axios.isAxiosError(error) && error.response?.data?.msg);
 
   const useOptimisticDeleteFlight = function () {
     const queryClient = useQueryClient();
@@ -254,6 +257,11 @@ const Flights = () => {
               />
             );
           })}
+        {isError && axios.isAxiosError(error) && (
+          <Typography variant='body1' color='error'>
+            {error.response?.data?.msg || error.message}
+          </Typography>
+        )}
         <AddFlight
           checkIfFlightIsThere={checkIfFlightIsThere}
           handleAddFlight={handleAddFlight}
