@@ -15,13 +15,14 @@ export const getFlightsByUserId = async (user_id: Number): Promise<FlightProps[]
     }
   };
 
-export const deleteFlightByUserFlightId = (user_flight_id:Number):Promise<{msg:String} | void> => {
+  export const deleteFlightByUserFlightId = (params: { user_id: number, flight_id: number }): Promise<{msg: string} | void> => {
+    const { user_id, flight_id } = params;
     return apiUrl
-    .delete(`flights/${user_flight_id}`)
-    .then((res) => {
-        console.log("🚀 ~ .then ~ res:", res)
-        // if (res.status !== 204) {
-        //     return res?.msg
-        // }
-    })
-}
+        .delete(`users/${user_id}/flights/${flight_id}`)
+        .then((res) => {
+            console.log("🚀 ~ .then ~ res:", res);
+            // if (res.status !== 204) {
+            //     return res?.msg
+            // }
+        });
+};
