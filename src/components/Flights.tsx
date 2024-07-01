@@ -12,123 +12,7 @@ import {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
-const mockFlights: FlightCardProps['flight'][] = [
-  {
-    id: uuidv4(),
-    flightnumber: 'FR504',
-    departureairport: 'STN',
-    arrivalairport: 'BCN',
-    departuretime: '2024-05-14T08:30:00',
-    arrivaltime: '2024-05-14T11:45:00',
-    airline: 'Ryanair',
-    seats: [
-      {
-        number: '1A',
-        location: 'front',
-        extraLegroom: true,
-        position: 'aisle',
-        id: '23423423',
-        isEditing: false,
-      },
-      {
-        number: '10B',
-        location: 'middle',
-        extraLegroom: false,
-        position: 'middle',
-        id: '3463546435',
-        isEditing: false,
-      },
-      {
-        number: '25C',
-        location: 'back',
-        extraLegroom: false,
-        position: 'window',
-        id: '325325345',
-        isEditing: false,
-      },
-    ],
-    preferences: {
-      location: '',
-      extraLegroom: false,
-      position: '',
-      neighbouringRows: true,
-      sameRow: false,
-      sideBySide: true,
-    },
-  },
-  {
-    id: uuidv4(),
-    flightnumber: 'W63321',
-    departureairport: 'BUD',
-    arrivalairport: 'CPH',
-    departuretime: '2024-05-14T15:00:00',
-    arrivaltime: '2024-05-14T16:50:00',
-    airline: 'Wizz Air',
-    seats: [
-      {
-        number: '30D',
-        location: 'back',
-        extraLegroom: false,
-        position: 'aisle',
-        id: '23423235',
-        isEditing: false,
-      },
-      {
-        number: '15A',
-        location: 'middle',
-        extraLegroom: true,
-        position: 'window',
-        id: '1243235',
-        isEditing: false,
-      },
-      {
-        number: '5B',
-        location: 'front',
-        extraLegroom: false,
-        position: 'middle',
-        id: '23545346',
-        isEditing: false,
-      },
-    ],
-    preferences: {
-      location: '',
-      extraLegroom: false,
-      position: '',
-      neighbouringRows: false,
-      sameRow: true,
-      sideBySide: false,
-    },
-  },
-  {
-    id: uuidv4(),
-    flightnumber: 'U24832',
-    departureairport: 'CDG',
-    arrivalairport: 'LIS',
-    departuretime: '2024-05-14T21:30:00',
-    arrivaltime: '2024-05-14T23:15:00',
-    airline: 'easyJet',
-    seats: [
-      {
-        number: '3C',
-        location: 'front',
-        extraLegroom: true,
-        position: 'middle',
-        id: '2354532346',
-        isEditing: false,
-      },
-    ],
-    preferences: {
-      location: '',
-      extraLegroom: false,
-      position: 'window',
-      neighbouringRows: true,
-      sameRow: true,
-      sideBySide: false,
-    },
-  },
-];
 const Flights = () => {
-  // const [flights, setFlights] = useState(mockFlights);
   const {
     data: flightsData,
     isSuccess,
@@ -145,16 +29,26 @@ const Flights = () => {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: deleteFlightByUserFlightId,
-      onMutate: async (user_flight_id: Number) => {
+      onMutate: async (params: { user_id: number; flight_id: number }) => {
         await queryClient.cancelQueries({ queryKey: ['getFlightsByUser'] });
-        const previousFlights = queryClient.getQueryData(['getFlightsByUser']);
-        queryClient.setQueryData(['getFlightsByUser'], (old: FlightProps[]) =>
-          old.filter((f) => Number(f.id) !== user_flight_id)
-        );
-        return { previousFlights };
+        const previousFlights = queryClient.getQueryData<FlightProps[]>([
+          'getFlightsByUser',
+        ]);
+        if (previousFlights) {
+          queryClient.setQueryData(
+            ['getFlightsByUser'],
+            previousFlights.filter((f) => Number(f.id) !== params.flight_id)
+          );
+        }
+        return { previousFlights: previousFlights || [] };
       },
-      onError: (context: { previousFlights: FlightProps[] }) => {
-        queryClient.setQueryData(['getFlightsByUser'], context.previousFlights);
+      onError: (error, params, context) => {
+        if (context?.previousFlights) {
+          queryClient.setQueryData(
+            ['getFlightsByUser'],
+            context.previousFlights
+          );
+        }
       },
       onSettled: () => {
         queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] });
@@ -178,15 +72,8 @@ const Flights = () => {
   const handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement> = (
     event
   ) => {
-    const flightNumberAndDate = event.currentTarget.value;
-    // const newFlights = flights.filter(
-    //   (flight) =>
-    //     flight.flightnumber + flight.departuretime !== flightNumberAndDate
-    // );
-    // setFlights(newFlights);
-    // useOptimisticDeleteFlight.mutate(Number(event.currentTarget.value));
-    const user_flight_id = Number(event.currentTarget.value);
-    deleteFlightMutation.mutate(user_flight_id);
+    const flight_id = Number(event.currentTarget.value);
+    deleteFlightMutation.mutate({ user_id: 2, flight_id });
   };
   const handleUpdateSeat: FlightCardProps['handleUpdateSeat'] = (
     seat,
