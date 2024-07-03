@@ -71,7 +71,7 @@ const Flights = () => {
     event
   ) => {
     const flight_id = Number(event.currentTarget.value);
-    deleteFlightMutation.mutate({ user_id: 2, flight_id });
+    deleteFlightMutation.mutate({ user_id: 24, flight_id });
   };
 
   const handleAddFlight: AddFlightProps['handleAddFlight'] = (flight) => {
