@@ -124,7 +124,7 @@ export default function FlightForm({
     if (!flightDetails) return;
     const updatedPreferences = {
       ...flightDetails.preferences,
-      neighbouring_rows_pref: newGroupPreferences.neighbouring_row_pref,
+      neighbouring_row_pref: newGroupPreferences.neighbouring_row_pref,
       same_row_pref: newGroupPreferences.same_row_pref,
       side_by_side_pref: newGroupPreferences.side_by_side_pref,
     };
