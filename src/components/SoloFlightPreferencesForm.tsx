@@ -26,17 +26,11 @@ export default function SoloFlightPreferencesForm({
 
   preferences: PreferencesProps;
 }) {
-  console.log('🚀 ~ preferences:', preferences.legroom_pref);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const updatedSoloPreferences = {
       ...preferences,
       [event.target.name]: event.target.checked,
     };
-    console.log('🚀 ~ handleChange ~ event.target.name:', event.target.name);
-    console.log(
-      '🚀 ~ handleChange ~ event.target.checked:',
-      event.target.checked
-    );
     handleChangeSoloPreferences(updatedSoloPreferences);
   };
   return (

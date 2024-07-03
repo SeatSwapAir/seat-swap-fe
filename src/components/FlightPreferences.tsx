@@ -6,7 +6,6 @@ export default function FlightPreferences({
 }: {
   preferences: PreferencesProps;
 }) {
-  console.log('🚀 ~ preferences:', preferences);
   const {
     legroom_pref,
     window_pref,

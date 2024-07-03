@@ -14,10 +14,10 @@ import { Button } from '@mui/material';
 import { updateFlightByUserFlightId } from '../api/seatSwapAPI';
 export default function FlightForm({
   flight,
-  handleSubmitFlightChanges,
+  setIsEditing,
 }: {
   flight: FlightProps;
-  handleSubmitFlightChanges: () => void;
+  setIsEditing: (isEditing: boolean) => void;
 }) {
   const [flightDetails, setFlightDetails] = useState(flight);
   const { flightnumber, seats, preferences } = flightDetails;
@@ -28,7 +28,7 @@ export default function FlightForm({
     onSuccess: (data) => {
       console.log('🚀 ~ .onSuccess ~ data:', data);
       queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] });
-      handleSubmitFlightChanges();
+      setIsEditing(false);
       return data;
     },
     onError: (err) => {

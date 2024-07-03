@@ -21,7 +21,6 @@ export default function GroupFlightPreferencesForm({
   }) => void;
   preferences: PreferencesProps;
 }) {
-  console.log('🚀 ~ preferences:', preferences);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const updatedGroupPreferences = {
       ...preferences,
