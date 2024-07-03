@@ -26,7 +26,6 @@ export default function FlightForm({
   const mutateFlight = useMutation({
     mutationFn: updateFlightByUserFlightId,
     onSuccess: (data) => {
-      console.log('🚀 ~ .onSuccess ~ data:', data);
       queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] });
       setIsEditing(false);
       return data;

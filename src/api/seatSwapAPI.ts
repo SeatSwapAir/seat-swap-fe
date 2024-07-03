@@ -40,9 +40,13 @@ export const updateFlightByUserFlightId = ({
   return apiUrl
     .patch(`users/${params.user_id}/flights/${params.flight_id}`, body)
     .then((res) => {
-      // console.log('🚀 ~ .then ~ res:', res);
-      if (res.status !== 200) {
+      if (res.status === 200) {
         return res?.data;
       }
+    })
+    .catch((err) => {
+      // Handle error appropriately
+      console.error('Error updating flight:', err);
+      throw err;
     });
 };
