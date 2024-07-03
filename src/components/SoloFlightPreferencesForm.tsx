@@ -26,14 +26,16 @@ export default function SoloFlightPreferencesForm({
 
   preferences: PreferencesProps;
 }) {
+  console.log('🚀 ~ preferences:', preferences.legroom_pref);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const updatedSoloPreferences = {
       ...preferences,
       [event.target.name]: event.target.checked,
     };
+    console.log('🚀 ~ handleChange ~ event.target.name:', event.target.name);
     console.log(
-      '🚀 ~ handleChange ~ updatedSoloPreferences:',
-      updatedSoloPreferences
+      '🚀 ~ handleChange ~ event.target.checked:',
+      event.target.checked
     );
     handleChangeSoloPreferences(updatedSoloPreferences);
   };
@@ -112,13 +114,20 @@ export default function SoloFlightPreferencesForm({
           />
         </FormGroup>
       </FormControl>
-      <FormControlLabel
-        control={
-          <Switch checked={preferences.legroom_pref} onChange={handleChange} />
-        }
-        label='Extra legroom preferred'
-      />
-      {/* <Button onClick={doSubmit}>Submit Changes</Button> */}
+      <FormControl>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={preferences.legroom_pref}
+                onChange={handleChange}
+                name='legroom_pref'
+              />
+            }
+            label='Extra legroom preferred'
+          />
+        </FormGroup>
+      </FormControl>
     </>
   );
 }

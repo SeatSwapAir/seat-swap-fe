@@ -124,9 +124,9 @@ export default function FlightForm({
     if (!flightDetails) return;
     const updatedPreferences = {
       ...flightDetails.preferences,
-      neighbouringRows: newGroupPreferences.neighbouring_row_pref,
-      sameRow: newGroupPreferences.same_row_pref,
-      sideBySide: newGroupPreferences.side_by_side_pref,
+      neighbouring_rows_pref: newGroupPreferences.neighbouring_row_pref,
+      same_row_pref: newGroupPreferences.same_row_pref,
+      side_by_side_pref: newGroupPreferences.side_by_side_pref,
     };
     setFlightDetails({ ...flightDetails, preferences: updatedPreferences });
   };
@@ -142,7 +142,7 @@ export default function FlightForm({
     if (!flightDetails) return;
     const updatedPreferences = {
       ...flightDetails.preferences,
-      extraLegroom: newSoloPreferences.legroom_pref,
+      legroom_pref: newSoloPreferences.legroom_pref,
       window_pref: newSoloPreferences.window_pref,
       middle_pref: newSoloPreferences.middle_pref,
       aisle_pref: newSoloPreferences.aisle_pref,
