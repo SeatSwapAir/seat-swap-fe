@@ -20,6 +20,7 @@ const Flights = () => {
     queryFn: () => getFlightsByUserId(24),
     queryKey: ['getFlightsByUser'],
   });
+  console.log('🚀 ~ Flights ~ flightsData:', flightsData);
 
   console.log(axios.isAxiosError(error) && error.response?.data?.msg);
 

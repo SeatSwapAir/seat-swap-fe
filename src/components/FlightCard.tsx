@@ -25,8 +25,8 @@ export default function FlightCard({
     preferences,
   } = flight;
 
-  const doSubmitFlightChanges = (flightDetails: FlightProps) => {
-    handleSubmitFlightChanges(flightDetails);
+  const doSubmitFlightChanges = () => {
+    // handleSubmitFlightChanges(flightDetails);
     setIsEditing(false);
   };
   return (

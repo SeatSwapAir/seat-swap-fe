@@ -15,7 +15,7 @@ export default function SoloFlightPreferencesForm({
   preferences,
 }: {
   handleChangeSoloPreferences: (newSoloPreferences: {
-    extraLegroom: boolean;
+    legroom_pref: boolean;
     window_pref: boolean;
     middle_pref: boolean;
     aisle_pref: boolean;
@@ -114,7 +114,7 @@ export default function SoloFlightPreferencesForm({
       </FormControl>
       <FormControlLabel
         control={
-          <Switch checked={preferences.extraLegroom} onChange={handleChange} />
+          <Switch checked={preferences.legroom_pref} onChange={handleChange} />
         }
         label='Extra legroom preferred'
       />

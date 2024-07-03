@@ -15,9 +15,9 @@ export default function GroupFlightPreferencesForm({
   preferences,
 }: {
   handleChangeGroupPreferences: (newGroupPreferences: {
-    neighbouringRows: boolean;
-    sameRow: boolean;
-    sideBySide: boolean;
+    neighbouring_row_pref: boolean;
+    same_row_pref: boolean;
+    side_by_side_pref: boolean;
   }) => void;
   preferences: PreferencesProps;
 }) {
@@ -38,9 +38,9 @@ export default function GroupFlightPreferencesForm({
           <FormControlLabel
             control={
               <Checkbox
-                checked={preferences.neighbouringRows}
+                checked={preferences.neighbouring_row_pref}
                 onChange={handleChange}
-                name='neighbouringRows'
+                name='neighbouring_row_pref'
               />
             }
             label='Neigbouring Rows OK'
@@ -48,9 +48,9 @@ export default function GroupFlightPreferencesForm({
           <FormControlLabel
             control={
               <Checkbox
-                checked={preferences.sameRow}
+                checked={preferences.same_row_pref}
                 onChange={handleChange}
-                name='sameRow'
+                name='same_row_pref'
               />
             }
             label='Same row OK'
@@ -58,9 +58,9 @@ export default function GroupFlightPreferencesForm({
           <FormControlLabel
             control={
               <Checkbox
-                checked={preferences.sideBySide}
+                checked={preferences.side_by_side_pref}
                 onChange={handleChange}
-                name='sideBySide'
+                name='side_by_side_pref'
               />
             }
             label='Side by side'
