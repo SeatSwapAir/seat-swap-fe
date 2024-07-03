@@ -1,7 +1,7 @@
 import { Typography, Button, CardContent, Card } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { FlightCardProps, FlightProps } from '../../lib/types';
+import { FlightCardProps } from '../../lib/types';
 import Seat from './Seat';
 import FlightForm from './FlightForm';
 import FlightPreferences from './FlightPreferences';
@@ -10,7 +10,6 @@ import { useState } from 'react';
 export default function FlightCard({
   flight,
   handleRemoveFlight,
-  handleSubmitFlightChanges,
 }: FlightCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const {
@@ -25,10 +24,6 @@ export default function FlightCard({
     preferences,
   } = flight;
 
-  const doSubmitFlightChanges = (flightDetails: FlightProps) => {
-    handleSubmitFlightChanges(flightDetails);
-    setIsEditing(false);
-  };
   return (
     <Card>
       <CardContent>
@@ -61,10 +56,7 @@ export default function FlightCard({
             </>
           )}
           {isEditing && (
-            <FlightForm
-              flight={flight}
-              handleSubmitFlightChanges={doSubmitFlightChanges}
-            />
+            <FlightForm flight={flight} setIsEditing={setIsEditing} />
           )}
           <Button
             variant='contained'

@@ -9,16 +9,38 @@ import {
 import SeatForm from './SeatForm';
 import SoloFlightPreferencesForm from './SoloFlightPreferencesForm';
 import GroupFlightPreferencesForm from './GroupFlightPreferencesForm';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@mui/material';
+import { updateFlightByUserFlightId } from '../api/seatSwapAPI';
 export default function FlightForm({
   flight,
-  handleSubmitFlightChanges,
+  setIsEditing,
 }: {
   flight: FlightProps;
-  handleSubmitFlightChanges: (flightDetails: FlightProps) => void;
+  setIsEditing: (isEditing: boolean) => void;
 }) {
   const [flightDetails, setFlightDetails] = useState(flight);
   const { flightnumber, seats, preferences } = flightDetails;
+
+  const queryClient = useQueryClient();
+  const mutateFlight = useMutation({
+    mutationFn: updateFlightByUserFlightId,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] });
+      setIsEditing(false);
+      return data;
+    },
+    onError: (err) => {
+      console.log('🚀 ~ .onError ~ err:', err);
+    },
+  });
+  const handleUpdateFlight = (): void | FlightProps => {
+    if (!flightDetails) return;
+    mutateFlight.mutate({
+      body: flightDetails,
+      params: { user_id: 24, flight_id: Number(flightDetails.id) },
+    });
+  };
 
   const handleUpdateSeat = (newSeat: SeatProps): void => {
     if (!flightDetails) return;
@@ -94,21 +116,21 @@ export default function FlightForm({
   };
 
   const handleChangeGroupPreferences = (newGroupPreferences: {
-    neighbouringRows: boolean;
-    sameRow: boolean;
-    sideBySide: boolean;
+    same_row_pref: boolean;
+    side_by_side_pref: boolean;
+    neighbouring_row_pref: boolean;
   }) => {
     if (!flightDetails) return;
     const updatedPreferences = {
       ...flightDetails.preferences,
-      neighbouringRows: newGroupPreferences.neighbouringRows,
-      sameRow: newGroupPreferences.sameRow,
-      sideBySide: newGroupPreferences.sideBySide,
+      neighbouring_row_pref: newGroupPreferences.neighbouring_row_pref,
+      same_row_pref: newGroupPreferences.same_row_pref,
+      side_by_side_pref: newGroupPreferences.side_by_side_pref,
     };
     setFlightDetails({ ...flightDetails, preferences: updatedPreferences });
   };
   const handleChangeSoloPreferences = (newSoloPreferences: {
-    extraLegroom: boolean;
+    legroom_pref: boolean;
     window_pref: boolean;
     middle_pref: boolean;
     aisle_pref: boolean;
@@ -119,7 +141,7 @@ export default function FlightForm({
     if (!flightDetails) return;
     const updatedPreferences = {
       ...flightDetails.preferences,
-      extraLegroom: newSoloPreferences.extraLegroom,
+      legroom_pref: newSoloPreferences.legroom_pref,
       window_pref: newSoloPreferences.window_pref,
       middle_pref: newSoloPreferences.middle_pref,
       aisle_pref: newSoloPreferences.aisle_pref,
@@ -159,9 +181,7 @@ export default function FlightForm({
         />
       )}
       <Button onClick={handleAddSeat}>Add Seat</Button>
-      <Button onClick={() => handleSubmitFlightChanges(flightDetails)}>
-        Submit
-      </Button>
+      <Button onClick={() => handleUpdateFlight()}>Submit</Button>
     </>
   );
 }

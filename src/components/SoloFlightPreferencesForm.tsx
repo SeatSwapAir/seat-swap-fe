@@ -15,7 +15,7 @@ export default function SoloFlightPreferencesForm({
   preferences,
 }: {
   handleChangeSoloPreferences: (newSoloPreferences: {
-    extraLegroom: boolean;
+    legroom_pref: boolean;
     window_pref: boolean;
     middle_pref: boolean;
     aisle_pref: boolean;
@@ -31,10 +31,6 @@ export default function SoloFlightPreferencesForm({
       ...preferences,
       [event.target.name]: event.target.checked,
     };
-    console.log(
-      '🚀 ~ handleChange ~ updatedSoloPreferences:',
-      updatedSoloPreferences
-    );
     handleChangeSoloPreferences(updatedSoloPreferences);
   };
   return (
@@ -112,13 +108,20 @@ export default function SoloFlightPreferencesForm({
           />
         </FormGroup>
       </FormControl>
-      <FormControlLabel
-        control={
-          <Switch checked={preferences.extraLegroom} onChange={handleChange} />
-        }
-        label='Extra legroom preferred'
-      />
-      {/* <Button onClick={doSubmit}>Submit Changes</Button> */}
+      <FormControl>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={preferences.legroom_pref}
+                onChange={handleChange}
+                name='legroom_pref'
+              />
+            }
+            label='Extra legroom preferred'
+          />
+        </FormGroup>
+      </FormControl>
     </>
   );
 }
