@@ -17,7 +17,7 @@ const Flights = () => {
     error,
     isError,
   } = useQuery({
-    queryFn: () => getFlightsByUserId(2),
+    queryFn: () => getFlightsByUserId(24),
     queryKey: ['getFlightsByUser'],
   });
 
