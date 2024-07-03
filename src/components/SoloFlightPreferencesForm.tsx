@@ -1,90 +1,120 @@
 import {
   FormControl,
-  Radio,
-  RadioGroup,
   FormLabel,
   FormControlLabel,
   Switch,
   Typography,
+  FormGroup,
+  Checkbox,
 } from '@mui/material';
 
-import {
-  PreferencesProps,
-  LocationProps,
-  PositionProps,
-} from '../../lib/types';
+import { PreferencesProps } from '../../lib/types';
 
 export default function SoloFlightPreferencesForm({
-  handleChangeLegroomPreferences,
-  handleChangePositionPreferences,
-  handleChangeLocationPreferences,
+  handleChangeSoloPreferences,
   preferences,
 }: {
-  handleUpdatePreferences: (newPreferences: PreferencesProps) => void;
-  handleChangeLegroomPreferences: (newLegroom: boolean) => void;
-  handleChangePositionPreferences: (newPosition: PositionProps) => void;
-  handleChangeLocationPreferences: (newLocation: LocationProps) => void;
+  handleChangeSoloPreferences: (newSoloPreferences: {
+    extraLegroom: boolean;
+    window_pref: boolean;
+    middle_pref: boolean;
+    aisle_pref: boolean;
+    front_pref: boolean;
+    center_pref: boolean;
+    back_pref: boolean;
+  }) => void;
 
   preferences: PreferencesProps;
 }) {
-  const doLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleChangeLocationPreferences(event.target.value as LocationProps);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedSoloPreferences = {
+      ...preferences,
+      [event.target.name]: event.target.checked,
+    };
+    console.log(
+      '🚀 ~ handleChange ~ updatedSoloPreferences:',
+      updatedSoloPreferences
+    );
+    handleChangeSoloPreferences(updatedSoloPreferences);
   };
-
-  const doPosition = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleChangePositionPreferences(event.target.value as PositionProps);
-  };
-
-  const toggleLegroom = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleChangeLegroomPreferences(event.target.checked);
-  };
-
   return (
     <>
       <Typography>Preferences</Typography>
       <FormControl>
         <FormLabel id='demo-controlled-radio-buttons-group'>Location</FormLabel>
-        <RadioGroup
-          aria-labelledby='demo-controlled-radio-buttons-group'
-          name='controlled-radio-buttons-group'
-          value={preferences.location}
-          onChange={doLocation}
-        >
+        <FormGroup>
           <FormControlLabel
-            value='front'
-            control={<Radio />}
-            label='Front of plane'
+            control={
+              <Checkbox
+                checked={preferences.window_pref}
+                onChange={handleChange}
+                name='window_pref'
+              />
+            }
+            label='Window'
           />
           <FormControlLabel
-            value='middle'
-            control={<Radio />}
-            label='Middle of plane'
+            control={
+              <Checkbox
+                checked={preferences.middle_pref}
+                onChange={handleChange}
+                name='middle_pref'
+              />
+            }
+            label='Middle'
           />
           <FormControlLabel
-            value='back'
-            control={<Radio />}
-            label='Back of plane'
+            control={
+              <Checkbox
+                checked={preferences.aisle_pref}
+                onChange={handleChange}
+                name='aisle_pref'
+              />
+            }
+            label='Aisle'
           />
-        </RadioGroup>
+        </FormGroup>
       </FormControl>
       <FormControl>
         <FormLabel id='demo-controlled-radio-buttons-group'>
           Seat Position
         </FormLabel>
-        <RadioGroup
-          aria-labelledby='demo-controlled-radio-buttons-group'
-          name='controlled-radio-buttons-group'
-          value={preferences.position}
-          onChange={doPosition}
-        >
-          <FormControlLabel value='window' control={<Radio />} label='Window' />
-          <FormControlLabel value='middle' control={<Radio />} label='Middle' />
-          <FormControlLabel value='aisle' control={<Radio />} label='Aisle' />
-        </RadioGroup>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={preferences.front_pref}
+                onChange={handleChange}
+                name='front_pref'
+              />
+            }
+            label='Front of plane'
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={preferences.center_pref}
+                onChange={handleChange}
+                name='center_pref'
+              />
+            }
+            label='Middle of plane'
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={preferences.back_pref}
+                onChange={handleChange}
+                name='back_pref'
+              />
+            }
+            label='Back of plane'
+          />
+        </FormGroup>
       </FormControl>
       <FormControlLabel
         control={
-          <Switch checked={preferences.extraLegroom} onChange={toggleLegroom} />
+          <Switch checked={preferences.extraLegroom} onChange={handleChange} />
         }
         label='Extra legroom preferred'
       />

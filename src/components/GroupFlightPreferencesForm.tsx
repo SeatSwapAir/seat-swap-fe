@@ -14,7 +14,6 @@ export default function GroupFlightPreferencesForm({
   handleChangeGroupPreferences,
   preferences,
 }: {
-  handleUpdatePreferences: (newPreferences: PreferencesProps) => void;
   handleChangeGroupPreferences: (newGroupPreferences: {
     neighbouringRows: boolean;
     sameRow: boolean;
@@ -22,15 +21,9 @@ export default function GroupFlightPreferencesForm({
   }) => void;
   preferences: PreferencesProps;
 }) {
-  const groupPreferences = {
-    neighbouringRows: preferences.neighbouringRows,
-    sameRow: preferences.sameRow,
-    sideBySide: preferences.sideBySide,
-  };
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const updatedGroupPreferences = {
-      ...groupPreferences,
+      ...preferences,
       [event.target.name]: event.target.checked,
     };
     handleChangeGroupPreferences(updatedGroupPreferences);

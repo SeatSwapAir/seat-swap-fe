@@ -21,12 +21,16 @@ export type SeatProps = {
   isEditing: boolean;
 };
 export type PreferencesProps = {
-  location: LocationProps;
-  extraLegroom: boolean;
-  position: PositionProps;
-  neighbouringRows: boolean;
-  sameRow: boolean;
-  sideBySide: boolean;
+  extraLegroom: boolean,
+  window_pref: boolean,
+  middle_pref: boolean,
+  aisle_pref: boolean,
+  front_pref: boolean,
+  center_pref: boolean,
+  back_pref: boolean,
+  sameRow: boolean,
+  neighbouringRows: boolean,
+  sideBySide: boolean,
 };
 
 export type FlightProps = {
