@@ -56,30 +56,11 @@ const Flights = () => {
 
   const deleteFlightMutation = useOptimisticDeleteFlight();
 
-  const checkIfFlightIsThere: AddFlightProps['checkIfFlightIsThere'] = () =>
-    // flightNumber,
-    // departureTime
-    {
-      return true;
-      // flights.some(
-      //   (flightObj) =>
-      //     flightObj.flightnumber === flightNumber &&
-      //     flightObj.departuretime === departureTime
-      // );
-    };
   const handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement> = (
     event
   ) => {
     const flight_id = Number(event.currentTarget.value);
     deleteFlightMutation.mutate({ user_id: 24, flight_id });
-  };
-
-  const handleAddFlight: AddFlightProps['handleAddFlight'] = (flight) => {
-    if (checkIfFlightIsThere(flight.flightnumber, flight.departuretime)) {
-      return true;
-    }
-    // API Call to add flight
-    return true;
   };
 
   return (
@@ -103,10 +84,7 @@ const Flights = () => {
             {error.response?.data?.msg || error.message}
           </Typography>
         )}
-        <AddFlight
-          checkIfFlightIsThere={checkIfFlightIsThere}
-          handleAddFlight={handleAddFlight}
-        />
+        <AddFlight flights={flightsData || []} />
       </CardContent>
     </Card>
   );

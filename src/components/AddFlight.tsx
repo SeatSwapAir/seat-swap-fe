@@ -6,64 +6,99 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
-import { FlightProps, AddFlightProps } from '../../lib/types';
+import { getFlightDetails } from '../api/seatSwapAPI';
 
-import { getToken, getFlightDetails } from '../api/amadeusAPI';
+import { useQuery } from '@tanstack/react-query';
+import { FlightProps } from '../../lib/types';
+
 import FlightForm from './FlightForm';
 
 export default function AddFlight({
-  checkIfFlightIsThere,
-  handleAddFlight,
+  flights,
 }: {
-  handleAddFlight: AddFlightProps['handleAddFlight'];
-  checkIfFlightIsThere: AddFlightProps['checkIfFlightIsThere'];
+  flights: FlightProps[] | null;
 }) {
-  const [open, setOpen] = useState(false);
-  const [showFlightForms, setShowFlightForms] = useState(false);
   const [flightNumberAndCarrierCode, setFlightNumberAndCarrierCode] =
     useState('FR9336');
-  const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
-  const [isFlightAdded, setIsFlightAdded] = useState(false);
-  const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
+  const [departureDate, setDepartureDate] = useState<Dayjs | null>(
+    dayjs('2022-10-01')
+  );
 
-  const findFlightDetails = async () => {
-    const token = await getToken();
-    const headers = { Authorization: `Bearer ${token}` };
-    const carrierCode = flightNumberAndCarrierCode.slice(0, 2);
-    const flightNumber = flightNumberAndCarrierCode.slice(2);
-    const scheduledDepartureDate = departureDate?.format('YYYY-MM-DD');
-    const response = await getFlightDetails(
-      carrierCode,
-      flightNumber,
-      scheduledDepartureDate,
-      headers
+  const [openFlightSearch, setOpenFlightSearch] = useState(false);
+  const [showFlightForms, setShowFlightForms] = useState(false);
+
+  const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
+  const [isJourneyExists, setIsJourneyExists] = useState(false);
+
+  const findFlightDetails = () => {
+    // this is checking if the flight is not there already before querying DB and api
+    if (!flights) return;
+    if (!departureDate) return;
+    const doesjourneyExists = flights.filter((journey: FlightProps) => {
+      const flightNumberMatch =
+        journey.flightnumber === flightNumberAndCarrierCode;
+      const departureDateMatch =
+        dayjs(journey.departuretime).format('YYYY-MM-DD') ===
+        departureDate?.format('YYYY-MM-DD');
+      return flightNumberMatch && departureDateMatch;
+    });
+    console.log(
+      '🚀 ~ findFlightDetails ~ doesjourneyExists:',
+      doesjourneyExists
     );
-    if (!response) return;
-    setFlightDetails(response);
-    setIsFlightAdded(
-      checkIfFlightIsThere(response.flightnumber, response.arrivaltime)
-    );
+    if (doesjourneyExists.length > 0) {
+      setFlightDetails(doesjourneyExists[0]);
+      setIsJourneyExists(true);
+      setShowFlightForms(false);
+      return;
+    }
+    refetch(); //IF ITS NOT ITS QUERYING THE DB WITH REACT QUERY
+    // setFlightDetails(flightsData);
   };
 
-  if (!open)
+  if (!departureDate) return;
+
+  const scheduledDepartureDate = departureDate?.format('YYYY-MM-DD');
+  const {
+    data: flightsData,
+    isSuccess,
+    error,
+    isError,
+    refetch,
+  } = useQuery({
+    queryFn: () =>
+      getFlightDetails({
+        flightNumber: flightNumberAndCarrierCode,
+        date: scheduledDepartureDate,
+      }),
+    queryKey: ['getFlightDetails'],
+    enabled: false,
+  });
+  console.log('🚀 ~  data: ', flightsData, isSuccess, error, isError);
+  if (isError) return <p>Error</p>;
+  if (isSuccess) () => setFlightDetails(flightsData); // I DONT THINK THIS IS RIGHT CAN CREATE ISSUES
+  if (!openFlightSearch)
     return (
       <Button
         onClick={() => {
-          setOpen(true);
+          setOpenFlightSearch(true);
         }}
       >
         <Add /> Add Flight
       </Button>
     );
 
-  const handleSubmitFlightChanges = (flightDetails: FlightProps): void => {
-    handleAddFlight(flightDetails);
-    setFlightDetails(null);
-    setFlightNumberAndCarrierCode('');
-    setDepartureDate(null);
-    setOpen(false);
-  };
+  // const handleSubmitFlightChanges = (flightDetails: FlightProps): void => {
+  //   handleAddFlight(flightDetails);
+  //   setFlightDetails(null);
+  //   setFlightNumberAndCarrierCode('');
+  //   setDepartureDate(null);
+  //   setOpen(false);
+  // };
+  console.log('AAAAAAAAAAAAAAAAAAA', flightDetails);
+  console.log('🚀 ~ BBBBBBBBB:', flightsData);
 
   return (
     <>
@@ -84,32 +119,32 @@ export default function AddFlight({
           onChange={(newDate) => setDepartureDate(newDate)}
         />
       </LocalizationProvider>
-      <Button onClick={findFlightDetails}>Find flight Details</Button>
+      <Button onClick={() => findFlightDetails()}>Find flight Details</Button>
       {showFlightForms && (
         <Button
           onClick={() => {
-            setOpen(false);
+            setOpenFlightSearch(false);
           }}
         >
           <Close /> Cancel
         </Button>
       )}
-      {flightDetails !== null && (
+      {flightDetails !== null && ( // BUT I NEED IT HERE TO SHOW FORMS
         <>
           <Typography>
             {flightDetails?.airline} - {flightDetails?.departureairport} -{'>'}
             {flightDetails?.arrivalairport}
-            {!isFlightAdded && !showFlightForms && (
+            {!setIsJourneyExists && !showFlightForms && (
               <Button onClick={() => setShowFlightForms(true)}>
                 This is my flight!
               </Button>
             )}
-            {isFlightAdded && ' This flight has already been added'}
+            {isJourneyExists && ' This flight has already been added'}
           </Typography>
           {showFlightForms && (
             <FlightForm
               flight={flightDetails}
-              handleSubmitFlightChanges={handleSubmitFlightChanges}
+              setIsEditing={setShowFlightForms}
             />
           )}
         </>
