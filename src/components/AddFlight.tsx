@@ -50,7 +50,7 @@ export default function AddFlight({
       setShowFlightForms(false);
       return;
     }
-    await refetch();
+    await refetch(); //Should I add qury key to refetch only 'getFlightDetails' not 'getFlightsByUser'?
     setDoesJourneyExists(false);
   };
 
