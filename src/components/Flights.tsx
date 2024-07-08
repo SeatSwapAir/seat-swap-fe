@@ -2,7 +2,7 @@ import { Typography, CardContent, Card } from '@mui/material';
 
 import FlightCard from './FlightCard';
 import AddFlight from './AddFlight';
-import { AddFlightProps, FlightProps } from '../../lib/types';
+import { FlightProps } from '../../lib/types';
 import {
   getFlightsByUserId,
   deleteFlightByUserFlightId,

@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { TextField, Button, Typography } from '@mui/material';
 import { Add, Close } from '@mui/icons-material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { getFlightDetails } from '../api/seatSwapAPI';
 
@@ -22,21 +21,21 @@ export default function AddFlight({
 }) {
   const [flightNumberAndCarrierCode, setFlightNumberAndCarrierCode] =
     useState('FR9336');
-  const [departureDate, setDepartureDate] = useState<Dayjs | null>(
-    dayjs('2022-10-01')
-  );
+  const [departureDate, setDepartureDate] = useState<Dayjs | null>(dayjs());
 
   const [openFlightSearch, setOpenFlightSearch] = useState(false);
   const [showFlightForms, setShowFlightForms] = useState(false);
 
   const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
-  const [isJourneyExists, setIsJourneyExists] = useState(false);
+  const [doesJourneyExists, setDoesJourneyExists] = useState<boolean | null>(
+    null
+  );
+  console.log('🚀 ~ doesJourneyExists:', doesJourneyExists);
+  console.log('🚀 ~ flightDetails:', flightDetails);
 
-  const findFlightDetails = () => {
-    // this is checking if the flight is not there already before querying DB and api
-    if (!flights) return;
-    if (!departureDate) return;
-    const doesjourneyExists = flights.filter((journey: FlightProps) => {
+  const findFlightDetails = async () => {
+    if (!flights || !departureDate) return;
+    const existingJourneys = flights.filter((journey: FlightProps) => {
       const flightNumberMatch =
         journey.flightnumber === flightNumberAndCarrierCode;
       const departureDateMatch =
@@ -44,23 +43,21 @@ export default function AddFlight({
         departureDate?.format('YYYY-MM-DD');
       return flightNumberMatch && departureDateMatch;
     });
-    console.log(
-      '🚀 ~ findFlightDetails ~ doesjourneyExists:',
-      doesjourneyExists
-    );
-    if (doesjourneyExists.length > 0) {
-      setFlightDetails(doesjourneyExists[0]);
-      setIsJourneyExists(true);
+    console.log('🚀 ~ existingJourneys ~ existingJourneys:', existingJourneys);
+    if (existingJourneys.length > 0) {
+      setFlightDetails(existingJourneys[0]);
+      setDoesJourneyExists(true);
       setShowFlightForms(false);
       return;
     }
-    refetch(); //IF ITS NOT ITS QUERYING THE DB WITH REACT QUERY
-    // setFlightDetails(flightsData);
+    await refetch();
+    setDoesJourneyExists(false);
   };
 
   if (!departureDate) return;
 
   const scheduledDepartureDate = departureDate?.format('YYYY-MM-DD');
+
   const {
     data: flightsData,
     isSuccess,
@@ -73,12 +70,19 @@ export default function AddFlight({
         flightNumber: flightNumberAndCarrierCode,
         date: scheduledDepartureDate,
       }),
+    initialData: null,
     queryKey: ['getFlightDetails'],
     enabled: false,
+    refetchOnWindowFocus: false,
   });
   console.log('🚀 ~  data: ', flightsData, isSuccess, error, isError);
-  if (isError) return <p>Error</p>;
-  if (isSuccess) () => setFlightDetails(flightsData); // I DONT THINK THIS IS RIGHT CAN CREATE ISSUES
+
+  useEffect(() => {
+    if (isSuccess && flightsData) {
+      setFlightDetails(flightsData);
+    }
+  }, [isSuccess, flightsData]);
+
   if (!openFlightSearch)
     return (
       <Button
@@ -97,8 +101,9 @@ export default function AddFlight({
   //   setDepartureDate(null);
   //   setOpen(false);
   // };
-  console.log('AAAAAAAAAAAAAAAAAAA', flightDetails);
-  console.log('🚀 ~ BBBBBBBBB:', flightsData);
+  console.log('LOCAL', flightDetails);
+  console.log('🚀 ~ SERVER:', flightsData);
+  console.log('🚀 ~ flightDetails:', flightDetails);
 
   return (
     <>
@@ -129,17 +134,17 @@ export default function AddFlight({
           <Close /> Cancel
         </Button>
       )}
-      {flightDetails !== null && ( // BUT I NEED IT HERE TO SHOW FORMS
+      {flightDetails !== null && (
         <>
           <Typography>
             {flightDetails?.airline} - {flightDetails?.departureairport} -{'>'}
-            {flightDetails?.arrivalairport}
-            {!setIsJourneyExists && !showFlightForms && (
+            {flightDetails?.arrivalairport} - {flightDetails?.departuretime}
+            {!doesJourneyExists && !showFlightForms && (
               <Button onClick={() => setShowFlightForms(true)}>
                 This is my flight!
               </Button>
             )}
-            {isJourneyExists && ' This flight has already been added'}
+            {doesJourneyExists && ' This flight has already been added'}
           </Typography>
           {showFlightForms && (
             <FlightForm
