@@ -30,8 +30,6 @@ export default function AddFlight({
   const [doesJourneyExists, setDoesJourneyExists] = useState<boolean | null>(
     null
   );
-  console.log('🚀 ~ doesJourneyExists:', doesJourneyExists);
-  console.log('🚀 ~ flightDetails:', flightDetails);
 
   const findFlightDetails = () => {
     if (!flights || !departureDate) return;
