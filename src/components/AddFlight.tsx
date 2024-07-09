@@ -33,7 +33,7 @@ export default function AddFlight({
   console.log('🚀 ~ doesJourneyExists:', doesJourneyExists);
   console.log('🚀 ~ flightDetails:', flightDetails);
 
-  const findFlightDetails = async () => {
+  const findFlightDetails = () => {
     if (!flights || !departureDate) return;
     const existingJourneys = flights.filter((journey: FlightProps) => {
       const flightNumberMatch =
@@ -50,7 +50,7 @@ export default function AddFlight({
       setShowFlightForms(false);
       return;
     }
-    await refetch(); //Should I add qury key to refetch only 'getFlightDetails' not 'getFlightsByUser'?
+    refetch(); //Should I add qury key to refetch only 'getFlightDetails' not 'getFlightsByUser'?
     setDoesJourneyExists(false);
   };
 
