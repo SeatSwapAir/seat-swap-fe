@@ -19,6 +19,23 @@ export default function FlightForm({
   flight: FlightProps;
   setIsEditing: (isEditing: boolean) => void;
 }) {
+  if (flight.preferences === undefined || flight.seats === undefined)
+    flight = {
+      ...flight,
+      seats: [],
+      preferences: {
+        legroom_pref: false,
+        window_pref: false,
+        middle_pref: false,
+        aisle_pref: false,
+        front_pref: false,
+        center_pref: false,
+        back_pref: false,
+        same_row_pref: false,
+        side_by_side_pref: false,
+        neighbouring_row_pref: false,
+      },
+    };
   const [flightDetails, setFlightDetails] = useState(flight);
   const { flightnumber, seats, preferences } = flightDetails;
 

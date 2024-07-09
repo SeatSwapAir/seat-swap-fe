@@ -55,3 +55,23 @@ export const updateFlightByUserFlightId = ({
       throw err;
     });
 };
+
+export const getFlightDetails = ({
+  flightNumber,
+  date,
+}: {
+  flightNumber: string;
+  date: string | null;
+}): Promise<FlightProps> => {
+  return apiUrl
+    .get(`flights/${flightNumber}/date/${date}`)
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
+      }
+    })
+    .catch((err) => {
+      console.error('Error getting flight details:', err);
+      throw err;
+    });
+};

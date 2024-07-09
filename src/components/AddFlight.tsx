@@ -1,69 +1,109 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { TextField, Button, Typography } from '@mui/material';
 import { Add, Close } from '@mui/icons-material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
-import { FlightProps, AddFlightProps } from '../../lib/types';
+import { getFlightDetails } from '../api/seatSwapAPI';
 
-import { getToken, getFlightDetails } from '../api/amadeusAPI';
+import { useQuery } from '@tanstack/react-query';
+import { FlightProps } from '../../lib/types';
+
 import FlightForm from './FlightForm';
 
 export default function AddFlight({
-  checkIfFlightIsThere,
-  handleAddFlight,
+  flights,
 }: {
-  handleAddFlight: AddFlightProps['handleAddFlight'];
-  checkIfFlightIsThere: AddFlightProps['checkIfFlightIsThere'];
+  flights: FlightProps[] | null;
 }) {
-  const [open, setOpen] = useState(false);
-  const [showFlightForms, setShowFlightForms] = useState(false);
   const [flightNumberAndCarrierCode, setFlightNumberAndCarrierCode] =
     useState('FR9336');
-  const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
-  const [isFlightAdded, setIsFlightAdded] = useState(false);
-  const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
+  const [departureDate, setDepartureDate] = useState<Dayjs | null>(dayjs());
 
-  const findFlightDetails = async () => {
-    const token = await getToken();
-    const headers = { Authorization: `Bearer ${token}` };
-    const carrierCode = flightNumberAndCarrierCode.slice(0, 2);
-    const flightNumber = flightNumberAndCarrierCode.slice(2);
-    const scheduledDepartureDate = departureDate?.format('YYYY-MM-DD');
-    const response = await getFlightDetails(
-      carrierCode,
-      flightNumber,
-      scheduledDepartureDate,
-      headers
-    );
-    if (!response) return;
-    setFlightDetails(response);
-    setIsFlightAdded(
-      checkIfFlightIsThere(response.flightnumber, response.arrivaltime)
-    );
+  const [openFlightSearch, setOpenFlightSearch] = useState(false);
+  const [showFlightForms, setShowFlightForms] = useState(false);
+
+  const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
+  const [doesJourneyExists, setDoesJourneyExists] = useState<boolean | null>(
+    null
+  );
+  console.log('🚀 ~ doesJourneyExists:', doesJourneyExists);
+  console.log('🚀 ~ flightDetails:', flightDetails);
+
+  const findFlightDetails = () => {
+    if (!flights || !departureDate) return;
+    const existingJourneys = flights.filter((journey: FlightProps) => {
+      const flightNumberMatch =
+        journey.flightnumber === flightNumberAndCarrierCode;
+      const departureDateMatch =
+        dayjs(journey.departuretime).format('YYYY-MM-DD') ===
+        departureDate?.format('YYYY-MM-DD');
+      return flightNumberMatch && departureDateMatch;
+    });
+    console.log('🚀 ~ existingJourneys ~ existingJourneys:', existingJourneys);
+    if (existingJourneys.length > 0) {
+      setFlightDetails(existingJourneys[0]);
+      setDoesJourneyExists(true);
+      setShowFlightForms(false);
+      return;
+    }
+    refetch(); //Should I add qury key to refetch only 'getFlightDetails' not 'getFlightsByUser'?
+    setDoesJourneyExists(false);
   };
 
-  if (!open)
+  if (!departureDate) return;
+
+  const scheduledDepartureDate = departureDate?.format('YYYY-MM-DD');
+
+  const {
+    data: flightsData,
+    isSuccess,
+    error,
+    isError,
+    refetch,
+  } = useQuery({
+    queryFn: () =>
+      getFlightDetails({
+        flightNumber: flightNumberAndCarrierCode,
+        date: scheduledDepartureDate,
+      }),
+    initialData: null,
+    queryKey: ['getFlightDetails'],
+    enabled: false,
+    refetchOnWindowFocus: false,
+  });
+  console.log('🚀 ~  data: ', flightsData, isSuccess, error, isError);
+
+  useEffect(() => {
+    if (isSuccess && flightsData) {
+      setFlightDetails(flightsData);
+    }
+  }, [isSuccess, flightsData]);
+
+  if (!openFlightSearch)
     return (
       <Button
         onClick={() => {
-          setOpen(true);
+          setOpenFlightSearch(true);
         }}
       >
         <Add /> Add Flight
       </Button>
     );
 
-  const handleSubmitFlightChanges = (flightDetails: FlightProps): void => {
-    handleAddFlight(flightDetails);
-    setFlightDetails(null);
-    setFlightNumberAndCarrierCode('');
-    setDepartureDate(null);
-    setOpen(false);
-  };
+  // const handleSubmitFlightChanges = (flightDetails: FlightProps): void => {
+  //   handleAddFlight(flightDetails);
+  //   setFlightDetails(null);
+  //   setFlightNumberAndCarrierCode('');
+  //   setDepartureDate(null);
+  //   setOpen(false);
+  // };
+  console.log('LOCAL', flightDetails);
+  console.log('🚀 ~ SERVER:', flightsData);
+  console.log('🚀 ~ flightDetails:', flightDetails);
 
   return (
     <>
@@ -84,11 +124,11 @@ export default function AddFlight({
           onChange={(newDate) => setDepartureDate(newDate)}
         />
       </LocalizationProvider>
-      <Button onClick={findFlightDetails}>Find flight Details</Button>
+      <Button onClick={() => findFlightDetails()}>Find flight Details</Button>
       {showFlightForms && (
         <Button
           onClick={() => {
-            setOpen(false);
+            setOpenFlightSearch(false);
           }}
         >
           <Close /> Cancel
@@ -98,18 +138,18 @@ export default function AddFlight({
         <>
           <Typography>
             {flightDetails?.airline} - {flightDetails?.departureairport} -{'>'}
-            {flightDetails?.arrivalairport}
-            {!isFlightAdded && !showFlightForms && (
+            {flightDetails?.arrivalairport} - {flightDetails?.departuretime}
+            {!doesJourneyExists && !showFlightForms && (
               <Button onClick={() => setShowFlightForms(true)}>
                 This is my flight!
               </Button>
             )}
-            {isFlightAdded && ' This flight has already been added'}
+            {doesJourneyExists && ' This flight has already been added'}
           </Typography>
           {showFlightForms && (
             <FlightForm
               flight={flightDetails}
-              handleSubmitFlightChanges={handleSubmitFlightChanges}
+              setIsEditing={setShowFlightForms}
             />
           )}
         </>
