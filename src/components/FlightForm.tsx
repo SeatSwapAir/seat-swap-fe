@@ -42,7 +42,6 @@ export default function FlightForm({
       setIsAddingJourney(true);
     }
   }
-  console.log(isAddingJourney);
   const [flightDetails, setFlightDetails] = useState(flight);
   const { flightnumber, seats, preferences } = flightDetails;
 
@@ -122,7 +121,7 @@ export default function FlightForm({
   const handleChangeSeatLetter = (id: string, newLetter: string) => {
     if (!flightDetails) return;
     const updatedSeats = flightDetails.seats.map((s) =>
-      s.id === id ? { ...s, number: s.number.slice(0, 1) + newLetter } : s
+      s.id === id ? { ...s, number: s.number.slice(0, -1) + newLetter } : s
     );
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
@@ -132,7 +131,6 @@ export default function FlightForm({
     const updatedSeats = flightDetails.seats.map((s) =>
       s.id === id ? { ...s, location: newLocation } : s
     );
-    console.log('🚀 ~ handleChangeSeatLocation ~ updatedSeats:', updatedSeats);
 
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
