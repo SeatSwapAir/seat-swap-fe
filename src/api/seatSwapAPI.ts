@@ -42,10 +42,11 @@ export const updateFlightByUserFlightId = ({
 }: {
   body: FlightProps;
   params: { user_id: number; flight_id: number };
-}): Promise<FlightProps | void> => {
+}): Promise<FlightProps | void> => {  
   return apiUrl
     .patch(`users/${params.user_id}/flights/${params.flight_id}`, body)
     .then((res) => {
+      console.log(res)
       if (res.status === 200) {
         return res?.data;
       }
@@ -72,6 +73,26 @@ export const getFlightDetails = ({
     })
     .catch((err) => {
       console.error('Error getting flight details:', err);
+      throw err;
+    });
+};
+
+export const postJourney= ({
+  body,
+  params,
+}: {
+  body: FlightProps;
+  params: { user_id: number; flight_id: number };
+}): Promise<FlightProps | void> => {
+  return apiUrl
+    .post(`users/${params.user_id}/flights/${params.flight_id}`, body)
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
+      }
+    })
+    .catch((err) => {
+      console.error('Error adding journey:', err);
       throw err;
     });
 };

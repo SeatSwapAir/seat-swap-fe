@@ -115,9 +115,9 @@ export default function SeatForm({
             label='Front of plane'
           />
           <FormControlLabel
-            value='middle'
+            value='center'
             control={<Radio />}
-            label='Middle of plane'
+            label='Center of plane'
           />
           <FormControlLabel
             value='back'

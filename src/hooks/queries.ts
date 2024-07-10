@@ -1,19 +1,28 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
     getFlightsByUserId,
-    deleteFlightByUserFlightId,
+    getFlightDetails
   } from '../api/seatSwapAPI';
 
 export function useFlightsByUserId(id: number) {
-    const { data: flightsData, isSuccess, error, isError } = useQuery({
+    return useQuery({
       queryFn: () => getFlightsByUserId(id),
       queryKey: ['getFlightsByUser'],
     });
-  
-    return {
-      data: flightsData,
-      isSuccess,
-      error,
-      isError,
-    };
+
   }
+
+  export function useFlightDetails(flightNumber: string, date: string) {
+    return useQuery({
+        queryFn: () =>
+          getFlightDetails({
+            flightNumber: flightNumber,
+            date: date,
+          }),
+        initialData: null,
+        queryKey: ['getFlightDetails'],
+        enabled: false,
+        refetchOnWindowFocus: false,
+      })
+  }
+

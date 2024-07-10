@@ -23,7 +23,7 @@ export default function FlightCard({
     seats,
     preferences,
   } = flight;
-
+  const mode = 'update';
   return (
     <Card>
       <CardContent>

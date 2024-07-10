@@ -12,6 +12,7 @@ import GroupFlightPreferencesForm from './GroupFlightPreferencesForm';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@mui/material';
 import { updateFlightByUserFlightId } from '../api/seatSwapAPI';
+import { usePostJourney, usePatchJourney } from '../hooks/mutations';
 export default function FlightForm({
   flight,
   setIsEditing,
@@ -19,7 +20,8 @@ export default function FlightForm({
   flight: FlightProps;
   setIsEditing: (isEditing: boolean) => void;
 }) {
-  if (flight.preferences === undefined || flight.seats === undefined)
+  const [isAddingJourney, setIsAddingJourney] = useState(false);
+  if (flight.preferences === undefined || flight.seats === undefined) {
     flight = {
       ...flight,
       seats: [],
@@ -36,27 +38,43 @@ export default function FlightForm({
         neighbouring_row_pref: false,
       },
     };
+    if (isAddingJourney === false) {
+      setIsAddingJourney(true);
+    }
+  }
+  console.log(isAddingJourney);
   const [flightDetails, setFlightDetails] = useState(flight);
   const { flightnumber, seats, preferences } = flightDetails;
 
-  const queryClient = useQueryClient();
-  const mutateFlight = useMutation({
-    mutationFn: updateFlightByUserFlightId,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] });
-      setIsEditing(false);
-      return data;
-    },
-    onError: (err) => {
-      console.log('🚀 ~ .onError ~ err:', err);
-    },
-  });
-  const handleUpdateFlight = (): void | FlightProps => {
+  // const mutateFlight = useMutation({
+  //   mutationFn: updateFlightByUserFlightId,
+  //   onSuccess: (data) => {
+  //     queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] });
+  //     setIsEditing(false);
+  //     return data;
+  //   },
+  //   onError: (err) => {
+  //     console.log('🚀 ~ .onError ~ err:', err);
+  //   },
+  // });
+  const mutateAddJourney = usePostJourney();
+  const mutateUpdateJourney = usePatchJourney();
+  const handleAddJourney = (): void | FlightProps => {
     if (!flightDetails) return;
-    mutateFlight.mutate({
+    mutateAddJourney.mutate({
       body: flightDetails,
       params: { user_id: 24, flight_id: Number(flightDetails.id) },
     });
+    setIsEditing(false);
+  };
+
+  const handleUpdateJourney = (): void | FlightProps => {
+    if (!flightDetails) return;
+    mutateUpdateJourney.mutate({
+      body: flightDetails,
+      params: { user_id: 24, flight_id: Number(flightDetails.id) },
+    });
+    setIsEditing(false);
   };
 
   const handleUpdateSeat = (newSeat: SeatProps): void => {
@@ -114,6 +132,8 @@ export default function FlightForm({
     const updatedSeats = flightDetails.seats.map((s) =>
       s.id === id ? { ...s, location: newLocation } : s
     );
+    console.log('🚀 ~ handleChangeSeatLocation ~ updatedSeats:', updatedSeats);
+
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
   const handleChangeSeatPosition = (id: string, newPosition: PositionProps) => {
@@ -198,7 +218,12 @@ export default function FlightForm({
         />
       )}
       <Button onClick={handleAddSeat}>Add Seat</Button>
-      <Button onClick={() => handleUpdateFlight()}>Submit</Button>
+      {isAddingJourney && (
+        <Button onClick={() => handleAddJourney()}>Submit</Button>
+      )}
+      {!isAddingJourney && (
+        <Button onClick={() => handleUpdateJourney()}>Submit</Button>
+      )}
     </>
   );
 }
