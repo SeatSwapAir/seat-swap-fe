@@ -8,6 +8,7 @@ import {
   deleteFlightByUserFlightId,
 } from '../api/seatSwapAPI';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useFlightsByUserId } from '../hooks/queries';
 import axios from 'axios';
 
 const Flights = () => {
@@ -16,10 +17,7 @@ const Flights = () => {
     isSuccess,
     error,
     isError,
-  } = useQuery({
-    queryFn: () => getFlightsByUserId(24),
-    queryKey: ['getFlightsByUser'],
-  });
+  } = useFlightsByUserId(24);
 
   const useOptimisticDeleteFlight = function () {
     const queryClient = useQueryClient();
@@ -70,7 +68,7 @@ const Flights = () => {
           Flights
         </Typography>
         {isSuccess &&
-          flightsData.map((flight) => {
+          flightsData?.map((flight) => {
             return (
               <FlightCard
                 key={flight.id}
