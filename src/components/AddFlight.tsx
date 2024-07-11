@@ -48,6 +48,7 @@ export default function AddFlight({
       return;
     }
     FlightDetailsQuery.refetch(); //Should I add qury key to refetch only 'getFlightDetails' not 'getFlightsByUser'?
+
     setDoesJourneyExists(false);
   };
 
@@ -112,6 +113,7 @@ export default function AddFlight({
           format='DD-MM-YYYY'
           value={departureDate}
           label='Date'
+          slotProps={{ field: { clearable: false } }}
           onChange={(newDate) => setDepartureDate(newDate)}
         />
       </LocalizationProvider>

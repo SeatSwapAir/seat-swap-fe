@@ -63,7 +63,7 @@ export function usePatchJourney() {
             return data;
           },
           onError: (err) => {
-            console.log('🚀 ~ .onError ~ err:', err);
+            throw err;
           },
         });
 }   

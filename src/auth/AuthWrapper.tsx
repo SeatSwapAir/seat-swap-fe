@@ -1,10 +1,9 @@
-import { createContext, useContext, useState } from "react";
-import Menu from "../components/Menu";
-import { Route, Routes } from "react-router-dom";
-import Home from "../components/Home";
-import Login from "../components/Login";
-import Account from "../components/Account";
-import DefaultPreferences from "../components/DefaultPreferences";
+import { createContext, useContext, useState } from 'react';
+import Menu from '../components/Menu';
+import { Route, Routes } from 'react-router-dom';
+import Home from '../components/Home';
+import Login from '../components/Login';
+import Account from '../components/Account';
 
 type User = {
   name: string;
@@ -18,22 +17,22 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType>({
-  user: { name: "", isAuthenticated: false },
-  login: async () => "",
+  user: { name: '', isAuthenticated: false },
+  login: async () => '',
   logout: () => {},
 });
 export const AuthData = () => useContext(AuthContext);
 
 export const AuthWrapper = () => {
-  const [user, setUser] = useState({ name: "", isAuthenticated: false });
+  const [user, setUser] = useState({ name: '', isAuthenticated: false });
 
   const login = (userName: string, password: string) => {
     return new Promise((resolve, reject) => {
-      if (password === "bob") {
+      if (password === 'bob') {
         setUser({ name: userName, isAuthenticated: true });
-        resolve("success");
+        resolve('success');
       } else {
-        reject("Incorrect password");
+        reject('Incorrect password');
       }
     });
   };
@@ -47,13 +46,12 @@ export const AuthWrapper = () => {
       <>
         <Menu />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<h1>SignUp</h1>} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/defaultpreferences" element={<DefaultPreferences />} />
-          <Route path="/review" element={<h1>Review</h1>} />
-          <Route path="/reviews" element={<h1>Reviews</h1>} />
+          <Route path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<h1>SignUp</h1>} />
+          <Route path='/account' element={<Account />} />
+          <Route path='/review' element={<h1>Review</h1>} />
+          <Route path='/reviews' element={<h1>Reviews</h1>} />
         </Routes>
       </>
     </AuthContext.Provider>

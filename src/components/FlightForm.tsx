@@ -10,9 +10,10 @@ import SeatForm from './SeatForm';
 import SoloFlightPreferencesForm from './SoloFlightPreferencesForm';
 import GroupFlightPreferencesForm from './GroupFlightPreferencesForm';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { updateFlightByUserFlightId } from '../api/seatSwapAPI';
 import { usePostJourney, usePatchJourney } from '../hooks/mutations';
+import axios from 'axios';
 export default function FlightForm({
   flight,
   setIsEditing,
@@ -64,8 +65,11 @@ export default function FlightForm({
       body: flightDetails,
       params: { user_id: 24, flight_id: Number(flightDetails.id) },
     });
-    setIsEditing(false);
   };
+  if (mutateAddJourney.isSuccess) {
+    console.log('here');
+    setIsEditing(false);
+  }
 
   const handleUpdateJourney = (): void | FlightProps => {
     if (!flightDetails) return;
@@ -73,8 +77,11 @@ export default function FlightForm({
       body: flightDetails,
       params: { user_id: 24, flight_id: Number(flightDetails.id) },
     });
-    setIsEditing(false);
   };
+  if (mutateUpdateJourney.isSuccess) {
+    console.log('here');
+    setIsEditing(false);
+  }
 
   const handleUpdateSeat = (newSeat: SeatProps): void => {
     if (!flightDetails) return;
@@ -189,6 +196,14 @@ export default function FlightForm({
 
   return (
     <>
+      {mutateUpdateJourney.isPending && <div>loading...</div>}
+      {mutateUpdateJourney.isError &&
+        axios.isAxiosError(mutateUpdateJourney.error) && (
+          <Typography variant='body1' color='error'>
+            {mutateUpdateJourney.error.response?.data?.msg ||
+              mutateUpdateJourney.error.message}
+          </Typography>
+        )}
       {seats.map((seat) => (
         <SeatForm
           key={seat.id}
