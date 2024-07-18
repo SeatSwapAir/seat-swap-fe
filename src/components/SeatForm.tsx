@@ -26,12 +26,12 @@ export default function SeatForm({
   seat: SeatProps;
   flightNumber: string;
   handleUpdateSeat: (newSeat: SeatProps) => void;
-  handleDeleteSeat: (id: string) => void;
-  handleChangeSeatRowNumber: (id: string, newNumber: string) => void;
-  handleChangeSeatLetter: (id: string, newLetter: string) => void;
-  handleChangeSeatLocation: (id: string, newLocation: LocationProps) => void;
-  handleChangeSeatPosition: (id: string, newPosition: PositionProps) => void;
-  handleChangeSeatLegroom: (id: string, newLegroom: boolean) => void;
+  handleDeleteSeat: (id: number) => void;
+  handleChangeSeatRowNumber: (id: number, newRow: number) => void;
+  handleChangeSeatLetter: (id: number, newLetter: string) => void;
+  handleChangeSeatLocation: (id: number, newLocation: LocationProps) => void;
+  handleChangeSeatPosition: (id: number, newPosition: PositionProps) => void;
+  handleChangeSeatLegroom: (id: number, newLegroom: boolean) => void;
 }) {
   const rows: Number[] = [];
   const letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
@@ -40,8 +40,8 @@ export default function SeatForm({
     rows.push(i);
   }
 
-  const doRowNumber = (event: SelectChangeEvent<string>) => {
-    handleChangeSeatRowNumber(seat.id, event.target.value);
+  const doRowNumber = (event: SelectChangeEvent<number>) => {
+    handleChangeSeatRowNumber(seat.id, +event.target.value);
   };
 
   const doSeatLetter = (event: SelectChangeEvent<string>) => {
@@ -71,7 +71,7 @@ export default function SeatForm({
           <Select
             labelId='demo-simple-select-label'
             id='demo-simple-select'
-            value={seat.number.slice(0, -1)}
+            value={seat.seat_row}
             label='Row Number'
             onChange={doRowNumber}
           >
@@ -89,7 +89,7 @@ export default function SeatForm({
           <Select
             labelId='demo-simple-select-label'
             id='demo-simple-select'
-            value={seat.number.slice(-1)}
+            value={seat.seat_letter}
             label='Seat Letter'
             onChange={doSeatLetter}
           >

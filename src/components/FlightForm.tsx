@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { useState, useEffect } from 'react';
 import {
   FlightProps,
   SeatProps,
@@ -9,9 +8,7 @@ import {
 import SeatForm from './SeatForm';
 import SoloFlightPreferencesForm from './SoloFlightPreferencesForm';
 import GroupFlightPreferencesForm from './GroupFlightPreferencesForm';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Typography } from '@mui/material';
-import { updateFlightByUserFlightId } from '../api/seatSwapAPI';
 import { usePostJourney, usePatchJourney } from '../hooks/mutations';
 import axios from 'axios';
 export default function FlightForm({
@@ -46,19 +43,16 @@ export default function FlightForm({
   const [flightDetails, setFlightDetails] = useState(flight);
   const { flightnumber, seats, preferences } = flightDetails;
 
-  // const mutateFlight = useMutation({
-  //   mutationFn: updateFlightByUserFlightId,
-  //   onSuccess: (data) => {
-  //     queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] });
-  //     setIsEditing(false);
-  //     return data;
-  //   },
-  //   onError: (err) => {
-  //     console.log('🚀 ~ .onError ~ err:', err);
-  //   },
-  // });
   const mutateAddJourney = usePostJourney();
   const mutateUpdateJourney = usePatchJourney();
+
+  useEffect(() => {
+    if (mutateAddJourney.isSuccess || mutateUpdateJourney.isSuccess) {
+      console.log('here');
+      setIsEditing(false);
+    }
+  }, [mutateAddJourney.isSuccess, mutateUpdateJourney.isSuccess, setIsEditing]);
+
   const handleAddJourney = (): void | FlightProps => {
     if (!flightDetails) return;
     mutateAddJourney.mutate({
@@ -66,10 +60,6 @@ export default function FlightForm({
       params: { user_id: 24, flight_id: Number(flightDetails.id) },
     });
   };
-  if (mutateAddJourney.isSuccess) {
-    console.log('here');
-    setIsEditing(false);
-  }
 
   const handleUpdateJourney = (): void | FlightProps => {
     if (!flightDetails) return;
@@ -78,10 +68,6 @@ export default function FlightForm({
       params: { user_id: 24, flight_id: Number(flightDetails.id) },
     });
   };
-  if (mutateUpdateJourney.isSuccess) {
-    console.log('here');
-    setIsEditing(false);
-  }
 
   const handleUpdateSeat = (newSeat: SeatProps): void => {
     if (!flightDetails) return;
@@ -91,7 +77,7 @@ export default function FlightForm({
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
 
-  const handleDeleteSeat = (id: string): void => {
+  const handleDeleteSeat = (id: number): void => {
     if (!flightDetails) return;
     const updatedSeats = flightDetails.seats.filter((s) => s.id !== id);
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
@@ -105,11 +91,12 @@ export default function FlightForm({
         seats: [
           ...prevDetails?.seats,
           {
-            number: '1A',
+            seat_letter: 'A',
+            seat_row: 1,
             location: '',
             extraLegroom: false,
             position: '',
-            id: uuidv4(),
+            id: Math.floor(Math.random() * 1000000000),
             isEditing: true,
           },
         ],
@@ -117,23 +104,23 @@ export default function FlightForm({
     });
   };
 
-  const handleChangeSeatRowNumber = (id: string, newNumber: string) => {
+  const handleChangeSeatRowNumber = (id: number, newRow: number) => {
     if (!flightDetails) return;
-    const updatedSeats = flightDetails.seats.map((s) =>
-      s.id === id ? { ...s, number: newNumber + s.number.slice(-1) } : s
+    const updatedSeats = flightDetails.seats.map((seat) =>
+      seat.id === id ? { ...seat, seat_row: newRow } : seat
     );
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
 
-  const handleChangeSeatLetter = (id: string, newLetter: string) => {
+  const handleChangeSeatLetter = (id: number, newLetter: string) => {
     if (!flightDetails) return;
-    const updatedSeats = flightDetails.seats.map((s) =>
-      s.id === id ? { ...s, number: s.number.slice(0, -1) + newLetter } : s
+    const updatedSeats = flightDetails.seats.map((seat) =>
+      seat.id === id ? { ...seat, seat_letter: newLetter } : seat
     );
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
 
-  const handleChangeSeatLocation = (id: string, newLocation: LocationProps) => {
+  const handleChangeSeatLocation = (id: number, newLocation: LocationProps) => {
     if (!flightDetails) return;
     const updatedSeats = flightDetails.seats.map((s) =>
       s.id === id ? { ...s, location: newLocation } : s
@@ -141,7 +128,7 @@ export default function FlightForm({
 
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
-  const handleChangeSeatPosition = (id: string, newPosition: PositionProps) => {
+  const handleChangeSeatPosition = (id: number, newPosition: PositionProps) => {
     if (!flightDetails) return;
     const updatedSeats = flightDetails.seats.map((s) =>
       s.id === id ? { ...s, position: newPosition } : s
@@ -149,7 +136,7 @@ export default function FlightForm({
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
 
-  const handleChangeSeatLegroom = (id: string, newLegroom: boolean) => {
+  const handleChangeSeatLegroom = (id: number, newLegroom: boolean) => {
     if (!flightDetails) return;
     const updatedSeats = flightDetails.seats.map((s) =>
       s.id === id ? { ...s, extraLegroom: newLegroom } : s
