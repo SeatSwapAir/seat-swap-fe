@@ -10,6 +10,7 @@ export const getFlightsByUserId = async (
 ): Promise<FlightProps[]> => {
   try {
     const res = await apiUrl.get(`users/${user_id}/flights`);
+    console.log('🚀 ~ res.data.flights:', res.data.flights);
     return res.data.flights;
   } catch (err) {
     // Ensure that any error is thrown so that useQuery can handle it
@@ -42,11 +43,11 @@ export const updateFlightByUserFlightId = ({
 }: {
   body: FlightProps;
   params: { user_id: number; flight_id: number };
-}): Promise<FlightProps | void> => {  
+}): Promise<FlightProps | void> => {
   return apiUrl
     .patch(`users/${params.user_id}/flights/${params.flight_id}`, body)
     .then((res) => {
-      console.log(res)
+      console.log(res);
       if (res.status === 200) {
         return res?.data;
       }
@@ -77,7 +78,7 @@ export const getFlightDetails = ({
     });
 };
 
-export const postJourney= ({
+export const postJourney = ({
   body,
   params,
 }: {

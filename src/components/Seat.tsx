@@ -10,7 +10,8 @@ export default function Seat({
 }) {
   return (
     <Typography variant='body2'>
-      Seat {seat.number} - {seat.location} - {seat.position} -{' '}
+      Seat {seat.seat_row}
+      {seat.seat_letter} - {seat.location} - {seat.position} -{' '}
       {seat.extraLegroom ? 'Extra Legroom' : 'Standard Legroom'}
     </Typography>
   );
