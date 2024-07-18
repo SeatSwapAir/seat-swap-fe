@@ -7,12 +7,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import dayjs, { Dayjs } from 'dayjs';
 
-import { getFlightDetails } from '../api/seatSwapAPI';
-
-import { useQuery } from '@tanstack/react-query';
 import { FlightProps } from '../../lib/types';
 
 import FlightForm from './FlightForm';
+
+import { useFlightDetails } from '../hooks/queries';
 
 export default function AddFlight({
   flights,
@@ -48,7 +47,8 @@ export default function AddFlight({
       setShowFlightForms(false);
       return;
     }
-    refetch(); //Should I add qury key to refetch only 'getFlightDetails' not 'getFlightsByUser'?
+    FlightDetailsQuery.refetch(); //Should I add qury key to refetch only 'getFlightDetails' not 'getFlightsByUser'?
+
     setDoesJourneyExists(false);
   };
 
@@ -56,30 +56,24 @@ export default function AddFlight({
 
   const scheduledDepartureDate = departureDate?.format('YYYY-MM-DD');
 
-  const {
-    data: flightsData,
-    isSuccess,
-    error,
-    isError,
-    refetch,
-  } = useQuery({
-    queryFn: () =>
-      getFlightDetails({
-        flightNumber: flightNumberAndCarrierCode,
-        date: scheduledDepartureDate,
-      }),
-    initialData: null,
-    queryKey: ['getFlightDetails'],
-    enabled: false,
-    refetchOnWindowFocus: false,
-  });
-  console.log('🚀 ~  data: ', flightsData, isSuccess, error, isError);
+  const FlightDetailsQuery = useFlightDetails(
+    flightNumberAndCarrierCode,
+    scheduledDepartureDate
+  );
+
+  console.log(
+    '🚀 ~  data: ',
+    FlightDetailsQuery.data,
+    FlightDetailsQuery.isSuccess,
+    FlightDetailsQuery.error,
+    FlightDetailsQuery.isError
+  );
 
   useEffect(() => {
-    if (isSuccess && flightsData) {
-      setFlightDetails(flightsData);
+    if (FlightDetailsQuery.isSuccess && FlightDetailsQuery.data) {
+      setFlightDetails(FlightDetailsQuery.data);
     }
-  }, [isSuccess, flightsData]);
+  }, [FlightDetailsQuery.isSuccess, FlightDetailsQuery.data]);
 
   if (!openFlightSearch)
     return (
@@ -100,7 +94,7 @@ export default function AddFlight({
   //   setOpen(false);
   // };
   console.log('LOCAL', flightDetails);
-  console.log('🚀 ~ SERVER:', flightsData);
+  console.log('🚀 ~ SERVER:', FlightDetailsQuery.data);
   console.log('🚀 ~ flightDetails:', flightDetails);
 
   return (
@@ -119,6 +113,7 @@ export default function AddFlight({
           format='DD-MM-YYYY'
           value={departureDate}
           label='Date'
+          slotProps={{ field: { clearable: false } }}
           onChange={(newDate) => setDepartureDate(newDate)}
         />
       </LocalizationProvider>

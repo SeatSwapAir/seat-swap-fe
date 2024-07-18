@@ -23,7 +23,6 @@ export default function FlightCard({
     seats,
     preferences,
   } = flight;
-
   return (
     <Card>
       <CardContent>

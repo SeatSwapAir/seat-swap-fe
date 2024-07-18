@@ -1,5 +1,5 @@
 export type PositionProps = 'window' | 'middle' | 'aisle' | '';
-export type LocationProps = 'front' | 'middle' | 'back' | '';
+export type LocationProps = 'front' | 'center' | 'back' | '';
 
 export type UserProps = {
   email: string;
