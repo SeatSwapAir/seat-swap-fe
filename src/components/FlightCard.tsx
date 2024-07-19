@@ -6,6 +6,7 @@ import Seat from './Seat';
 import FlightForm from './FlightForm';
 import FlightPreferences from './FlightPreferences';
 import { useState } from 'react';
+import GroupSeatOffers from './GroupSeatOffers';
 
 export default function FlightCard({
   flight,
@@ -57,6 +58,8 @@ export default function FlightCard({
           {isEditing && (
             <FlightForm flight={flight} setIsEditing={setIsEditing} />
           )}
+          <Typography variant='h5'>Seats Offers</Typography>
+          <GroupSeatOffers flight_id={id} />
           <Button
             variant='contained'
             color='primary'

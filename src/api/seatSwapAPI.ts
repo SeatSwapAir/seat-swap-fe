@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FlightProps } from '../../lib/types';
+import { FlightProps, SideBySideMatchesProps } from '../../lib/types';
 
 const apiUrl = axios.create({
   baseURL: 'http://localhost:9090/api',
@@ -94,6 +94,26 @@ export const postJourney = ({
     })
     .catch((err) => {
       console.error('Error adding journey:', err);
+      throw err;
+    });
+};
+
+export const getSideBySideMatches = ({
+  flight_id,
+  user_id,
+}: {
+  flight_id: string;
+  user_id: number;
+}): Promise<SideBySideMatchesProps> => {
+  return apiUrl
+    .get(`matches/side_by_side/user/${user_id}/flight/${flight_id}`)
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
+      }
+    })
+    .catch((err) => {
+      console.error('Error getting matches details:', err);
       throw err;
     });
 };
