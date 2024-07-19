@@ -1,7 +1,12 @@
 // import { useGetSideBySideMatches } from '../hooks/queries';
-import { getSideBySideMatches } from '../api/seatSwapAPI';
+import { getSideBySideMatches, getSameRowMatches } from '../api/seatSwapAPI';
 import { UseQueryResult, useQuery } from '@tanstack/react-query';
-import { MatchProps, SeatProps, SideBySideMatchesProps } from '../../lib/types';
+import {
+  MatchProps,
+  SeatProps,
+  SideBySideMatchesProps,
+  SameRowMatchesProps,
+} from '../../lib/types';
 import MatchCard from './MatchCard';
 
 const useGetSideBySideMatches = (user_id: number, flight_id: string) => {
@@ -12,8 +17,20 @@ const useGetSideBySideMatches = (user_id: number, flight_id: string) => {
     // initialData:
   });
 };
+
+const useSameRowMatches = (user_id: number, flight_id: string) => {
+  return useQuery({
+    queryKey: ['same_row_matches', flight_id, user_id],
+    queryFn: () => getSameRowMatches({ flight_id, user_id }),
+    enabled: true,
+    // initialData:
+  });
+};
+
 const GroupSeatOffers = ({ flight_id }: { flight_id: string }) => {
   const side_by_side_matches = useGetSideBySideMatches(24, flight_id);
+  const same_row_matches = useSameRowMatches(24, flight_id);
+  console.log('🚀 ~ GroupSeatOffers ~ same_row_matches:', same_row_matches);
 
   const transformMatches = (matches: MatchProps[] | undefined) => {
     if (!matches) return;
@@ -25,18 +42,22 @@ const GroupSeatOffers = ({ flight_id }: { flight_id: string }) => {
     side_by_side_matches.data?.side_by_side_matches
   );
 
+  const SameRowMatches = transformMatches(
+    same_row_matches.data?.same_row_matches
+  );
+
   return (
     <>
       <div>
         Side By Side Matches
         {SideBySideMatches &&
           SideBySideMatches.map((match: SeatProps[], index: number) => {
-            return <MatchCard key={index} match={match} />;
+            return <MatchCard key={index + 'sidebyside'} match={match} />;
           })}
         Same Row Matches
-        {SideBySideMatches &&
-          SideBySideMatches.map((match: SeatProps[], index: number) => {
-            return <MatchCard key={index} match={match} />;
+        {SameRowMatches &&
+          SameRowMatches.map((match: SeatProps[], index: number) => {
+            return <MatchCard key={index + 'samerow'} match={match} />;
           })}
       </div>
     </>

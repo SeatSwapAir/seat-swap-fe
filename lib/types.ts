@@ -54,6 +54,10 @@ export type SideBySideMatchesProps = {
   side_by_side_matches: MatchProps[];
 };
 
+export type SameRowMatchesProps = {
+  same_row_matches: MatchProps[];
+};
+
 export type FlightCardProps = {
   flight: FlightProps;
   handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement>;
