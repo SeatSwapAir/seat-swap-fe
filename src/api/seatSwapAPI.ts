@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FlightProps, SideBySideMatchesProps, SameRowMatchesProps } from '../../lib/types';
+import { FlightProps, SideBySideMatchesProps, SameRowMatchesProps, NeighbouringRowsMatchesProps } from '../../lib/types';
 
 const apiUrl = axios.create({
   baseURL: 'http://localhost:9090/api',
@@ -127,6 +127,26 @@ export const getSameRowMatches = ({
 }): Promise<SameRowMatchesProps> => {
   return apiUrl
     .get(`matches/same_row/user/${user_id}/flight/${flight_id}`)
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
+      }
+    })
+    .catch((err) => {
+      console.error('Error getting matches details:', err);
+      throw err;
+    });
+};
+
+export const getNeighbouringRowsMatches = ({
+  flight_id,
+  user_id,
+}: {
+  flight_id: string;
+  user_id: number;
+}): Promise<NeighbouringRowsMatchesProps> => {
+  return apiUrl
+    .get(`matches/neighbouring_rows/user/${user_id}/flight/${flight_id}`)
     .then((res) => {
       if (res.status === 200) {
         return res?.data;

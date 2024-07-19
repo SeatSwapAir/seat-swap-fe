@@ -58,6 +58,10 @@ export type SameRowMatchesProps = {
   same_row_matches: MatchProps[];
 };
 
+export type NeighbouringRowsMatchesProps = {
+  neighbouring_rows_matches: MatchProps[];
+}
+
 export type FlightCardProps = {
   flight: FlightProps;
   handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement>;
