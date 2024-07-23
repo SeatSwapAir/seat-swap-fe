@@ -45,13 +45,11 @@ export default function FlightCard({
           <Typography variant='h5'>Seats</Typography>
           {!isEditing && (
             <>
-              {seats.map((seat, index) => (
-                <Seat
-                  key={index + flightnumber}
-                  seat={seat}
-                  flightNumber={flightnumber}
-                />
-              ))}
+              <div className='flex flex-wrap justify-center gap-4'>
+                {seats.map((seat, index) => (
+                  <Seat key={index + flightnumber} seat={seat} />
+                ))}
+              </div>
               <FlightPreferences preferences={preferences} />
             </>
           )}
