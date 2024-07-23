@@ -5,6 +5,7 @@ import AddFlight from './AddFlight';
 import { useFlightsByUserId } from '../hooks/queries';
 import { useOptimisticDeleteFlight } from '../hooks/mutations';
 import axios from 'axios';
+import { Button } from './ui/button';
 
 const Flights = () => {
   const FlightsByUserIdQuery = useFlightsByUserId(24);
@@ -20,6 +21,7 @@ const Flights = () => {
 
   return (
     <Card>
+      <Button>test</Button>
       <CardContent>
         <Typography variant='h2' gutterBottom>
           Flights
