@@ -25,6 +25,7 @@ export default function FlightCard({
     seats,
     preferences,
   } = flight;
+  const seatsLength = seats.length;
   return (
     <>
       <div className='flex flex-wrap justify-center gap-4'>
@@ -35,14 +36,11 @@ export default function FlightCard({
           <Typography variant='h4' component='div' gutterBottom>
             <Typography variant='h5'>Seats</Typography>
             {!isEditing && (
-              <>
-                <div className='flex flex-wrap justify-center gap-4'>
-                  {seats.map((seat, index) => (
-                    <Seat key={index + flightnumber} seat={seat} />
-                  ))}
-                </div>
-                <FlightPreferences preferences={preferences} />
-              </>
+              <div className='flex flex-wrap justify-center gap-4'>
+                {seats.map((seat, index) => (
+                  <Seat key={index + flightnumber} seat={seat} />
+                ))}
+              </div>
             )}
             {isEditing && (
               <FlightForm flight={flight} setIsEditing={setIsEditing} />
