@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   deleteFlightByUserFlightId,
   postJourney,
+  postSwapRequest,
   updateFlightByUserFlightId,
 } from '../api/seatSwapAPI';
 import { FlightProps } from '../../lib/types';
@@ -60,6 +61,20 @@ export function usePatchJourney() {
     },
     onError: (err) => {
       throw err;
+    },
+  });
+}
+
+export function usePostSwapRequest() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: postSwapRequest,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] });
+      return data;
+    },
+    onError: (err) => {
+      console.log('🚀 ~ .onError ~ err:', err);
     },
   });
 }
