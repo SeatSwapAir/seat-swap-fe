@@ -13,6 +13,12 @@ import {
   NeighbouringRowsMatchesProps,
 } from '../../lib/types';
 import MatchCard from './MatchCard';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 const useGetSideBySideMatches = (user_id: number, flight_id: string) => {
   return useQuery({
@@ -67,23 +73,45 @@ const GroupSeatOffers = ({ flight_id }: { flight_id: string }) => {
 
   return (
     <>
-      <div>
-        Side By Side Matches
-        {sideBySideMatches &&
-          sideBySideMatches.map((match: SeatProps[], index: number) => {
-            return <MatchCard key={index + 'sidebyside'} match={match} />;
-          })}
-        Same Row Matches
-        {sameRowMatches &&
-          sameRowMatches.map((match: SeatProps[], index: number) => {
-            return <MatchCard key={index + 'samerow'} match={match} />;
-          })}
-        Neighbouring Row Matches
-        {neighbouringRowsMatches &&
-          neighbouringRowsMatches.map((match: SeatProps[], index: number) => {
-            return <MatchCard key={index + 'neighbouringrows'} match={match} />;
-          })}
-      </div>
+      <Accordion
+        defaultValue='item-1'
+        type='single'
+        collapsible
+        className='w-full'
+      >
+        <AccordionItem value='item-1'>
+          <AccordionTrigger> Side By Side Matches</AccordionTrigger>
+          <AccordionContent>
+            {sideBySideMatches &&
+              sideBySideMatches.map((match: SeatProps[], index: number) => {
+                return <MatchCard key={index + 'sidebyside'} match={match} />;
+              })}
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value='item-2'>
+          <AccordionTrigger> Same Row Matches</AccordionTrigger>
+          <AccordionContent>
+            {sameRowMatches &&
+              sameRowMatches.map((match: SeatProps[], index: number) => {
+                return <MatchCard key={index + 'samerow'} match={match} />;
+              })}
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value='item-3'>
+          <AccordionTrigger> Neighbouring Row Matches</AccordionTrigger>
+          <AccordionContent>
+            {neighbouringRowsMatches &&
+              neighbouringRowsMatches.map(
+                (match: SeatProps[], index: number) => {
+                  return (
+                    <MatchCard key={index + 'neighbouringrows'} match={match} />
+                  );
+                }
+              )}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+      <div className='flex flex-col justify-center items-center gap-4'></div>
     </>
   );
 };

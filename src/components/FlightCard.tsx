@@ -45,8 +45,9 @@ export default function FlightCard({
             {isEditing && (
               <FlightForm flight={flight} setIsEditing={setIsEditing} />
             )}
-            <Typography variant='h5'>Seats Offers</Typography>
-            <GroupSeatOffers flight_id={id} />
+            {!isEditing && (
+              <Button onClick={() => setIsEditing(true)}>Edit Flight</Button>
+            )}
             <Button
               variant='contained'
               color='primary'
@@ -56,6 +57,8 @@ export default function FlightCard({
               <DeleteIcon />
               Remove Flight
             </Button>
+            <Typography variant='h5'>Seats Offers</Typography>
+            <GroupSeatOffers flight_id={id} />
           </Typography>
         </CardContent>
       </Card>
