@@ -169,6 +169,7 @@ export const getMatchStatus = ({
   your_seat_id: number;
   matched_seat_id: number;
 }): Promise<{ actions: string[] }> => {
+  console.log('🚀 ~ your_seat_id:', your_seat_id);
   return apiUrl
     .get(`/swap/yourseat/${your_seat_id}/matched/${matched_seat_id}`)
     .then((res) => {
@@ -178,6 +179,28 @@ export const getMatchStatus = ({
     })
     .catch((err) => {
       console.error('Error getting match status:', err);
+      throw err;
+    });
+};
+
+export const postSwapRequest = ({
+  body,
+}: {
+  body: { offered_seat_id: number; requested_seat_id: number };
+}): Promise<{
+  offered_seat_id: number;
+  requested_seat_id: number;
+  swap_request_date: string;
+}> => {
+  return apiUrl
+    .post(`swap`, body)
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
+      }
+    })
+    .catch((err) => {
+      console.error('Error requesting swap:', err);
       throw err;
     });
 };
