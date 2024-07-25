@@ -4,11 +4,23 @@ import { Button } from './ui/button';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SeatCardSwap from './SeatCardSwap';
 import { useMatchStatus } from '../hooks/queries';
+import { usePostSwapRequest } from '../hooks/mutations';
 
 const MatchCard = (match: { match: SeatProps[] }) => {
-  // console.log(JSON.stringify(match.match, null, 2));
-
   const matchStatus = useMatchStatus(match.match[0].id, match.match[1].id);
+  const postSwapRequest = usePostSwapRequest(
+    match.match[0].id,
+    match.match[1].id
+  );
+
+  const handleSwapRequest = () => {
+    postSwapRequest.mutate({
+      body: {
+        offered_seat_id: match.match[0].id,
+        requested_seat_id: match.match[1].id,
+      },
+    });
+  };
   return (
     <>
       <Card className='w-fit flex flex-row'>
@@ -19,7 +31,12 @@ const MatchCard = (match: { match: SeatProps[] }) => {
           </span>
           <SeatCardSwap seat={match.match[1]} />
           {matchStatus.data?.actions.includes('request') && (
-            <Button className='p-0.5 px-1.5 mr-1 h-7 text-sm'>Request</Button>
+            <Button
+              className='p-0.5 px-1.5 mr-1 h-7 text-sm'
+              onClick={handleSwapRequest}
+            >
+              Request
+            </Button>
           )}
           {matchStatus.data?.actions.includes('reject') && (
             <>

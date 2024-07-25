@@ -65,12 +65,17 @@ export function usePatchJourney() {
   });
 }
 
-export function usePostSwapRequest() {
+export function usePostSwapRequest(
+  your_seat_id: number,
+  matched_seat_id: number
+) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: postSwapRequest,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] });
+      queryClient.invalidateQueries({
+        queryKey: ['getMatchStatus', your_seat_id, matched_seat_id],
+      });
       return data;
     },
     onError: (err) => {
