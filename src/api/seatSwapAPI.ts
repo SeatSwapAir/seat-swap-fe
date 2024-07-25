@@ -204,3 +204,29 @@ export const postSwapRequest = ({
       throw err;
     });
 };
+export const patchSwapRequest = ({
+  body,
+  params,
+}: {
+  body: { action: string };
+  params: { swap_id: number };
+}): Promise<{
+  approved: {
+    offered_seat_id: number;
+    requested_seat_id: number;
+    swap_approval_date: string;
+  };
+  canceled: [{}];
+}> => {
+  return apiUrl
+    .post(`swap/${params.swap_id}`, body)
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
+      }
+    })
+    .catch((err) => {
+      console.error('Error requesting swap:', err);
+      throw err;
+    });
+};
