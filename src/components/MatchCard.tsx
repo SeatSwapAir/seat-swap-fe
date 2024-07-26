@@ -1,14 +1,19 @@
 import { SeatProps } from '../../lib/types';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from './ui/button';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SeatCardSwap from './SeatCardSwap';
 import { useMatchStatus } from '../hooks/queries';
-import { usePostSwapRequest } from '../hooks/mutations';
+import { usePostSwapRequest, usePatchSwapRequest } from '../hooks/mutations';
 
 const MatchCard = (match: { match: SeatProps[] }) => {
   const matchStatus = useMatchStatus(match.match[0].id, match.match[1].id);
+  console.log('🚀 ~ MatchCard ~ matchStatus:', matchStatus.data);
   const postSwapRequest = usePostSwapRequest(
+    match.match[0].id,
+    match.match[1].id
+  );
+  const patchSwapRequest = usePatchSwapRequest(
     match.match[0].id,
     match.match[1].id
   );
@@ -21,6 +26,19 @@ const MatchCard = (match: { match: SeatProps[] }) => {
       },
     });
   };
+  const handlePatchSwapRequest = () => {
+    if (!matchStatus.data?.swap_id && !matchStatus.data?.actions?.[0]) return;
+    if (!matchStatus.data.swap_id) return;
+    patchSwapRequest.mutate({
+      body: {
+        action: matchStatus.data.actions[0],
+      },
+      params: {
+        swap_id: matchStatus.data.swap_id,
+      },
+    });
+  };
+
   return (
     <>
       <Card className='w-fit flex flex-row'>
@@ -45,7 +63,12 @@ const MatchCard = (match: { match: SeatProps[] }) => {
             </>
           )}
           {matchStatus.data?.actions.includes('cancel') && (
-            <Button className='p-0.5 px-1.5 mr-1 h-7 text-sm'>Cancel</Button>
+            <Button
+              className='p-0.5 px-1.5 mr-1 h-7 text-sm'
+              onClick={handlePatchSwapRequest}
+            >
+              Cancel
+            </Button>
           )}
         </div>
       </Card>

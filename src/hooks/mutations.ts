@@ -4,6 +4,7 @@ import {
   postJourney,
   postSwapRequest,
   updateFlightByUserFlightId,
+  patchSwapRequest,
 } from '../api/seatSwapAPI';
 import { FlightProps } from '../../lib/types';
 
@@ -72,6 +73,24 @@ export function usePostSwapRequest(
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: postSwapRequest,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['getMatchStatus', your_seat_id, matched_seat_id],
+      });
+      return data;
+    },
+    onError: (err) => {
+      console.log('🚀 ~ .onError ~ err:', err);
+    },
+  });
+}
+export function usePatchSwapRequest(
+  your_seat_id: number,
+  matched_seat_id: number
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: patchSwapRequest,
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ['getMatchStatus', your_seat_id, matched_seat_id],

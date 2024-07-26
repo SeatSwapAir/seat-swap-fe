@@ -168,7 +168,7 @@ export const getMatchStatus = ({
 }: {
   your_seat_id: number;
   matched_seat_id: number;
-}): Promise<{ actions: string[] }> => {
+}): Promise<{ actions: string[]; swap_id?: number }> => {
   console.log('🚀 ~ your_seat_id:', your_seat_id);
   return apiUrl
     .get(`/swap/yourseat/${your_seat_id}/matched/${matched_seat_id}`)
@@ -218,10 +218,14 @@ export const patchSwapRequest = ({
   };
   canceled: [{}];
 }> => {
+  console.log('🚀 ~ params:', params);
+
+  console.log('🚀 ~ body:', body);
   return apiUrl
-    .post(`swap/${params.swap_id}`, body)
+    .patch(`swap/${params.swap_id}`, body)
     .then((res) => {
       if (res.status === 200) {
+        console.log('🚀 ~ .then ~ res?.data:', res?.data);
         return res?.data;
       }
     })
