@@ -8,7 +8,7 @@ import { usePostSwapRequest, usePatchSwapRequest } from '../hooks/mutations';
 
 const MatchCard = (match: { match: SeatProps[] }) => {
   const matchStatus = useMatchStatus(match.match[0].id, match.match[1].id);
-  console.log('🚀 ~ MatchCard ~ matchStatus:', matchStatus.data);
+  // console.log('🚀 ~ MatchCard ~ matchStatus:', matchStatus.data);
   const postSwapRequest = usePostSwapRequest(
     match.match[0].id,
     match.match[1].id
@@ -38,7 +38,15 @@ const MatchCard = (match: { match: SeatProps[] }) => {
       },
     });
   };
-
+  // if (!matchStatus.data?.actions) {
+  //   console.log(
+  //     '🚀 ~ MatchCard ~ match.match[0].id, match.match[1].id:',
+  //     match.match[0].id,
+  //     match.match[1].id
+  //   );
+  //   console.log('🚀 ~ MatchCard ~ matchStatus.data:', matchStatus.data);
+  //   return <div>No actions</div>;
+  // }
   return (
     <>
       <Card className='w-fit flex flex-row'>
@@ -48,6 +56,7 @@ const MatchCard = (match: { match: SeatProps[] }) => {
             <ArrowForwardIcon />
           </span>
           <SeatCardSwap seat={match.match[1]} />
+          <div>{match.match[0].id + ' - ' + match.match[1].id}</div>
           {matchStatus.data?.actions.includes('request') && (
             <Button
               className='p-0.5 px-1.5 mr-1 h-7 text-sm'
@@ -58,7 +67,12 @@ const MatchCard = (match: { match: SeatProps[] }) => {
           )}
           {matchStatus.data?.actions.includes('reject') && (
             <>
-              <Button className='p-0.5 px-1.5 mr-1 h-7 text-sm'>Approve</Button>
+              <Button
+                className='p-0.5 px-1.5 mr-1 h-7 text-sm'
+                onClick={handlePatchSwapRequest}
+              >
+                Approve
+              </Button>
               <Button className='p-0.5 px-1.5 mr-1 h-7 text-sm'>Reject</Button>
             </>
           )}
@@ -68,6 +82,11 @@ const MatchCard = (match: { match: SeatProps[] }) => {
               onClick={handlePatchSwapRequest}
             >
               Cancel
+            </Button>
+          )}
+          {matchStatus.data?.actions.includes('ok') && (
+            <Button className='p-0.5 px-1.5 mr-1 h-7 text-sm'>
+              Already Swapped
             </Button>
           )}
         </div>
