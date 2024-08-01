@@ -70,6 +70,9 @@ export function usePostSwapRequest(
   your_seat_id: number,
   matched_seat_id: number
 ) {
+  console.log("🚀 ~ matched_seat_id:", matched_seat_id)
+  console.log("🚀 ~ your_seat_id:", your_seat_id)
+  
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: postSwapRequest,
@@ -91,10 +94,21 @@ export function usePatchSwapRequest(
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: patchSwapRequest,
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['getMatchStatus', your_seat_id, matched_seat_id],
       });
+      if (variables.body.action === 'accept') {
+        Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['getFlightsByUser']}),
+        queryClient.invalidateQueries({ queryKey: ['side_bySide_matches']}),
+        queryClient.invalidateQueries({ queryKey: ['same_row_matches']}),
+        queryClient.invalidateQueries({ queryKey: ['neighbouring_rows_matches']}),
+        queryClient.invalidateQueries({ queryKey: ['offers']}),
+          
+      ])
+        
+      }
       return data;
     },
     onError: (err) => {

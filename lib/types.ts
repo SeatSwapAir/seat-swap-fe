@@ -60,6 +60,13 @@ export type SameRowMatchesProps = {
 
 export type NeighbouringRowsMatchesProps = {
   neighbouring_rows_matches: MatchProps[];
+};
+
+export type OffersProps = {
+  offers: MatchProps[],
+  requested: MatchProps[],
+  voided: MatchProps[],
+
 }
 
 export type FlightCardProps = {
