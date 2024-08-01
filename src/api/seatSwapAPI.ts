@@ -5,6 +5,7 @@ import {
   SameRowMatchesProps,
   NeighbouringRowsMatchesProps,
   OffersProps,
+  AllMatchesProps
 } from '../../lib/types';
 
 const apiUrl = axios.create({
@@ -259,6 +260,26 @@ export const getOffers = ({
     })
     .catch((err) => {
       console.error('Error getting offers details:', err);
+      throw err;
+    });
+};
+
+export const getAllMatches = ({
+  flight_id,
+  user_id,
+}: {
+  flight_id: string;
+  user_id: number;
+}): Promise<AllMatchesProps> => {
+  return apiUrl
+    .get(`matches/all/user/${user_id}/flight/${flight_id}`)
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
+      }
+    })
+    .catch((err) => {
+      console.error('Error getting matches details:', err);
       throw err;
     });
 };

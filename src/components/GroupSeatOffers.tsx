@@ -4,6 +4,7 @@ import {
   getSameRowMatches,
   getNeighbouringRowsMatches,
   getOffers,
+  getAllMatches,
 } from '../api/seatSwapAPI';
 import { UseQueryResult, useQuery } from '@tanstack/react-query';
 import {
@@ -57,10 +58,21 @@ const useOffers = (user_id: number, flight_id: string) => {
   });
 };
 
+const useAllMatches = (user_id: number, flight_id: string) => {
+  return useQuery({
+    queryKey: ['all_matches', flight_id, user_id],
+    queryFn: () => getAllMatches({ flight_id, user_id }),
+    enabled: true,
+    // initialData:
+  });
+};
+
 const GroupSeatOffers = ({ flight_id }: { flight_id: string }) => {
   const side_by_side_matches = useGetSideBySideMatches(21, flight_id);
   const same_row_matches = useSameRowMatches(21, flight_id);
   const neighbouring_rows_matches = useNeighbouringRowsMatches(21, flight_id);
+  const all_matches = useAllMatches(21, flight_id);
+
   const offers = useOffers(21, flight_id);
   console.log('🚀 ~ GroupSeatOffers ~ offers:', offers);
 
@@ -82,6 +94,7 @@ const GroupSeatOffers = ({ flight_id }: { flight_id: string }) => {
     neighbouring_rows_matches.data?.neighbouring_rows_matches
   );
 
+  const allMatches = transformMatches(all_matches.data?.all_matches);
   const offersFormatted = transformMatches(offers.data?.offers);
   console.log('🚀 ~ GroupSeatOffers ~ offersFormatted:', offersFormatted);
 
@@ -136,7 +149,7 @@ const GroupSeatOffers = ({ flight_id }: { flight_id: string }) => {
               </div>
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value='item-1'>
+          <AccordionItem value='item-2'>
             <AccordionTrigger> Side By Side Matches</AccordionTrigger>
             <AccordionContent className='flex flex-col justify-center items-center'>
               {sideBySideMatches &&
@@ -145,7 +158,7 @@ const GroupSeatOffers = ({ flight_id }: { flight_id: string }) => {
                 })}
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value='item-2'>
+          <AccordionItem value='item-3'>
             <AccordionTrigger> Same Row Matches</AccordionTrigger>
             <AccordionContent className='flex flex-col justify-center items-center'>
               {sameRowMatches &&
@@ -154,7 +167,7 @@ const GroupSeatOffers = ({ flight_id }: { flight_id: string }) => {
                 })}
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value='item-3'>
+          <AccordionItem value='item-4'>
             <AccordionTrigger> Neighbouring Row Matches</AccordionTrigger>
             <AccordionContent className='flex flex-col justify-center items-center'>
               {neighbouringRowsMatches &&
@@ -168,6 +181,15 @@ const GroupSeatOffers = ({ flight_id }: { flight_id: string }) => {
                     );
                   }
                 )}
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value='item-5'>
+            <AccordionTrigger> All Matches</AccordionTrigger>
+            <AccordionContent className='flex flex-col justify-center items-center'>
+              {allMatches &&
+                allMatches.map((match: SeatProps[], index: number) => {
+                  return <MatchCard key={index + 'all'} match={match} />;
+                })}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
