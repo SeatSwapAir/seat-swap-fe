@@ -19,6 +19,8 @@ export type SeatProps = {
   seat_letter: string;
   seat_row: number;
   isEditing?: boolean;
+  previous_user_name: string | null;
+  previous_user_id: number | null;
 };
 export type PreferencesProps = {
   legroom_pref: boolean;

@@ -51,6 +51,8 @@ export const updateFlightByUserFlightId = ({
   body: FlightProps;
   params: { user_id: number; flight_id: number };
 }): Promise<FlightProps | void> => {
+  
+  
   return apiUrl
     .patch(`users/${params.user_id}/flights/${params.flight_id}`, body)
     .then((res) => {

@@ -68,6 +68,11 @@ export default function Seat({ seat }: { seat: SeatProps }) {
                 </>
               )}
             </li>
+            <li className='flex items-center mt-1'>
+              {seat.previous_user_name && (
+                <div>Previous owner: {seat.previous_user_name}</div>
+              )}
+            </li>
           </ul>
         </CardContent>
       </Card>
