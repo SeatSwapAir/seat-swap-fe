@@ -5,7 +5,7 @@ import {
   SameRowMatchesProps,
   NeighbouringRowsMatchesProps,
   OffersProps,
-  AllMatchesProps
+  AllMatchesProps,
 } from '../../lib/types';
 
 const apiUrl = axios.create({
@@ -17,7 +17,6 @@ export const getFlightsByUserId = async (
 ): Promise<FlightProps[]> => {
   try {
     const res = await apiUrl.get(`users/${user_id}/flights`);
-    console.log('🚀 ~ res.data.flights:', res.data.flights);
     return res.data.flights;
   } catch (err) {
     // Ensure that any error is thrown so that useQuery can handle it
@@ -51,8 +50,6 @@ export const updateFlightByUserFlightId = ({
   body: FlightProps;
   params: { user_id: number; flight_id: number };
 }): Promise<FlightProps | void> => {
-  
-  
   return apiUrl
     .patch(`users/${params.user_id}/flights/${params.flight_id}`, body)
     .then((res) => {
@@ -173,13 +170,10 @@ export const getMatchStatus = ({
   your_seat_id: number;
   matched_seat_id: number;
 }): Promise<{ actions: string[]; swap_id?: number }> => {
-  console.log("🚀 ~ matched_seat_id:", matched_seat_id)
-  console.log("🚀 ~ your_seat_id:", your_seat_id)
   return apiUrl
     .get(`/swap/yourseat/${your_seat_id}/matched/${matched_seat_id}`)
     .then((res) => {
       if (res.status === 200) {
-        console.log(res.data);
         return res?.data;
       }
     })
@@ -199,7 +193,7 @@ export const postSwapRequest = ({
   created_at: string;
 }> => {
   // console.log("🚀 ~ body:", body)
-  
+
   return apiUrl
     .post(`swap`, body)
     .then((res) => {
@@ -244,7 +238,6 @@ export const patchSwapRequest = ({
     });
 };
 
-
 export const getOffers = ({
   flight_id,
   user_id,
@@ -256,7 +249,6 @@ export const getOffers = ({
     .get(`/user/${user_id}/flight/${flight_id}/offers`)
     .then((res) => {
       if (res.status === 200) {
-        console.log(res.data);
         return res?.data;
       }
     })
