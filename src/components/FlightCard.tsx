@@ -8,13 +8,14 @@ import FlightInfo from './FlightInfo';
 import FlightPreferences from './FlightPreferences';
 import { useState } from 'react';
 import GroupSeatOffers from './GroupSeatOffers';
+import SoloSeatOffers from './SoloSeatOffers';
 
 export default function FlightCard({
   flight,
   handleRemoveFlight,
 }: FlightCardProps) {
-  console.log('🚀 ~ flight:', flight);
   const [isEditing, setIsEditing] = useState(false);
+  const numberOfSeats = flight.seats.length;
   const {
     id,
     flightnumber,
@@ -27,8 +28,6 @@ export default function FlightCard({
     preferences,
   } = flight;
   const seatsSwapped = seats.filter((seat) => seat.previous_user_id !== null);
-
-  const seatsLength = seats.length;
 
   return (
     <>
@@ -67,7 +66,9 @@ export default function FlightCard({
               Remove Flight
             </Button>
             <Typography variant='h5'>Seats Offers</Typography>
-            <GroupSeatOffers flight_id={id} />
+            {numberOfSeats > 1 && <GroupSeatOffers flight_id={id} />}
+            {numberOfSeats === 1 && <SoloSeatOffers flight_id={id} />}
+            {numberOfSeats === 0 && <div>Add your seats to get offers</div>}
           </Typography>
         </CardContent>
       </Card>
