@@ -57,7 +57,7 @@ export default function FlightForm({
     if (!flightDetails) return;
     mutateAddJourney.mutate({
       body: flightDetails,
-      params: { user_id: 24, flight_id: Number(flightDetails.id) },
+      params: { user_id: 21, flight_id: Number(flightDetails.id) },
     });
   };
 
@@ -65,7 +65,7 @@ export default function FlightForm({
     if (!flightDetails) return;
     mutateUpdateJourney.mutate({
       body: flightDetails,
-      params: { user_id: 24, flight_id: Number(flightDetails.id) },
+      params: { user_id: 21, flight_id: Number(flightDetails.id) },
     });
   };
 
@@ -97,6 +97,8 @@ export default function FlightForm({
             extraLegroom: false,
             position: '',
             id: Math.floor(Math.random() * 1000000000),
+            previous_user_name: null,
+            previous_user_id: null,
             isEditing: true,
           },
         ],

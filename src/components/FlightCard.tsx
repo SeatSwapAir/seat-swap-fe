@@ -13,6 +13,7 @@ export default function FlightCard({
   flight,
   handleRemoveFlight,
 }: FlightCardProps) {
+  console.log('🚀 ~ flight:', flight);
   const [isEditing, setIsEditing] = useState(false);
   const {
     id,
@@ -25,7 +26,10 @@ export default function FlightCard({
     seats,
     preferences,
   } = flight;
+  const seatsSwapped = seats.filter((seat) => seat.previous_user_id !== null);
+
   const seatsLength = seats.length;
+
   return (
     <>
       <div className='flex flex-wrap justify-center gap-4'>
@@ -46,7 +50,12 @@ export default function FlightCard({
               <FlightForm flight={flight} setIsEditing={setIsEditing} />
             )}
             {!isEditing && (
-              <Button onClick={() => setIsEditing(true)}>Edit Flight</Button>
+              <Button
+                disabled={seatsSwapped.length !== 0}
+                onClick={() => setIsEditing(true)}
+              >
+                Edit Flight
+              </Button>
             )}
             <Button
               variant='contained'

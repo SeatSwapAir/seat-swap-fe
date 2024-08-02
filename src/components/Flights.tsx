@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Button } from './ui/button';
 
 const Flights = () => {
-  const FlightsByUserIdQuery = useFlightsByUserId(24);
+  const FlightsByUserIdQuery = useFlightsByUserId(21);
 
   const deleteFlightMutation = useOptimisticDeleteFlight();
 
@@ -16,7 +16,7 @@ const Flights = () => {
     event
   ) => {
     const flight_id = Number(event.currentTarget.value);
-    deleteFlightMutation.mutate({ user_id: 24, flight_id });
+    deleteFlightMutation.mutate({ user_id: 21, flight_id });
   };
 
   return (

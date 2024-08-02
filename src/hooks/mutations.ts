@@ -2,7 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   deleteFlightByUserFlightId,
   postJourney,
+  postSwapRequest,
   updateFlightByUserFlightId,
+  patchSwapRequest,
 } from '../api/seatSwapAPI';
 import { FlightProps } from '../../lib/types';
 
@@ -60,6 +62,57 @@ export function usePatchJourney() {
     },
     onError: (err) => {
       throw err;
+    },
+  });
+}
+
+export function usePostSwapRequest(
+  your_seat_id: number,
+  matched_seat_id: number
+) {
+  console.log("🚀 ~ matched_seat_id:", matched_seat_id)
+  console.log("🚀 ~ your_seat_id:", your_seat_id)
+  
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: postSwapRequest,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['getMatchStatus', your_seat_id, matched_seat_id],
+      });
+      return data;
+    },
+    onError: (err) => {
+      console.log('🚀 ~ .onError ~ err:', err);
+    },
+  });
+}
+export function usePatchSwapRequest(
+  your_seat_id: number,
+  matched_seat_id: number
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: patchSwapRequest,
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['getMatchStatus', your_seat_id, matched_seat_id],
+      });
+      if (variables.body.action === 'accept') {
+        Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['getFlightsByUser']}),
+        queryClient.invalidateQueries({ queryKey: ['side_bySide_matches']}),
+        queryClient.invalidateQueries({ queryKey: ['same_row_matches']}),
+        queryClient.invalidateQueries({ queryKey: ['neighbouring_rows_matches']}),
+        queryClient.invalidateQueries({ queryKey: ['offers']}),
+          
+      ])
+        
+      }
+      return data;
+    },
+    onError: (err) => {
+      console.log('🚀 ~ .onError ~ err:', err);
     },
   });
 }

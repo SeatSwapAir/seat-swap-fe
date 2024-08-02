@@ -19,6 +19,8 @@ export type SeatProps = {
   seat_letter: string;
   seat_row: number;
   isEditing?: boolean;
+  previous_user_name: string | null;
+  previous_user_id: number | null;
 };
 export type PreferencesProps = {
   legroom_pref: boolean;
@@ -60,6 +62,16 @@ export type SameRowMatchesProps = {
 
 export type NeighbouringRowsMatchesProps = {
   neighbouring_rows_matches: MatchProps[];
+};
+
+export type AllMatchesProps = {
+  all_matches: MatchProps[];
+};
+
+export type OffersProps = {
+  offers: MatchProps[],
+  requested: MatchProps[],
+  voided: MatchProps[],
 }
 
 export type FlightCardProps = {
