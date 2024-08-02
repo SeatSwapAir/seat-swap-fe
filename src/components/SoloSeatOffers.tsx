@@ -1,4 +1,3 @@
-// import { useGetSideBySideMatches } from '../hooks/queries';
 import { getOffers, getAllMatches } from '../api/seatSwapAPI';
 import { useQuery } from '@tanstack/react-query';
 import { MatchProps, SeatProps } from '../../lib/types';
@@ -48,7 +47,6 @@ const SoloSeatOffers = ({ flight_id }: { flight_id: string }) => {
     (seat) => seat[1].position === 'window'
   );
   const aisleSeat = allMatches?.filter((seat) => seat[1].position === 'aisle');
-  console.log('🚀 ~ SoloSeatOffers ~ windowSeats:', windowSeats);
   const offersFormatted = transformMatches(offers.data?.offers);
 
   const requestedFormatted = transformMatches(offers.data?.requested);
