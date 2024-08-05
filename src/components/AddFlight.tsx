@@ -61,14 +61,6 @@ export default function AddFlight({
     scheduledDepartureDate
   );
 
-  console.log(
-    '🚀 ~  data: ',
-    FlightDetailsQuery.data,
-    FlightDetailsQuery.isSuccess,
-    FlightDetailsQuery.error,
-    FlightDetailsQuery.isError
-  );
-
   useEffect(() => {
     if (FlightDetailsQuery.isSuccess && FlightDetailsQuery.data) {
       setFlightDetails(FlightDetailsQuery.data);
