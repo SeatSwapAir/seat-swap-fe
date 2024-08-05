@@ -1,14 +1,10 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-
 import { FlightProps } from '../../lib/types';
-import FlightForm from './FlightForm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FlightTakeoff, FlightLand } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 export default function FlightInfo({ flight }: { flight: FlightProps }) {
   const {
-    id,
     flightnumber,
     departureairport,
     arrivalairport,

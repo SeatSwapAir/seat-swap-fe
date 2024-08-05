@@ -6,8 +6,6 @@ import {
   PositionProps,
 } from '../../lib/types';
 import SeatForm from './SeatForm';
-import SoloFlightPreferencesForm from './SoloFlightPreferencesForm';
-import GroupFlightPreferencesForm from './GroupFlightPreferencesForm';
 import { Button, Typography } from '@mui/material';
 import { usePostJourney, usePatchJourney } from '../hooks/mutations';
 import axios from 'axios';
@@ -19,29 +17,17 @@ export default function FlightForm({
   setIsEditing: (isEditing: boolean) => void;
 }) {
   const [isAddingJourney, setIsAddingJourney] = useState(false);
-  if (flight.preferences === undefined || flight.seats === undefined) {
+  if (flight.seats === undefined) {
     flight = {
       ...flight,
       seats: [],
-      preferences: {
-        legroom_pref: false,
-        window_pref: false,
-        middle_pref: false,
-        aisle_pref: false,
-        front_pref: false,
-        center_pref: false,
-        back_pref: false,
-        same_row_pref: false,
-        side_by_side_pref: false,
-        neighbouring_row_pref: false,
-      },
     };
     if (isAddingJourney === false) {
       setIsAddingJourney(true);
     }
   }
   const [flightDetails, setFlightDetails] = useState(flight);
-  const { flightnumber, seats, preferences } = flightDetails;
+  const { flightnumber, seats } = flightDetails;
 
   const mutateAddJourney = usePostJourney();
   const mutateUpdateJourney = usePatchJourney();
@@ -146,43 +132,6 @@ export default function FlightForm({
     setFlightDetails({ ...flightDetails, seats: updatedSeats });
   };
 
-  const handleChangeGroupPreferences = (newGroupPreferences: {
-    same_row_pref: boolean;
-    side_by_side_pref: boolean;
-    neighbouring_row_pref: boolean;
-  }) => {
-    if (!flightDetails) return;
-    const updatedPreferences = {
-      ...flightDetails.preferences,
-      neighbouring_row_pref: newGroupPreferences.neighbouring_row_pref,
-      same_row_pref: newGroupPreferences.same_row_pref,
-      side_by_side_pref: newGroupPreferences.side_by_side_pref,
-    };
-    setFlightDetails({ ...flightDetails, preferences: updatedPreferences });
-  };
-  const handleChangeSoloPreferences = (newSoloPreferences: {
-    legroom_pref: boolean;
-    window_pref: boolean;
-    middle_pref: boolean;
-    aisle_pref: boolean;
-    front_pref: boolean;
-    center_pref: boolean;
-    back_pref: boolean;
-  }) => {
-    if (!flightDetails) return;
-    const updatedPreferences = {
-      ...flightDetails.preferences,
-      legroom_pref: newSoloPreferences.legroom_pref,
-      window_pref: newSoloPreferences.window_pref,
-      middle_pref: newSoloPreferences.middle_pref,
-      aisle_pref: newSoloPreferences.aisle_pref,
-      front_pref: newSoloPreferences.front_pref,
-      center_pref: newSoloPreferences.center_pref,
-      back_pref: newSoloPreferences.back_pref,
-    };
-    setFlightDetails({ ...flightDetails, preferences: updatedPreferences });
-  };
-
   return (
     <>
       {mutateUpdateJourney.isPending && <div>loading...</div>}
@@ -207,18 +156,7 @@ export default function FlightForm({
           handleChangeSeatLegroom={handleChangeSeatLegroom}
         />
       ))}
-      {seats.length === 1 && (
-        <SoloFlightPreferencesForm
-          handleChangeSoloPreferences={handleChangeSoloPreferences}
-          preferences={preferences}
-        />
-      )}
-      {seats.length > 1 && (
-        <GroupFlightPreferencesForm
-          preferences={preferences}
-          handleChangeGroupPreferences={handleChangeGroupPreferences}
-        />
-      )}
+
       <Button onClick={handleAddSeat}>Add Seat</Button>
       {isAddingJourney && (
         <Button onClick={() => handleAddJourney()}>Submit</Button>
