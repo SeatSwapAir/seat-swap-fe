@@ -5,7 +5,6 @@ import { FlightCardProps } from '../../lib/types';
 import Seat from './Seat';
 import FlightForm from './FlightForm';
 import FlightInfo from './FlightInfo';
-import FlightPreferences from './FlightPreferences';
 import { useState } from 'react';
 import GroupSeatOffers from './GroupSeatOffers';
 import SoloSeatOffers from './SoloSeatOffers';
@@ -16,17 +15,7 @@ export default function FlightCard({
 }: FlightCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const numberOfSeats = flight.seats.length;
-  const {
-    id,
-    flightnumber,
-    departureairport,
-    arrivalairport,
-    departuretime,
-    arrivaltime,
-    airline,
-    seats,
-    preferences,
-  } = flight;
+  const { id, flightnumber, seats } = flight;
   const seatsSwapped = seats.filter((seat) => seat.previous_user_id !== null);
 
   return (

@@ -47,6 +47,7 @@ const SoloSeatOffers = ({ flight_id }: { flight_id: string }) => {
     (seat) => seat[1].position === 'window'
   );
   const aisleSeat = allMatches?.filter((seat) => seat[1].position === 'aisle');
+
   const offersFormatted = transformMatches(offers.data?.offers);
 
   const requestedFormatted = transformMatches(offers.data?.requested);
