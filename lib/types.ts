@@ -22,18 +22,6 @@ export type SeatProps = {
   previous_user_name: string | null;
   previous_user_id: number | null;
 };
-export type PreferencesProps = {
-  legroom_pref: boolean;
-  window_pref: boolean;
-  middle_pref: boolean;
-  aisle_pref: boolean;
-  front_pref: boolean;
-  center_pref: boolean;
-  back_pref: boolean;
-  same_row_pref: boolean;
-  neighbouring_row_pref: boolean;
-  side_by_side_pref: boolean;
-};
 
 export type FlightProps = {
   flightnumber: string;
@@ -43,7 +31,6 @@ export type FlightProps = {
   arrivaltime: string;
   airline: string;
   seats: SeatProps[];
-  preferences: PreferencesProps;
   id: string;
 };
 
@@ -69,10 +56,10 @@ export type AllMatchesProps = {
 };
 
 export type OffersProps = {
-  offers: MatchProps[],
-  requested: MatchProps[],
-  voided: MatchProps[],
-}
+  offers: MatchProps[];
+  requested: MatchProps[];
+  voided: MatchProps[];
+};
 
 export type FlightCardProps = {
   flight: FlightProps;
