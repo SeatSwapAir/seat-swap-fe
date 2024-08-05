@@ -2,6 +2,7 @@ import { getOffers, getAllMatches } from '../api/seatSwapAPI';
 import { useQuery } from '@tanstack/react-query';
 import { MatchProps, SeatProps } from '../../lib/types';
 import MatchCard from './MatchCard';
+import FilterMatches from './FilterMatches';
 import {
   Accordion,
   AccordionContent,
@@ -40,13 +41,6 @@ const SoloSeatOffers = ({ flight_id }: { flight_id: string }) => {
   };
 
   const allMatches = transformMatches(all_matches.data?.all_matches);
-  const extraLegroomSeats = allMatches?.filter(
-    (seat) => seat[1].extraLegroom === true
-  );
-  const windowSeats = allMatches?.filter(
-    (seat) => seat[1].position === 'window'
-  );
-  const aisleSeat = allMatches?.filter((seat) => seat[1].position === 'aisle');
 
   const offersFormatted = transformMatches(offers.data?.offers);
 
@@ -100,54 +94,9 @@ const SoloSeatOffers = ({ flight_id }: { flight_id: string }) => {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value='item-2'>
-            <AccordionTrigger> Extra Legroom Seats</AccordionTrigger>
-            <AccordionContent className='flex flex-col justify-center items-center'>
-              {extraLegroomSeats &&
-                extraLegroomSeats.map((match: SeatProps[], index: number) => {
-                  return (
-                    <MatchCard
-                      key={index + 'extraLegroomSeats'}
-                      match={match}
-                    />
-                  );
-                })}
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value='item-3'>
-            <AccordionTrigger> Window Seats</AccordionTrigger>
-            <AccordionContent className='flex flex-col justify-center items-center'>
-              {windowSeats &&
-                windowSeats.map((match: SeatProps[], index: number) => {
-                  return (
-                    <MatchCard
-                      key={index + 'extraLegroomSeats'}
-                      match={match}
-                    />
-                  );
-                })}
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value='item-4'>
-            <AccordionTrigger> Aisle Seats</AccordionTrigger>
-            <AccordionContent className='flex flex-col justify-center items-center'>
-              {aisleSeat &&
-                aisleSeat.map((match: SeatProps[], index: number) => {
-                  return (
-                    <MatchCard
-                      key={index + 'extraLegroomSeats'}
-                      match={match}
-                    />
-                  );
-                })}
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value='item-5'>
             <AccordionTrigger> All Seats</AccordionTrigger>
             <AccordionContent className='flex flex-col justify-center items-center'>
-              {allMatches &&
-                allMatches.map((match: SeatProps[], index: number) => {
-                  return <MatchCard key={index + 'all'} match={match} />;
-                })}
+              {allMatches && <FilterMatches allMatches={allMatches} />}
             </AccordionContent>
           </AccordionItem>
         </Accordion>

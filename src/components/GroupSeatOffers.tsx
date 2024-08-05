@@ -15,6 +15,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import FilterMatches from './FilterMatches';
 
 const useGetSideBySideMatches = (user_id: number, flight_id: string) => {
   return useQuery({
@@ -176,10 +177,7 @@ const GroupSeatOffers = ({ flight_id }: { flight_id: string }) => {
           <AccordionItem value='item-5'>
             <AccordionTrigger> All Matches</AccordionTrigger>
             <AccordionContent className='flex flex-col justify-center items-center'>
-              {allMatches &&
-                allMatches.map((match: SeatProps[], index: number) => {
-                  return <MatchCard key={index + 'all'} match={match} />;
-                })}
+              {allMatches && <FilterMatches allMatches={allMatches} />}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
