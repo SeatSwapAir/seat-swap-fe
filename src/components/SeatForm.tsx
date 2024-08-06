@@ -4,6 +4,15 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
+import AircraftSeatAisle from '@/components/ui/icons/AircraftSeatAisle';
+import AircraftSeatMiddle from '@/components/ui/icons/AircraftSeatMiddle';
+import AircraftSeatWindow from '@/components/ui/icons/AircraftSeatWindow';
+import AircraftSeatExtraLegroom from '@/components/ui/icons/AircraftSeatExtraLegroom';
+import AircraftSeatReducedLegroom from '@/components/ui/icons/AircraftSeatReducedLegroom';
+import AircraftFrontSection from '@/components/ui/icons/AircraftFrontSection';
+import AircraftCenterSection from '@/components/ui/icons/AircraftCenterSection';
+import AircraftBackSection from '@/components/ui/icons/AircraftBackSection';
+
 import { SeatProps, LocationProps, PositionProps } from '../../lib/types';
 
 export default function SeatForm({
@@ -63,21 +72,13 @@ export default function SeatForm({
             }
           >
             <ToggleGroupItem aria-label='Front of plane' value='front'>
-              <img
-                src={'../../public/front2.svg'}
-                alt='Front of plane'
-                className='w-6 h-6'
-              />
+              <AircraftFrontSection className='w-6 h-6' />
             </ToggleGroupItem>
             <ToggleGroupItem aria-label='Center of plane' value='center'>
-              <img
-                src={'../../public/center2.svg'}
-                alt='Center of plane'
-                className='w-6 h-6'
-              />
+              <AircraftCenterSection className='w-6 h-6' />
             </ToggleGroupItem>
             <ToggleGroupItem aria-label='Back of plane' value='back'>
-              <img src={'../../public/back2.svg'} alt='' className='w-6 h-6' />{' '}
+              <AircraftBackSection className='w-6 h-6' />
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
@@ -94,25 +95,13 @@ export default function SeatForm({
             }
           >
             <ToggleGroupItem aria-label='Aisle Seat' value='aisle'>
-              <img
-                src={'../../public/Aircraft_Seat_Aisle.svg'}
-                alt='Aisle Seat'
-                className='w-6 h-6'
-              />
+              <AircraftSeatAisle className='w-6 h-6' />
             </ToggleGroupItem>
             <ToggleGroupItem aria-label='Middle Seat' value='middle'>
-              <img
-                src={'../../public/Aircraft_Seat_Middle.svg'}
-                alt='Middle Seat'
-                className='w-6 h-6'
-              />
+              <AircraftSeatMiddle className='w-6 h-6' />
             </ToggleGroupItem>
             <ToggleGroupItem aria-label='Window Seat' value='window'>
-              <img
-                src={'../../public/Aircraft_Seat_Window.svg'}
-                alt='Window Seat'
-                className='w-6 h-6'
-              />
+              <AircraftSeatWindow className='w-6 h-6' />
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
@@ -134,18 +123,10 @@ export default function SeatForm({
             }
           >
             <ToggleGroupItem value='true' aria-label='Extra Legroom Seat'>
-              <img
-                src={'../../public/Airline_Seat_Extra_Legroom.svg'}
-                alt='Extra Legroom Seat'
-                className='w-6 h-6'
-              />
+              <AircraftSeatExtraLegroom className='w-6 h-6' />
             </ToggleGroupItem>
             <ToggleGroupItem value='false' aria-label='Reduced Legroom Seat'>
-              <img
-                src={'../../public/Airline_Seat_Reduced_Legroom.svg'}
-                alt='Reduced Legroom Seat'
-                className='w-6 h-6'
-              />
+              <AircraftSeatReducedLegroom className='w-6 h-6' />
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
