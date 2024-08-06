@@ -12,12 +12,12 @@ export type UserProps = {
 };
 
 export type SeatProps = {
-  extraLegroom: boolean;
+  extraLegroom?: boolean | null;
   id: number;
   location: LocationProps;
   position: PositionProps;
-  seat_letter: string;
-  seat_row: number;
+  seat_letter: string | null;
+  seat_row: number | null;
   isEditing?: boolean;
   previous_user_name: string | null;
   previous_user_id: number | null;

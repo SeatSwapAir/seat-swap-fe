@@ -16,6 +16,7 @@ export default function FlightCard({
   const [isEditing, setIsEditing] = useState(false);
   const numberOfSeats = flight.seats.length;
   const { id, flightnumber, seats } = flight;
+
   const seatsSwapped = seats.filter((seat) => seat.previous_user_id !== null);
 
   return (
