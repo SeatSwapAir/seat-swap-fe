@@ -77,10 +77,10 @@ export default function FlightForm({
         seats: [
           ...prevDetails?.seats,
           {
-            seat_letter: 'A',
-            seat_row: 1,
+            seat_letter: null,
+            seat_row: null,
             location: '',
-            extraLegroom: false,
+            extraLegroom: null,
             position: '',
             id: Math.floor(Math.random() * 1000000000),
             previous_user_name: null,

@@ -1,16 +1,8 @@
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import {
-  Box,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormLabel,
-  Switch,
-  Button,
-} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 import { SeatProps, LocationProps, PositionProps } from '../../lib/types';
 
@@ -33,121 +25,136 @@ export default function SeatForm({
   handleChangeSeatPosition: (id: number, newPosition: PositionProps) => void;
   handleChangeSeatLegroom: (id: number, newLegroom: boolean) => void;
 }) {
-  const rows: Number[] = [];
-  const letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-
-  for (let i = 0; i < 66; i++) {
-    rows.push(i);
-  }
-
-  const doRowNumber = (event: SelectChangeEvent<number>) => {
-    handleChangeSeatRowNumber(seat.id, +event.target.value);
-  };
-
-  const doSeatLetter = (event: SelectChangeEvent<string>) => {
-    handleChangeSeatLetter(seat.id, event.target.value);
-  };
-
-  const doLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newLocation = event.target.value as LocationProps;
-    handleChangeSeatLocation(seat.id, newLocation);
-  };
-
-  const doPosition = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const position = event.target.value as PositionProps;
-    handleChangeSeatPosition(seat.id, position);
-  };
-
-  const toggleLegroom = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const legroom = event.target.checked;
-    handleChangeSeatLegroom(seat.id, legroom);
-  };
-
   return (
     <>
-      <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth>
-          <InputLabel id='demo-simple-select-label'>Row Number</InputLabel>
-          <Select
-            labelId='demo-simple-select-label'
-            id='demo-simple-select'
-            value={seat.seat_row}
-            label='Row Number'
-            onChange={doRowNumber}
+      <div className='flex w-full  items-center gap-1.5 justify-between'>
+        <div className='w-12 pb-1'>
+          <Label htmlFor='number'>Number</Label>
+          <Input
+            type='text'
+            id='number'
+            value={seat.seat_row ?? ''}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              handleChangeSeatRowNumber(seat.id, +event.target.value)
+            }
+          />
+        </div>
+        <div className='w-10 pb-1'>
+          <Label htmlFor='letter'>Letter</Label>
+          <Input
+            type='text'
+            id='letter'
+            value={seat.seat_letter ?? ''}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              handleChangeSeatLetter(seat.id, event.target.value)
+            }
+          />
+        </div>
+        <div className=' pb-1'>
+          <Label htmlFor='section'>Section</Label>
+          <ToggleGroup
+            id='section'
+            type='single'
+            variant='outline'
+            aria-label='Location on the plane'
+            value={seat.location}
+            onValueChange={(value: LocationProps) =>
+              handleChangeSeatLocation(seat.id, value)
+            }
           >
-            {rows.map((row) => (
-              <MenuItem key={row.toString()} value={row.toString()}>
-                {row.toString()}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
-      <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth>
-          <InputLabel id='demo-simple-select-label'>Seat Letter</InputLabel>
-          <Select
-            labelId='demo-simple-select-label'
-            id='demo-simple-select'
-            value={seat.seat_letter}
-            label='Seat Letter'
-            onChange={doSeatLetter}
+            <ToggleGroupItem aria-label='Front of plane' value='front'>
+              <img
+                src={'../../public/front2.svg'}
+                alt='Front of plane'
+                className='w-6 h-6'
+              />
+            </ToggleGroupItem>
+            <ToggleGroupItem aria-label='Center of plane' value='center'>
+              <img
+                src={'../../public/center2.svg'}
+                alt='Center of plane'
+                className='w-6 h-6'
+              />
+            </ToggleGroupItem>
+            <ToggleGroupItem aria-label='Back of plane' value='back'>
+              <img src={'../../public/back2.svg'} alt='' className='w-6 h-6' />{' '}
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+        <div className=' pb-1'>
+          <Label htmlFor='position'>Position</Label>
+          <ToggleGroup
+            variant='outline'
+            id='position'
+            type='single'
+            aria-label='Position'
+            value={seat.position}
+            onValueChange={(value: PositionProps) =>
+              handleChangeSeatPosition(seat.id, value)
+            }
           >
-            {letters.map((letter) => (
-              <MenuItem key={letter} value={letter}>
-                {letter}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
-      <FormControl>
-        <FormLabel id='demo-controlled-radio-buttons-group'>Location</FormLabel>
-        <RadioGroup
-          aria-labelledby='demo-controlled-radio-buttons-group'
-          name='controlled-radio-buttons-group'
-          value={seat.location}
-          onChange={doLocation}
-        >
-          <FormControlLabel
-            value='front'
-            control={<Radio />}
-            label='Front of plane'
-          />
-          <FormControlLabel
-            value='center'
-            control={<Radio />}
-            label='Center of plane'
-          />
-          <FormControlLabel
-            value='back'
-            control={<Radio />}
-            label='Back of plane'
-          />
-        </RadioGroup>
-      </FormControl>
-      <FormControl>
-        <FormLabel id='demo-controlled-radio-buttons-group'>
-          Seat Position
-        </FormLabel>
-        <RadioGroup
-          aria-labelledby='demo-controlled-radio-buttons-group'
-          name='controlled-radio-buttons-group'
-          value={seat.position}
-          onChange={doPosition}
-        >
-          <FormControlLabel value='window' control={<Radio />} label='Window' />
-          <FormControlLabel value='middle' control={<Radio />} label='Middle' />
-          <FormControlLabel value='aisle' control={<Radio />} label='Aisle' />
-        </RadioGroup>
-      </FormControl>
-      <FormControlLabel
-        control={
-          <Switch checked={seat.extraLegroom} onChange={toggleLegroom} />
-        }
-        label='This seat has extra legroom'
-      />
-      <Button onClick={() => handleDeleteSeat(seat.id)}>Delete</Button>
+            <ToggleGroupItem aria-label='Aisle Seat' value='aisle'>
+              <img
+                src={'../../public/Aircraft_Seat_Aisle.svg'}
+                alt='Aisle Seat'
+                className='w-6 h-6'
+              />
+            </ToggleGroupItem>
+            <ToggleGroupItem aria-label='Middle Seat' value='middle'>
+              <img
+                src={'../../public/Aircraft_Seat_Middle.svg'}
+                alt='Middle Seat'
+                className='w-6 h-6'
+              />
+            </ToggleGroupItem>
+            <ToggleGroupItem aria-label='Window Seat' value='window'>
+              <img
+                src={'../../public/Aircraft_Seat_Window.svg'}
+                alt='Window Seat'
+                className='w-6 h-6'
+              />
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+        <div className=' pb-1'>
+          <Label htmlFor='extraLegroom'>Extra Legroom</Label>
+
+          <ToggleGroup
+            id='extraLegroom'
+            variant='outline'
+            aria-label='Extra Legroom Seat'
+            type='single'
+            value={
+              seat.extraLegroom === null
+                ? undefined
+                : seat.extraLegroom?.toString()
+            }
+            onValueChange={(value) =>
+              handleChangeSeatLegroom(seat.id, value === 'true')
+            }
+          >
+            <ToggleGroupItem value='true' aria-label='Extra Legroom Seat'>
+              <img
+                src={'../../public/Airline_Seat_Extra_Legroom.svg'}
+                alt='Extra Legroom Seat'
+                className='w-6 h-6'
+              />
+            </ToggleGroupItem>
+            <ToggleGroupItem value='false' aria-label='Reduced Legroom Seat'>
+              <img
+                src={'../../public/Airline_Seat_Reduced_Legroom.svg'}
+                alt='Reduced Legroom Seat'
+                className='w-6 h-6'
+              />
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+        <div className='mt-auto'>
+          <Button onClick={() => handleDeleteSeat(seat.id)}>
+            <DeleteIcon />
+          </Button>
+        </div>
+      </div>
     </>
   );
 }
