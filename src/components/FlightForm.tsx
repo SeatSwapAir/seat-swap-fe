@@ -6,9 +6,13 @@ import {
   PositionProps,
 } from '../../lib/types';
 import SeatForm from './SeatForm';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import { Button } from '@/components/ui/button';
 import { usePostJourney, usePatchJourney } from '../hooks/mutations';
 import axios from 'axios';
+
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+
 export default function FlightForm({
   flight,
   setIsEditing,
@@ -156,13 +160,26 @@ export default function FlightForm({
           handleChangeSeatLegroom={handleChangeSeatLegroom}
         />
       ))}
-
-      <Button onClick={handleAddSeat}>Add Seat</Button>
+      <div className='flex justify-center mt-4'>
+        <Button onClick={handleAddSeat}>
+          <AddCircleIcon className='mr-2' /> Add Seat
+        </Button>
+      </div>
       {isAddingJourney && (
-        <Button onClick={() => handleAddJourney()}>Submit</Button>
+        <div className='flex justify-center mt-4 gap-2'>
+          <Button variant={'outline'} onClick={() => setIsEditing(false)}>
+            Cancel
+          </Button>
+          <Button onClick={() => handleAddJourney()}>Submit</Button>
+        </div>
       )}
       {!isAddingJourney && (
-        <Button onClick={() => handleUpdateJourney()}>Submit</Button>
+        <div className='flex justify-center mt-4 gap-2'>
+          <Button variant={'outline'} onClick={() => setIsEditing(false)}>
+            Cancel
+          </Button>
+          <Button onClick={() => handleUpdateJourney()}>Submit</Button>
+        </div>
       )}
     </>
   );
