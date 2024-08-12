@@ -26,11 +26,25 @@ export type SeatProps = {
 export type FlightProps = {
   flightnumber: string;
   departureairport: string;
+  departureairportname: string;
+  arrivalairportname: string;
   arrivalairport: string;
   departuretime: string;
   arrivaltime: string;
   airline: string;
   seats: SeatProps[];
+  id: string;
+};
+
+export type FlightDetailsProps = {
+  flightnumber: string;
+  departureairport: string;
+  departureairportname: string;
+  arrivalairportname: string;
+  arrivalairport: string;
+  departuretime: string;
+  arrivaltime: string;
+  airline: string;
   id: string;
 };
 
