@@ -6,6 +6,7 @@ import {
   NeighbouringRowsMatchesProps,
   OffersProps,
   AllMatchesProps,
+  SeatProps,
 } from '../../lib/types';
 
 const apiUrl = axios.create({
@@ -277,3 +278,30 @@ export const getAllMatches = ({
       throw err;
     });
 };
+
+export const getSeat = ({
+  flight_id,
+  user_id,
+  seat_letter,
+  seat_row
+}: {
+  flight_id: string;
+  user_id: number;
+  seat_letter: string;
+  seat_row: number;
+}): Promise<SeatProps | string> => {
+  return apiUrl
+  .get(`users/${user_id}/flights/${flight_id}/seats/${seat_letter}/${seat_row}`)
+  .then((res) => {
+    if (res.status === 200) {
+      return res?.data;
+    }
+    // if (res.status === 400 || res.status === 403) {
+    //   return res.data.msg;
+    // }
+  })
+  .catch((err) => {
+    console.error('Error getting seat details:', err);
+      throw err;
+  })
+}

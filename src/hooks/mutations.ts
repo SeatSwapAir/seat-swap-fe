@@ -1,12 +1,13 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import {
   deleteFlightByUserFlightId,
   postJourney,
   postSwapRequest,
   updateFlightByUserFlightId,
   patchSwapRequest,
+  getSeat,
 } from '../api/seatSwapAPI';
-import { FlightProps } from '../../lib/types';
+import { FlightProps, SeatProps } from '../../lib/types';
 
 export function useOptimisticDeleteFlight() {
   const queryClient = useQueryClient();
@@ -111,5 +112,19 @@ export function usePatchSwapRequest(
     onError: (err) => {
       console.log('🚀 ~ .onError ~ err:', err);
     },
+  });
+}
+
+
+export function useCheckSeatAvailability(): UseMutationResult<SeatProps | string, Error, { flightId: string;
+  userId: number;
+  seatLetter: string;
+  seatRow: number;}> {
+  return useMutation<SeatProps | string, Error, { flightId: string;
+    userId: number;
+    seatLetter: string;
+    seatRow: number;}>({
+    mutationFn: ({ flightId, userId, seatLetter, seatRow }) => 
+      getSeat({ flight_id: flightId, user_id: userId, seat_letter: seatLetter, seat_row: seatRow }),
   });
 }
