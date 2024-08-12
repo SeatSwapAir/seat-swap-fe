@@ -15,14 +15,14 @@ export default function FlightCard({
 }: FlightCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const numberOfSeats = flight.seats.length;
-  const { id, flightnumber, seats } = flight;
+  const { seats, ...rest } = flight;
 
   const seatsSwapped = seats.filter((seat) => seat.previous_user_id !== null);
 
   return (
     <>
       <div className='flex flex-wrap justify-center gap-4'>
-        <FlightInfo flight={flight} />
+        <FlightInfo flightDetails={rest} />
       </div>
       <Card>
         <CardContent>
@@ -31,7 +31,7 @@ export default function FlightCard({
             {!isEditing && (
               <div className='flex flex-wrap justify-center gap-4'>
                 {seats.map((seat, index) => (
-                  <Seat key={index + flightnumber} seat={seat} />
+                  <Seat key={index + rest.flightnumber} seat={seat} />
                 ))}
               </div>
             )}
@@ -50,14 +50,14 @@ export default function FlightCard({
               variant='contained'
               color='primary'
               onClick={handleRemoveFlight}
-              value={id}
+              value={rest.id}
             >
               <DeleteIcon />
               Remove Flight
             </Button>
             <Typography variant='h5'>Seats Offers</Typography>
-            {numberOfSeats > 1 && <GroupSeatOffers flight_id={id} />}
-            {numberOfSeats === 1 && <SoloSeatOffers flight_id={id} />}
+            {numberOfSeats > 1 && <GroupSeatOffers flight_id={rest.id} />}
+            {numberOfSeats === 1 && <SoloSeatOffers flight_id={rest.id} />}
             {numberOfSeats === 0 && <div>Add your seats to get offers</div>}
           </Typography>
         </CardContent>
