@@ -1,4 +1,3 @@
-import Flights from './Flights';
 import Main from './Main';
 import { AuthData } from '../auth/AuthWrapper';
 import { Link } from 'react-router-dom';
@@ -8,7 +7,6 @@ const Home = () => {
     <div>
       {user.isAuthenticated ? (
         <>
-          <div style={{ marginTop: '5vh' }}></div>
           <Main />
         </>
       ) : (

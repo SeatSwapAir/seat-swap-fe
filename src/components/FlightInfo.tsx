@@ -13,14 +13,14 @@ export default function FlightInfo({ flight }: { flight: FlightProps }) {
           <Flight className='mr-2' />
           {flight?.airline} Flight Number {flight?.flightnumber}
         </h3>
-        <div className='grid grid-flow-col justify-center'>
+        <div className='grid grid-flow-col justify-start'>
           <Timeline className='self-center h-14' />
-          <div className='grid grid-rows-2 gap-5'>
-            <div className='flex flex-row justify-center'>
+          <div className='grid grid-rows-2 gap-5 '>
+            <div className='flex flex-row'>
               <div className='mr-5'>
                 {dayjs(flight?.departuretime).format('HH:mm')}
               </div>
-              <div>
+              <div className=' truncate  lg:max-w-[300px]  max-w-[200px] text-left'>
                 {flight?.departureairport} {flight?.departureairportname}
               </div>
             </div>
@@ -28,7 +28,7 @@ export default function FlightInfo({ flight }: { flight: FlightProps }) {
               <div className='mr-5'>
                 {dayjs(flight?.arrivaltime).format('HH:mm')}
               </div>
-              <div>
+              <div className=' truncate  lg:max-w-[300px] max-w-[200px] text-left'>
                 {flight?.arrivalairport} {flight?.arrivalairportname}
               </div>
             </div>

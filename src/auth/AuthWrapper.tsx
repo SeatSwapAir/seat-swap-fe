@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from '../components/Home';
 import Login from '../components/Login';
 import Account from '../components/Account';
+import MainMenu from '@/components/ui/main-menu';
 
 type User = {
   name: string;
@@ -44,7 +45,8 @@ export const AuthWrapper = () => {
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
       <>
-        <Menu />
+        {/* <Menu /> */}
+        <MainMenu />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />

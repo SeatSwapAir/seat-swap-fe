@@ -81,9 +81,9 @@ export default function FindFlight({
   return (
     <>
       {!flightDetails && (
-        <div className='grid'>
+        <div className='grid max-w-[450px]'>
           <CardHeader>
-            <CardTitle>Find Your Flight</CardTitle>
+            <CardTitle>Find Your Journey!</CardTitle>
             <CardDescription>Adventure is calling!</CardDescription>
           </CardHeader>
           <div className='pb-6 grid'>
@@ -98,32 +98,14 @@ export default function FindFlight({
               }}
             />
           </div>
-          {/* <TextField
-            InputLabelProps={{ shrink: true }}
-            id='outlined-controlled'
-            label='Flight Number'
-            value={flightNumberAndCarrierCode}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setFlightNumberAndCarrierCode(event.target.value);
-            }}
-          /> */}
           <div className='pb-6 grid'>
             <Label className='justify-self-start pb-3' htmlFor='Date'>
               Date
             </Label>
             <DatePicker2 handleDateChange={handleDateChange} />
           </div>
-          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              format='DD-MM-YYYY'
-              value={departureDate}
-              label='Date'
-              slotProps={{ field: { clearable: false } }}
-              onChange={(newDate) => setDepartureDate(newDate)}
-            />
-          </LocalizationProvider> */}
           <Button className='mb-4' onClick={() => findFlightDetails()}>
-            Find Flight
+            Add Journey!
           </Button>
         </div>
       )}

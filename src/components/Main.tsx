@@ -8,13 +8,13 @@ export default function Main() {
 
   return (
     <div className='grid-flow-row'>
-      <h3>Choose or add your journey</h3>
-      <div className='grid lg:flex lg:flex-row lg:w-[1000px] md:w-[768px]'>
+      <h3 className='text-3xl'>Add or pick a journey to edit!</h3>
+      <div className='grid lg:flex lg:flex-row lg:w-[1000px] md:w-[768px] justify-center pt-4'>
         <div className='min-w-[45%]'>
           <FindFlight flights={FlightsByUserIdQuery.data || []} />
         </div>
         <Separator
-          className='my-4 lg:my-0 lg:mx-4 lg:h-auto lg:w-px'
+          className='my-4 lg:my-0 lg:mx-[50px] lg:h-auto lg:w-px max-w-[450px]'
           orientation='horizontal'
         />
         <div className='min-w-[45%]'>
