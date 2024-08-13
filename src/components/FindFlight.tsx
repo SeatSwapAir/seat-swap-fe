@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { TextField, Button, Typography } from '@mui/material';
-import { Add, Close } from '@mui/icons-material';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Typography } from '@mui/material';
+
+import { Button } from '@/components/ui/button';
+import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { DatePicker2 } from './DatePicker';
 
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -26,6 +30,9 @@ export default function FindFlight({
   const [doesJourneyExists, setDoesJourneyExists] = useState<boolean | null>(
     null
   );
+
+  console.log(flightNumberAndCarrierCode);
+  console.log(departureDate);
 
   const findFlightDetails = () => {
     if (!flights || !departureDate) return;
@@ -57,6 +64,10 @@ export default function FindFlight({
     scheduledDepartureDate
   );
 
+  const handleDateChange = (date: Date) => {
+    setDepartureDate(dayjs(date));
+  };
+
   useEffect(() => {
     if (FlightDetailsQuery.isSuccess && FlightDetailsQuery.data) {
       setFlightDetails(FlightDetailsQuery.data);
@@ -70,10 +81,24 @@ export default function FindFlight({
   return (
     <>
       {!flightDetails && (
-        <>
-          <h1>Find Your Flight</h1>
-          <h4>Adventure is calling!</h4>
-          <TextField
+        <div className='grid'>
+          <CardHeader>
+            <CardTitle>Find Your Flight</CardTitle>
+            <CardDescription>Adventure is calling!</CardDescription>
+          </CardHeader>
+          <div className='pb-6 grid'>
+            <Label className='justify-self-start pb-3' htmlFor='Flight Number'>
+              Flight Number
+            </Label>
+            <Input
+              id='Flight Number'
+              value={flightNumberAndCarrierCode}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setFlightNumberAndCarrierCode(event.target.value);
+              }}
+            />
+          </div>
+          {/* <TextField
             InputLabelProps={{ shrink: true }}
             id='outlined-controlled'
             label='Flight Number'
@@ -81,8 +106,14 @@ export default function FindFlight({
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setFlightNumberAndCarrierCode(event.target.value);
             }}
-          />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          /> */}
+          <div className='pb-6 grid'>
+            <Label className='justify-self-start pb-3' htmlFor='Date'>
+              Date
+            </Label>
+            <DatePicker2 handleDateChange={handleDateChange} />
+          </div>
+          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               format='DD-MM-YYYY'
               value={departureDate}
@@ -90,9 +121,11 @@ export default function FindFlight({
               slotProps={{ field: { clearable: false } }}
               onChange={(newDate) => setDepartureDate(newDate)}
             />
-          </LocalizationProvider>
-          <Button onClick={() => findFlightDetails()}>Find Flight</Button>
-        </>
+          </LocalizationProvider> */}
+          <Button className='mb-4' onClick={() => findFlightDetails()}>
+            Find Flight
+          </Button>
+        </div>
       )}
       {flightDetails !== null && (
         <>
@@ -101,7 +134,7 @@ export default function FindFlight({
           </Typography>
         </>
       )}
-      {flightDetails && <AddJourney flightDetails={flightDetails} />}
+      {flightDetails && <AddJourney flight={flightDetails} />}
     </>
   );
 }

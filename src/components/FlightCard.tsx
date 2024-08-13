@@ -22,7 +22,7 @@ export default function FlightCard({
   return (
     <>
       <div className='flex flex-wrap justify-center gap-4'>
-        <FlightInfo flightDetails={rest} />
+        <FlightInfo flight={flight} />
       </div>
       <Card>
         <CardContent>
