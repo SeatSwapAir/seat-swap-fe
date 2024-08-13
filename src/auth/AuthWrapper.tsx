@@ -1,9 +1,9 @@
 import { createContext, useContext, useState } from 'react';
-import Menu from '../components/Menu';
 import { Route, Routes } from 'react-router-dom';
 import Home from '../components/Home';
 import Login from '../components/Login';
 import Account from '../components/Account';
+import Header from '@/components/Header';
 
 type User = {
   name: string;
@@ -44,7 +44,7 @@ export const AuthWrapper = () => {
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
       <>
-        <Menu />
+        <Header />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
