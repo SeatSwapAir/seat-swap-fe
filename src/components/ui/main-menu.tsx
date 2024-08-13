@@ -5,7 +5,15 @@ import { MenuIcon } from 'lucide-react';
 export default function MainMenu() {
   const isDesktop = useMediaQuery('(min-width: 768px)');
   return isDesktop ? (
-    <div>desktop</div>
+    <div className=''>
+      <ul className='flex flex-row gap-4 p-4'>
+        <li>Account</li>
+        <li>Your Journeys</li>
+        <li>Add Journey</li>
+        <li>Reviews</li>
+        <li>Logout</li>
+      </ul>
+    </div>
   ) : (
     <div>
       <Drawer direction='right'>
@@ -13,10 +21,11 @@ export default function MainMenu() {
           <MenuIcon />
         </DrawerTrigger>
         <DrawerContent>
-          <ul>
+          <ul className='flex flex-col gap-4 p-4'>
             <li>Account</li>
             <li>Your Journeys</li>
-            <li>Revews</li>
+            <li>Add Journey</li>
+            <li>Reviews</li>
             <li>Logout</li>
           </ul>
         </DrawerContent>
