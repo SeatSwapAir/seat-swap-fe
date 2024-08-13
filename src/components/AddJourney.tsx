@@ -1,17 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Add, Close } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import SeatForm from './SeatForm';
 import { useCheckSeatAvailability } from '@/hooks/mutations';
-import { Flight, FlightTakeoff } from '@mui/icons-material';
-
-import dayjs, { Dayjs } from 'dayjs';
 
 import {
   FlightProps,
-  FlightDetailsProps,
   SeatProps,
   LocationProps,
   PositionProps,
@@ -31,13 +25,7 @@ import { usePostJourney } from '@/hooks/mutations';
 import axios from 'axios';
 import FlightInfo from './FlightInfo';
 
-export default function AddJourney({
-  flightDetails,
-}: {
-  flightDetails: FlightDetailsProps | null;
-}) {
-  console.log('🚀 ~ flightDetails:', flightDetails);
-
+export default function AddJourney({ flight }: { flight: FlightProps | null }) {
   const [seats, setSeats] = useState<SeatProps[]>([]);
   const newSeat = {
     id: Math.floor(Math.random() * 1000000000),
@@ -58,24 +46,24 @@ export default function AddJourney({
   const mutateAddJourney = usePostJourney();
 
   const handleAddJourney = (): void | FlightProps => {
-    if (!flightDetails) return;
+    if (!flight) return;
     const journey = {
-      flightnumber: flightDetails.flightnumber,
-      departureairport: flightDetails.departureairport,
-      departureairportname: flightDetails.departureairportname,
-      arrivalairportname: flightDetails.arrivalairportname,
-      arrivalairport: flightDetails.arrivalairport,
-      departuretime: flightDetails.departuretime,
-      arrivaltime: flightDetails.arrivaltime,
-      airline: flightDetails.airline,
+      flightnumber: flight.flightnumber,
+      departureairport: flight.departureairport,
+      departureairportname: flight.departureairportname,
+      arrivalairportname: flight.arrivalairportname,
+      arrivalairport: flight.arrivalairport,
+      departuretime: flight.departuretime,
+      arrivaltime: flight.arrivaltime,
+      airline: flight.airline,
       seats: seats,
-      id: flightDetails.id,
+      id: flight.id,
     };
     console.log('🚀 ~ handleAddJourney ~ journey:', journey);
 
     mutateAddJourney.mutate({
       body: journey,
-      params: { user_id: 21, flight_id: Number(flightDetails.id) },
+      params: { user_id: 21, flight_id: Number(flight.id) },
     });
   };
 
@@ -115,12 +103,12 @@ export default function AddJourney({
   const checkSeatAvailability = useCheckSeatAvailability();
 
   const handleSaveSeat = async () => {
-    if (!seat || !flightDetails) return;
+    if (!seat || !flight) return;
 
     if (seat.seat_letter && seat.seat_row) {
       try {
         await checkSeatAvailability.mutateAsync({
-          flightId: flightDetails.id,
+          flightId: flight.id,
           userId: 21,
           seatLetter: seat.seat_letter,
           seatRow: seat.seat_row,
@@ -155,7 +143,7 @@ export default function AddJourney({
     <div className='grid justify-items-center'>
       <h2>Add Journey</h2>
       <h4 className='mb-3'>Add seats on flight</h4>
-      {flightDetails && <FlightInfo flightDetails={flightDetails} />}
+      {flight && <FlightInfo flight={flight} />}
       {seatError && <div>{seatError}</div>}
       {seats.length > 0 &&
         seats.map((seat: SeatProps, index) => (
