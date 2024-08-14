@@ -4,6 +4,7 @@ import Home from '../components/Home';
 import Login from '../components/Login';
 import Account from '../components/Account';
 import Header from '@/components/Header';
+import AddJourney from '@/components/AddJourney';
 
 type User = {
   name: string;
@@ -48,6 +49,7 @@ export const AuthWrapper = () => {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/addjourney' element={<AddJourney />} />
           <Route path='/signup' element={<h1>SignUp</h1>} />
           <Route path='/account' element={<Account />} />
           <Route path='/review' element={<h1>Review</h1>} />

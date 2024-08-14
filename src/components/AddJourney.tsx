@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useCheckSeatAvailability } from '@/hooks/mutations';
+
+import SeatCard from './SeatCard';
+
+import { useLocation } from 'react-router-dom';
 
 import {
   FlightProps,
@@ -11,22 +13,17 @@ import {
   PositionProps,
 } from '../../lib/types';
 
-import AircraftSeatAisle from '@/components/ui/icons/AircraftSeatAisle';
-import AircraftSeatMiddle from '@/components/ui/icons/AircraftSeatMiddle';
-import AircraftSeatWindow from '@/components/ui/icons/AircraftSeatWindow';
-import AircraftSeatExtraLegroom from '@/components/ui/icons/AircraftSeatExtraLegroom';
-import AircraftSeatReducedLegroom from '@/components/ui/icons/AircraftSeatReducedLegroom';
-import AircraftFrontSection from '@/components/ui/icons/AircraftFrontSection';
-import AircraftCenterSection from '@/components/ui/icons/AircraftCenterSection';
-import AircraftBackSection from '@/components/ui/icons/AircraftBackSection';
-import Timeline from '@/components/ui/icons/Timeline';
 import SeatForm2 from './SeatForm2';
 import { usePostJourney } from '@/hooks/mutations';
 import axios from 'axios';
 import FlightInfo from './FlightInfo';
+import { Add } from '@mui/icons-material';
+import AddSeatForm from './AddSeatForm';
+import EditSeatForm from './EditSeatForm';
 
-export default function AddJourney({ flight }: { flight: FlightProps | null }) {
+export default function AddJourney() {
   const [seats, setSeats] = useState<SeatProps[]>([]);
+  console.log('🚀 ~ file: AddJourney.tsx:23 ~ AddJourney ~ seats:', seats);
   const newSeat = {
     id: Math.floor(Math.random() * 1000000000),
     location: '' as LocationProps,
@@ -36,10 +33,18 @@ export default function AddJourney({ flight }: { flight: FlightProps | null }) {
     previous_user_name: null,
     previous_user_id: null,
   };
+  const location = useLocation();
+  const flight = location.state?.flight as FlightProps;
+
+  if (!flight) {
+    return <div>No flight details available</div>;
+  }
+
   const [seat, setSeat] = useState<SeatProps | null>(newSeat);
   console.log('🚀 ~ seat:', seat);
 
-  const [showSeatForm, setShowSeatForm] = useState(true);
+  const [showEditSeatForm, setShowEditSeatForm] = useState(false);
+  const [showAddSeatForm, setShowAddSeatForm] = useState(false);
 
   const [seatError, setSeatError] = useState<string | null>(null);
 
@@ -47,6 +52,7 @@ export default function AddJourney({ flight }: { flight: FlightProps | null }) {
 
   const handleAddJourney = (): void | FlightProps => {
     if (!flight) return;
+
     const journey = {
       flightnumber: flight.flightnumber,
       departureairport: flight.departureairport,
@@ -59,45 +65,32 @@ export default function AddJourney({ flight }: { flight: FlightProps | null }) {
       seats: seats,
       id: flight.id,
     };
-    console.log('🚀 ~ handleAddJourney ~ journey:', journey);
 
     mutateAddJourney.mutate({
       body: journey,
       params: { user_id: 21, flight_id: Number(flight.id) },
     });
   };
+  const handleEditSeat = (seat: SeatProps) => {
+    setSeat(seat);
+    setShowEditSeatForm(true);
+  };
+
+  const handleUpdateSeat = (seat: SeatProps) => {
+    if (!seat || !flight) return;
+    setSeats((prevSeats) =>
+      prevSeats.map((s) => (s.id === seat.id ? seat : s))
+    );
+    setShowEditSeatForm(false);
+  };
 
   const handleDeleteSeat = (seat: SeatProps): void => {
     if (!seat.seat_row || !seat.seat_letter) return;
     const updatedSeats = seats.filter(
-      (s) => s.seat_row !== seat.seat_row && s.seat_letter !== seat.seat_letter
+      (s) =>
+        !(s.seat_row === seat.seat_row && s.seat_letter === seat.seat_letter)
     );
     setSeats(updatedSeats);
-  };
-
-  const handleChangeSeatRowNumber = (newRowNumber: number) => {
-    if (!seat) return;
-    setSeat({ ...seat, seat_row: newRowNumber });
-  };
-
-  const handleChangeSeatLetter = (newLetter: string) => {
-    if (!seat) return;
-    setSeat({ ...seat, seat_letter: newLetter });
-  };
-
-  const handleChangeSeatLocation = (newLocation: LocationProps) => {
-    if (!seat) return;
-    setSeat({ ...seat, location: newLocation });
-  };
-
-  const handleChangeSeatPosition = (newPosition: PositionProps) => {
-    if (!seat) return;
-    setSeat({ ...seat, position: newPosition });
-  };
-
-  const handleChangeSeatLegroom = (newExtraLegroom: boolean) => {
-    if (!seat) return;
-    setSeat({ ...seat, extraLegroom: newExtraLegroom });
   };
 
   const checkSeatAvailability = useCheckSeatAvailability();
@@ -113,7 +106,10 @@ export default function AddJourney({ flight }: { flight: FlightProps | null }) {
           seatLetter: seat.seat_letter,
           seatRow: seat.seat_row,
         });
-        const seatExist = seats.filter((s) => s.id === seat.id);
+        const seatExist = seats.filter(
+          (s) =>
+            s.seat_letter === seat.seat_letter && s.seat_row === seat.seat_row
+        );
         if (seatExist.length === 0) {
           setSeats((prevSeats) => [...prevSeats, seat]);
         } else {
@@ -122,7 +118,7 @@ export default function AddJourney({ flight }: { flight: FlightProps | null }) {
           );
         }
         setSeat(newSeat);
-        setShowSeatForm(false);
+        setShowEditSeatForm(false);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           setSeatError(error.response?.data?.msg || 'An error occurred');
@@ -133,11 +129,42 @@ export default function AddJourney({ flight }: { flight: FlightProps | null }) {
     }
   };
 
+  const handleAddSeat = async (seat: SeatProps) => {
+    if (!seat || !flight) return;
+
+    const { seat_row, seat_letter } = seat;
+    if (!seat_row || !seat_letter) return;
+    try {
+      await checkSeatAvailability.mutateAsync({
+        flightId: flight.id,
+        userId: 21,
+        seatLetter: seat_letter,
+        seatRow: seat_row,
+      });
+      const doesSeatExist =
+        seats.filter(
+          (s) => s.seat_row === seat_row && s.seat_letter === seat_letter
+        ).length > 0;
+      if (doesSeatExist) {
+        setSeatError(`Seat ${seat_row}${seat_letter} already exists`);
+        return;
+      }
+      setSeats((prevSeats) => [...prevSeats, seat]);
+      setShowAddSeatForm(false);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setSeatError(error.response?.data?.msg || 'An error occurred');
+      } else {
+        setSeatError('An unexpected error occurred');
+      }
+    }
+  };
+
   useEffect(() => {
     if (mutateAddJourney.isSuccess) {
-      setShowSeatForm(false);
+      setShowEditSeatForm(false);
     }
-  }, [mutateAddJourney.isSuccess, setShowSeatForm]);
+  }, [mutateAddJourney.isSuccess, setShowEditSeatForm]);
 
   return (
     <div className='grid justify-items-center'>
@@ -147,87 +174,34 @@ export default function AddJourney({ flight }: { flight: FlightProps | null }) {
       {seatError && <div>{seatError}</div>}
       {seats.length > 0 &&
         seats.map((seat: SeatProps, index) => (
-          <div
+          <SeatCard
             key={
               seat.seat_row !== null && seat.seat_letter !== null
                 ? `${seat.seat_row}${seat.seat_letter}`
                 : index
             }
-            className='flex flex-row p-0 items-center justify-center'
-          >
-            <div className='mr-3'>
-              Seat {seat.seat_row}
-              {seat.seat_letter}
-            </div>
-            <div className='flex items-center p-0 mr-2'>
-              Position:{' '}
-              {seat.position === 'aisle' ? (
-                <AircraftSeatAisle className='w-6 h-6' />
-              ) : seat.position === 'middle' ? (
-                <AircraftSeatMiddle className='w-6 h-6' />
-              ) : (
-                <AircraftSeatWindow className='w-6 h-6' />
-              )}
-            </div>
-            <div className='flex items-center p-0 mr-2'>
-              Section:{' '}
-              {seat.location === 'front' ? (
-                <AircraftFrontSection className='w-6 h-6' />
-              ) : seat.location === 'center' ? (
-                <AircraftCenterSection className='w-6 h-6' />
-              ) : (
-                <AircraftBackSection className='w-6 h-6' />
-              )}
-            </div>
-            <div className='flex items-center p-0 mr-2'>
-              Seat Legroom:{' '}
-              {seat.extraLegroom ? (
-                <AircraftSeatExtraLegroom className='w-6 h-6' />
-              ) : (
-                <AircraftSeatReducedLegroom className='w-6 h-6' />
-              )}
-            </div>
-            <Button className='w-7 h-7 mr-1'>
-              <EditIcon
-                onClick={() => {
-                  setShowSeatForm(true);
-                  setSeat(seat);
-                }}
-              />
-            </Button>
-            <Button className='w-7 h-7' onClick={() => handleDeleteSeat(seat)}>
-              <DeleteIcon />
-            </Button>
-          </div>
+            seat={seat}
+            handleDeleteSeat={handleDeleteSeat}
+            handleEditSeat={handleEditSeat}
+          />
         ))}
-      {showSeatForm && seat && (
-        <SeatForm2
-          seat={seat}
-          handleChangeSeatRowNumber={handleChangeSeatRowNumber}
-          handleChangeSeatLetter={handleChangeSeatLetter}
-          handleChangeSeatLocation={handleChangeSeatLocation}
-          handleChangeSeatPosition={handleChangeSeatPosition}
-          handleChangeSeatLegroom={handleChangeSeatLegroom}
-          handleSaveSeat={handleSaveSeat}
-        />
-      )}
+
       <Button
         onClick={() => {
-          setShowSeatForm(true);
-          setSeat(newSeat);
+          setShowAddSeatForm(true);
         }}
       >
         Add Seat
       </Button>
+      {showAddSeatForm && <AddSeatForm handleAddSeat={handleAddSeat} />}
+      {showEditSeatForm && seat && (
+        <EditSeatForm
+          handleUpdateSeat={handleUpdateSeat}
+          seatToEdit={seat}
+          key={seat.id}
+        />
+      )}
       <Button onClick={() => handleAddJourney()}>Submit</Button>
-      {/* {showSeatForm && (
-        <Button onClick={() => {
-            setShowSeatForm(false)
-
-        }}>
-          <Close /> Cancel
-        </Button>
-      )} */}
     </div>
   );
 }

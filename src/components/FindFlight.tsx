@@ -12,9 +12,8 @@ import { DatePicker2 } from './DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 
 import { FlightProps } from '../../lib/types';
-
 import { useFlightDetails } from '../hooks/queries';
-import AddJourney from './AddJourney';
+import { useNavigate } from 'react-router-dom';
 
 export default function FindFlight({
   flights,
@@ -24,12 +23,11 @@ export default function FindFlight({
   const [flightNumberAndCarrierCode, setFlightNumberAndCarrierCode] =
     useState('FR9336');
   const [departureDate, setDepartureDate] = useState<Dayjs | null>(dayjs());
-
   const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
-
   const [doesJourneyExists, setDoesJourneyExists] = useState<boolean | null>(
     null
   );
+  const navigate = useNavigate();
 
   console.log(flightNumberAndCarrierCode);
   console.log(departureDate);
@@ -71,7 +69,9 @@ export default function FindFlight({
   useEffect(() => {
     if (FlightDetailsQuery.isSuccess && FlightDetailsQuery.data) {
       setFlightDetails(FlightDetailsQuery.data);
+      navigate('/addjourney', { state: { flight: FlightDetailsQuery.data } });
     }
+    // navigate('/addjourney', { state: { flight: flightDetails } })
   }, [FlightDetailsQuery.isSuccess, FlightDetailsQuery.data]);
 
   console.log('LOCAL', flightDetails);
@@ -116,7 +116,6 @@ export default function FindFlight({
           </Typography>
         </>
       )}
-      {flightDetails && <AddJourney flight={flightDetails} />}
     </>
   );
 }

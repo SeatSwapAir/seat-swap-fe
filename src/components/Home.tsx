@@ -3,6 +3,7 @@ import { AuthData } from '../auth/AuthWrapper';
 import { Link } from 'react-router-dom';
 const Home = () => {
   const { user } = AuthData();
+  console.log('🚀 ~ file: Home.tsx:6 ~ Home ~ user:', user);
   return (
     <div>
       {user.isAuthenticated ? (
