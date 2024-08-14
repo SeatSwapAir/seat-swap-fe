@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useCheckSeatAvailability } from '@/hooks/mutations';
 
@@ -6,33 +6,19 @@ import SeatCard from './SeatCard';
 
 import { useLocation } from 'react-router-dom';
 
-import {
-  FlightProps,
-  SeatProps,
-  LocationProps,
-  PositionProps,
-} from '../../lib/types';
+import { FlightProps, SeatProps } from '../../lib/types';
 
-import SeatForm2 from './SeatForm2';
 import { usePostJourney } from '@/hooks/mutations';
 import axios from 'axios';
 import FlightInfo from './FlightInfo';
-import { Add } from '@mui/icons-material';
 import AddSeatForm from './AddSeatForm';
 import EditSeatForm from './EditSeatForm';
+import { Separator } from '@/components/ui/separator';
+import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function AddJourney() {
   const [seats, setSeats] = useState<SeatProps[]>([]);
-  console.log('🚀 ~ file: AddJourney.tsx:23 ~ AddJourney ~ seats:', seats);
-  const newSeat = {
-    id: Math.floor(Math.random() * 1000000000),
-    location: '' as LocationProps,
-    position: '' as PositionProps,
-    seat_letter: null,
-    seat_row: null,
-    previous_user_name: null,
-    previous_user_id: null,
-  };
+
   const location = useLocation();
   const flight = location.state?.flight as FlightProps;
 
@@ -40,12 +26,9 @@ export default function AddJourney() {
     return <div>No flight details available</div>;
   }
 
-  const [seat, setSeat] = useState<SeatProps | null>(newSeat);
-  console.log('🚀 ~ seat:', seat);
-
+  const [seat, setSeat] = useState<SeatProps | null>(null);
   const [showEditSeatForm, setShowEditSeatForm] = useState(false);
   const [showAddSeatForm, setShowAddSeatForm] = useState(false);
-
   const [seatError, setSeatError] = useState<string | null>(null);
 
   const mutateAddJourney = usePostJourney();
@@ -95,38 +78,16 @@ export default function AddJourney() {
 
   const checkSeatAvailability = useCheckSeatAvailability();
 
-  const handleSaveSeat = async () => {
-    if (!seat || !flight) return;
-
-    if (seat.seat_letter && seat.seat_row) {
-      try {
-        await checkSeatAvailability.mutateAsync({
-          flightId: flight.id,
-          userId: 21,
-          seatLetter: seat.seat_letter,
-          seatRow: seat.seat_row,
-        });
-        const seatExist = seats.filter(
-          (s) =>
-            s.seat_letter === seat.seat_letter && s.seat_row === seat.seat_row
-        );
-        if (seatExist.length === 0) {
-          setSeats((prevSeats) => [...prevSeats, seat]);
-        } else {
-          setSeats((prevSeats) =>
-            prevSeats.map((s) => (s.id === seat.id ? seat : s))
-          );
-        }
-        setSeat(newSeat);
-        setShowEditSeatForm(false);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          setSeatError(error.response?.data?.msg || 'An error occurred');
-        } else {
-          setSeatError('An unexpected error occurred');
-        }
-      }
-    }
+  const cancelButton = (
+    func: MouseEventHandler<HTMLButtonElement>
+  ): JSX.Element => {
+    return (
+      <div className='flex justify-start ml-4'>
+        <Button className='w-[330px]' onClick={func}>
+          Cancel
+        </Button>
+      </div>
+    );
   };
 
   const handleAddSeat = async (seat: SeatProps) => {
@@ -167,41 +128,84 @@ export default function AddJourney() {
   }, [mutateAddJourney.isSuccess, setShowEditSeatForm]);
 
   return (
-    <div className='grid justify-items-center'>
-      <h2>Add Journey</h2>
-      <h4 className='mb-3'>Add seats on flight</h4>
-      {flight && <FlightInfo flight={flight} />}
-      {seatError && <div>{seatError}</div>}
-      {seats.length > 0 &&
-        seats.map((seat: SeatProps, index) => (
-          <SeatCard
-            key={
-              seat.seat_row !== null && seat.seat_letter !== null
-                ? `${seat.seat_row}${seat.seat_letter}`
-                : index
-            }
-            seat={seat}
-            handleDeleteSeat={handleDeleteSeat}
-            handleEditSeat={handleEditSeat}
+    <div className='grid-flow-row'>
+      <div className='grid justify-items-center'>
+        <h3 className='text-3xl py-6'>Add seats and submit!</h3>
+        <div className='grid lg:flex lg:flex-row lg:w-[1000px] justify-center'>
+          <div className='min-w-[45%]'>
+            <CardHeader className='mt-4'>
+              <CardTitle>Heres your flight!</CardTitle>
+              <CardDescription>
+                Submit your journey after adding all seats
+              </CardDescription>
+            </CardHeader>
+            {flight && <FlightInfo flight={flight} />}
+            <Separator orientation='horizontal' />
+            {seatError && <div>{seatError}</div>}
+            {seats.length > 0 &&
+              seats.map((seat: SeatProps, index) => (
+                <SeatCard
+                  key={
+                    seat.seat_row !== null && seat.seat_letter !== null
+                      ? `${seat.seat_row}${seat.seat_letter}`
+                      : index
+                  }
+                  seat={seat}
+                  handleDeleteSeat={handleDeleteSeat}
+                  handleEditSeat={handleEditSeat}
+                />
+              ))}{' '}
+            <Button
+              className='my-4'
+              disabled={!seats.length}
+              onClick={() => handleAddJourney()}
+            >
+              Submit your journey!
+            </Button>
+          </div>
+          <Separator
+            className='my-4 lg:my-0 lg:mx-[50px] lg:h-auto lg:w-px max-w-[450px]'
+            orientation='horizontal'
           />
-        ))}
-
-      <Button
-        onClick={() => {
-          setShowAddSeatForm(true);
-        }}
-      >
-        Add Seat
-      </Button>
-      {showAddSeatForm && <AddSeatForm handleAddSeat={handleAddSeat} />}
-      {showEditSeatForm && seat && (
-        <EditSeatForm
-          handleUpdateSeat={handleUpdateSeat}
-          seatToEdit={seat}
-          key={seat.id}
-        />
-      )}
-      <Button onClick={() => handleAddJourney()}>Submit</Button>
+          <div className='min-w-[45%] m-auto'>
+            {!showAddSeatForm && !showEditSeatForm && (
+              <>
+                {seats.length === 0 && (
+                  <CardHeader>
+                    <CardTitle>Add your seats!</CardTitle>
+                    <CardDescription>
+                      You cannot submit journey befir adding all of your seats
+                    </CardDescription>
+                  </CardHeader>
+                )}
+                <Button
+                  onClick={() => {
+                    setShowAddSeatForm(true);
+                  }}
+                >
+                  Add Seat
+                </Button>
+              </>
+            )}
+            {showAddSeatForm && (
+              <>
+                <AddSeatForm handleAddSeat={handleAddSeat} />
+                {cancelButton(() => setShowAddSeatForm(false))}
+              </>
+            )}
+            {showEditSeatForm && seat && (
+              <>
+                <EditSeatForm
+                  handleUpdateSeat={handleUpdateSeat}
+                  seatToEdit={seat}
+                  key={seat.id}
+                />
+                {cancelButton(() => setShowEditSeatForm(false))}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
