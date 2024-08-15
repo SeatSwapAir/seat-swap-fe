@@ -4,7 +4,7 @@ import {
   getSameRowMatches,
   getNeighbouringRowsMatches,
   getOffers,
-  getAllMatches,
+  getAllSeats,
 } from '../api/seatSwapAPI';
 import { useQuery } from '@tanstack/react-query';
 import { MatchProps, SeatProps } from '../../lib/types';
@@ -53,10 +53,10 @@ const useOffers = (user_id: number, flight_id: string) => {
   });
 };
 
-const useAllMatches = (user_id: number, flight_id: string) => {
+const useAllSeats = (user_id: number, flight_id: string) => {
   return useQuery({
     queryKey: ['all_matches', flight_id, user_id],
-    queryFn: () => getAllMatches({ flight_id, user_id }),
+    queryFn: () => getAllSeats({ flight_id, user_id }),
     enabled: true,
     // initialData:
   });
@@ -66,7 +66,7 @@ const GroupSeatOffers = ({ flight_id }: { flight_id: string }) => {
   const side_by_side_matches = useGetSideBySideMatches(21, flight_id);
   const same_row_matches = useSameRowMatches(21, flight_id);
   const neighbouring_rows_matches = useNeighbouringRowsMatches(21, flight_id);
-  const all_matches = useAllMatches(21, flight_id);
+  const all_matches = useAllSeats(21, flight_id);
 
   const offers = useOffers(21, flight_id);
 

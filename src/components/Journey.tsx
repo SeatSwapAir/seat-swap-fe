@@ -6,7 +6,7 @@ import SeatCard from './SeatCard';
 
 import { useLocation } from 'react-router-dom';
 
-import { FlightProps, SeatProps } from '../../lib/types';
+import { FlightProps, MatchProps, SeatProps } from '../../lib/types';
 
 import { usePostJourney } from '@/hooks/mutations';
 import axios from 'axios';
@@ -15,62 +15,68 @@ import AddSeatForm from './AddSeatForm';
 import EditSeatForm from './EditSeatForm';
 import { Separator } from '@/components/ui/separator';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useJourney } from '@/hooks/queries';
+import { usePatchJourney } from '@/hooks/mutations';
+import { useAllSeats } from '@/hooks/queries';
+import FilterMatches from './FilterMatches';
 
-import { useNavigate } from 'react-router-dom';
-
-export default function AddJourney() {
+export default function Journey() {
   const [seats, setSeats] = useState<SeatProps[]>([]);
 
-  const location = useLocation();
-  const flight = location.state?.flight as FlightProps;
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (!flight) {
-    return <div>No flight details available</div>;
-  }
+  const location = useLocation();
+
+  const flight_id = location.state?.flight_id as string;
+  const user_id = location.state?.user_id as number;
+
+  const FindJourneyQuery = useJourney(user_id, flight_id);
+
+  const mutateUpdateJourney = usePatchJourney();
+
+  console.log('🚀 ~ Journey ~ FindJourneyQuery:', FindJourneyQuery);
+
+  const journey = {
+    id: FindJourneyQuery.data?.id,
+    airline: FindJourneyQuery.data?.airline,
+    arrivalairport: FindJourneyQuery.data?.arrivalairport,
+    arrivalairportname: FindJourneyQuery.data?.arrivalairportname,
+    arrivaltime: FindJourneyQuery.data?.arrivaltime,
+    departureairport: FindJourneyQuery.data?.departureairport,
+    departureairportname: FindJourneyQuery.data?.departureairportname,
+    departuretime: FindJourneyQuery.data?.departuretime,
+    flightnumber: FindJourneyQuery.data?.flightnumber,
+    seats: seats,
+  };
+
+  //   if (!flight) {
+  //     return <div>No flight details available</div>;
+  //   }
 
   const [seat, setSeat] = useState<SeatProps | null>(null);
   const [showEditSeatForm, setShowEditSeatForm] = useState(false);
   const [showAddSeatForm, setShowAddSeatForm] = useState(false);
   const [seatError, setSeatError] = useState<string | null>(null);
-  console.log('🚀 ~ AddJourney ~ seatError:', seatError);
 
-  const navigate = useNavigate();
-
-  const mutateAddJourney = usePostJourney();
-
-  console.log(
-    '🚀 ~ AddJourney ~ mutateAddJourney:',
-    mutateAddJourney.error?.message
-  );
-
-  const handleAddJourney = (): void | FlightProps => {
-    if (!flight) return;
-
-    const journey = {
-      flightnumber: flight.flightnumber,
-      departureairport: flight.departureairport,
-      departureairportname: flight.departureairportname,
-      arrivalairportname: flight.arrivalairportname,
-      arrivalairport: flight.arrivalairport,
-      departuretime: flight.departuretime,
-      arrivaltime: flight.arrivaltime,
-      airline: flight.airline,
-      seats: seats,
-      id: flight.id,
-    };
-
-    mutateAddJourney.mutate({
-      body: journey,
-      params: { user_id: 21, flight_id: Number(flight.id) },
-    });
+  const transformMatches = (matches: MatchProps[] | undefined) => {
+    if (!matches) return;
+    return matches.flatMap((seat) =>
+      seat.offer_seats.map((offer_seat) => [seat.current_seats, offer_seat])
+    );
   };
+
+  const all_seats = useAllSeats(21, flight_id);
+  const all_seats_formatted = transformMatches(all_seats.data?.all_matches);
+
+  const seatsSwapped = seats.filter((seat) => seat.previous_user_id !== null);
+
   const handleEditSeat = (seat: SeatProps) => {
     setSeat(seat);
     setShowEditSeatForm(true);
   };
 
   const handleUpdateSeat = (seat: SeatProps) => {
-    if (!seat || !flight) return;
+    if (!seat || !FindJourneyQuery.data) return;
     setSeats((prevSeats) =>
       prevSeats.map((s) => (s.id === seat.id ? seat : s))
     );
@@ -101,13 +107,13 @@ export default function AddJourney() {
   };
 
   const handleAddSeat = async (seat: SeatProps) => {
-    if (!seat || !flight) return;
+    if (!seat || !FindJourneyQuery.data) return;
 
     const { seat_row, seat_letter } = seat;
     if (!seat_row || !seat_letter) return;
     try {
       await checkSeatAvailability.mutateAsync({
-        flightId: flight.id,
+        flightId: flight_id,
         userId: 21,
         seatLetter: seat_letter,
         seatRow: seat_row,
@@ -131,22 +137,42 @@ export default function AddJourney() {
     }
   };
 
-  useEffect(() => {
-    if (mutateAddJourney.isSuccess) {
-      setShowEditSeatForm(false);
-      navigate('/journey', { state: { user_id: 21, flight_id: flight.id } });
-    }
-  }, [mutateAddJourney.isSuccess, setShowEditSeatForm]);
+  const handleUpdateJourney = (): void | FlightProps => {
+    if (!FindJourneyQuery.data) return;
+    mutateUpdateJourney.mutate({
+      body: { ...FindJourneyQuery.data, seats },
+      params: { user_id: 21, flight_id: Number(flight_id) },
+    });
+  };
 
   useEffect(() => {
-    if (mutateAddJourney.isError) {
-      if (axios.isAxiosError(mutateAddJourney.error)) {
+    if (FindJourneyQuery.isLoading) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+      if (FindJourneyQuery.data && FindJourneyQuery.data.seats) {
+        setSeats(FindJourneyQuery.data.seats);
+      }
+    }
+  }, [FindJourneyQuery.data, FindJourneyQuery.isLoading]);
+
+  useEffect(() => {
+    if (mutateUpdateJourney.isSuccess) {
+      // setSeats(mutateUpdateJourney.data.seats)
+      console.log('🚀 ~ useEffect ~ mutateUpdateJourney:', mutateUpdateJourney);
+      setShowEditSeatForm(false);
+    }
+  }, [mutateUpdateJourney.isSuccess, setShowEditSeatForm]);
+
+  useEffect(() => {
+    if (mutateUpdateJourney.isError) {
+      if (axios.isAxiosError(mutateUpdateJourney.error)) {
         setSeatError(
-          mutateAddJourney.error.response?.data?.msg || 'An error occurred'
+          mutateUpdateJourney.error.response?.data?.msg || 'An error occurred'
         );
       }
     }
-  }, [mutateAddJourney.isError]);
+  }, [mutateUpdateJourney.isError]);
 
   return (
     <div className='grid-flow-row'>
@@ -160,10 +186,15 @@ export default function AddJourney() {
                 Submit your journey after adding all seats
               </CardDescription>
             </CardHeader>
-            {flight && <FlightInfo flight={flight} />}
+            {FindJourneyQuery?.data && (
+              <FlightInfo flight={FindJourneyQuery.data} />
+            )}
             <Separator orientation='horizontal' />
             {seatError && <div>{seatError}</div>}
-            {seats.length > 0 &&
+            {isLoading ? (
+              <div>Loading seats...</div>
+            ) : (
+              seats.length > 0 &&
               seats.map((seat: SeatProps, index) => (
                 <SeatCard
                   key={
@@ -175,13 +206,25 @@ export default function AddJourney() {
                   handleDeleteSeat={handleDeleteSeat}
                   handleEditSeat={handleEditSeat}
                 />
-              ))}{' '}
+              ))
+            )}
+            <Button
+              onClick={() => {
+                setShowAddSeatForm(true);
+              }}
+            >
+              Add Seat
+            </Button>
+
             <Button
               className='my-4'
-              disabled={!seats.length}
-              onClick={() => handleAddJourney()}
+              disabled={seatsSwapped.length > 0}
+              //   onClick={() => handleAddJourney()}
             >
-              Submit your journey!
+              Delete Flight
+            </Button>
+            <Button onClick={() => handleUpdateJourney()}>
+              Submit Changes
             </Button>
           </div>
           <Separator
@@ -191,21 +234,12 @@ export default function AddJourney() {
           <div className='min-w-[45%] m-auto'>
             {!showAddSeatForm && !showEditSeatForm && (
               <>
-                {seats.length === 0 && (
-                  <CardHeader>
-                    <CardTitle>Add your seats!</CardTitle>
-                    <CardDescription>
-                      You cannot submit journey before adding all of your seats
-                    </CardDescription>
-                  </CardHeader>
-                )}
-                <Button
-                  onClick={() => {
-                    setShowAddSeatForm(true);
-                  }}
-                >
-                  Add Seat
-                </Button>
+                <CardHeader>
+                  <CardTitle>Add your seats!</CardTitle>
+                  <CardDescription>
+                    You cannot submit journey before adding all of your seats
+                  </CardDescription>
+                </CardHeader>
               </>
             )}
             {showAddSeatForm && (
@@ -224,6 +258,7 @@ export default function AddJourney() {
                 {cancelButton(() => setShowEditSeatForm(false))}
               </>
             )}
+            {all_seats && <FilterMatches allMatches={all_seats_formatted} />}
           </div>
         </div>
       </div>

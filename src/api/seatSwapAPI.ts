@@ -259,7 +259,7 @@ export const getOffers = ({
     });
 };
 
-export const getAllMatches = ({
+export const getAllSeats = ({
   flight_id,
   user_id,
 }: {
@@ -283,7 +283,7 @@ export const getSeat = ({
   flight_id,
   user_id,
   seat_letter,
-  seat_row
+  seat_row,
 }: {
   flight_id: string;
   user_id: number;
@@ -291,17 +291,39 @@ export const getSeat = ({
   seat_row: number;
 }): Promise<SeatProps | string> => {
   return apiUrl
-  .get(`users/${user_id}/flights/${flight_id}/seats/${seat_letter}/${seat_row}`)
-  .then((res) => {
-    if (res.status === 200) {
-      return res?.data;
-    }
-    // if (res.status === 400 || res.status === 403) {
-    //   return res.data.msg;
-    // }
-  })
-  .catch((err) => {
-    console.error('Error getting seat details:', err);
+    .get(
+      `users/${user_id}/flights/${flight_id}/seats/${seat_letter}/${seat_row}`
+    )
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
+      }
+      // if (res.status === 400 || res.status === 403) {
+      //   return res.data.msg;
+      // }
+    })
+    .catch((err) => {
+      console.error('Error getting seat details:', err);
       throw err;
-  })
-}
+    });
+};
+
+export const getJourney = async ({
+  user_id,
+  flight_id,
+}: {
+  user_id: number;
+  flight_id: string;
+}): Promise<FlightProps> => {
+  // console.log('🚀 ~ flight_id:', flight_id);
+  // console.log('🚀 ~ user_id:', user_id);
+  console.log('boom');
+
+  try {
+    const res = await apiUrl.get(`users/${user_id}/flights/${flight_id}`);
+    return res.data;
+  } catch (err) {
+    // Ensure that any error is thrown so that useQuery can handle it
+    throw err;
+  }
+};

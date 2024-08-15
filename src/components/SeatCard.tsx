@@ -59,14 +59,21 @@ const SeatCard = ({
         </div>
 
         <div className='flex items-center justify-end'>
-          <Button className='w-8 h-8 mr-1'>
+          <Button
+            disabled={seat.previous_user_id !== null}
+            className='w-8 h-8 mr-1'
+          >
             <EditIcon
               onClick={() => {
                 handleEditSeat(seat);
               }}
             />
           </Button>
-          <Button className='w-8 h-8' onClick={() => handleDeleteSeat(seat)}>
+          <Button
+            disabled={seat.previous_user_id !== null}
+            className='w-8 h-8'
+            onClick={() => handleDeleteSeat(seat)}
+          >
             <DeleteIcon />
           </Button>
         </div>

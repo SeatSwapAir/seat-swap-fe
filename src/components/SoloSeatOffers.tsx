@@ -1,4 +1,4 @@
-import { getOffers, getAllMatches } from '../api/seatSwapAPI';
+import { getOffers, getAllSeats } from '../api/seatSwapAPI';
 import { useQuery } from '@tanstack/react-query';
 import { MatchProps, SeatProps } from '../../lib/types';
 import MatchCard from './MatchCard';
@@ -19,17 +19,17 @@ const useOffers = (user_id: number, flight_id: string) => {
   });
 };
 
-const useAllMatches = (user_id: number, flight_id: string) => {
+const useAllSeats = (user_id: number, flight_id: string) => {
   return useQuery({
     queryKey: ['all_matches', flight_id, user_id],
-    queryFn: () => getAllMatches({ flight_id, user_id }),
+    queryFn: () => getAllSeats({ flight_id, user_id }),
     enabled: true,
     // initialData:
   });
 };
 
 const SoloSeatOffers = ({ flight_id }: { flight_id: string }) => {
-  const all_matches = useAllMatches(21, flight_id);
+  const all_matches = useAllSeats(21, flight_id);
 
   const offers = useOffers(21, flight_id);
 
