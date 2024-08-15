@@ -30,8 +30,14 @@ export default function AddJourney() {
   const [showEditSeatForm, setShowEditSeatForm] = useState(false);
   const [showAddSeatForm, setShowAddSeatForm] = useState(false);
   const [seatError, setSeatError] = useState<string | null>(null);
+  console.log('🚀 ~ AddJourney ~ seatError:', seatError);
 
   const mutateAddJourney = usePostJourney();
+
+  console.log(
+    '🚀 ~ AddJourney ~ mutateAddJourney:',
+    mutateAddJourney.error?.message
+  );
 
   const handleAddJourney = (): void | FlightProps => {
     if (!flight) return;
@@ -126,6 +132,16 @@ export default function AddJourney() {
       setShowEditSeatForm(false);
     }
   }, [mutateAddJourney.isSuccess, setShowEditSeatForm]);
+
+  useEffect(() => {
+    if (mutateAddJourney.isError) {
+      if (axios.isAxiosError(mutateAddJourney.error)) {
+        setSeatError(
+          mutateAddJourney.error.response?.data?.msg || 'An error occurred'
+        );
+      }
+    }
+  }, [mutateAddJourney.isError]);
 
   return (
     <div className='grid-flow-row'>
