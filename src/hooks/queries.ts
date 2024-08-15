@@ -3,6 +3,8 @@ import {
   getFlightsByUserId,
   getFlightDetails,
   getMatchStatus,
+  getJourney,
+  getAllSeats,
 } from '../api/seatSwapAPI';
 
 export function useFlightsByUserId(id: number) {
@@ -36,5 +38,30 @@ export function useMatchStatus(your_seat_id: number, matched_seat_id: number) {
     queryKey: ['getMatchStatus', your_seat_id, matched_seat_id],
     enabled: true,
     refetchOnWindowFocus: false,
+  });
+}
+
+export function useJourney(user_id: number, flight_id: string) {
+  console.log('🚀 ~ useJourney ~ flight_id:', flight_id);
+  console.log('🚀 ~ useJourney ~ user_id:', user_id);
+
+  return useQuery({
+    queryFn: () =>
+      getJourney({
+        user_id: user_id,
+        flight_id: flight_id,
+      }),
+    initialData: null,
+    queryKey: ['getJourney', user_id, flight_id],
+    refetchOnWindowFocus: false,
+  });
+}
+
+export function useAllSeats(user_id: number, flight_id: string) {
+  return useQuery({
+    queryKey: ['all_matches', flight_id, user_id],
+    queryFn: () => getAllSeats({ flight_id, user_id }),
+    enabled: true,
+    // initialData:
   });
 }
