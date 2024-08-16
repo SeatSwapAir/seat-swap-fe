@@ -4,8 +4,6 @@ import Timeline from '@/components/ui/icons/Timeline';
 import dayjs from 'dayjs';
 
 export default function FlightInfo({ flight }: { flight: FlightProps }) {
-  console.log('🚀 ~ FlightInfo ~ flight:');
-
   return (
     <>
       <div className=' grid p-3'>

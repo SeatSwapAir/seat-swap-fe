@@ -5,6 +5,7 @@ import {
   getMatchStatus,
   getJourney,
   getAllSeats,
+  getOffers,
 } from '../api/seatSwapAPI';
 
 export function useFlightsByUserId(id: number) {
@@ -58,6 +59,15 @@ export function useAllSeats(user_id: number, flight_id: string) {
   return useQuery({
     queryKey: ['all_matches', flight_id, user_id],
     queryFn: () => getAllSeats({ flight_id, user_id }),
+    enabled: true,
+    // initialData:
+  });
+}
+
+export function useOffers(user_id: number, flight_id: string) {
+  return useQuery({
+    queryKey: ['offers', flight_id, user_id],
+    queryFn: () => getOffers({ flight_id, user_id }),
     enabled: true,
     // initialData:
   });

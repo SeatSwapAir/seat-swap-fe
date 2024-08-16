@@ -28,12 +28,7 @@ const FilterMatches = ({
     'standard',
   ]);
 
-  console.log(selectedFilters.includes('extra'));
-
-  console.log('🚀 ~ selectedFilters:', selectedFilters);
-
   const filteredSeats = useMemo(() => {
-    console.log(allMatches);
     return allMatches?.filter((match) => {
       const [, offerSeat] = match;
       const { position, location, extraLegroom } = offerSeat;
@@ -49,8 +44,6 @@ const FilterMatches = ({
       );
     });
   }, [selectedFilters]);
-
-  console.log('🚀 ~ filteredSeats ~ filteredSeats:', filteredSeats);
 
   return (
     <>
