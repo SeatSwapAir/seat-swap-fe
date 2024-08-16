@@ -38,7 +38,6 @@ export default function FlightForm({
 
   useEffect(() => {
     if (mutateAddJourney.isSuccess || mutateUpdateJourney.isSuccess) {
-      console.log('here');
       setIsEditing(false);
     }
   }, [mutateAddJourney.isSuccess, mutateUpdateJourney.isSuccess, setIsEditing]);

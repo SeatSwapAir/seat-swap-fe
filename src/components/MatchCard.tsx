@@ -6,6 +6,7 @@ import SeatCardSwap from './SeatCardSwap';
 import { useMatchStatus } from '../hooks/queries';
 import { usePostSwapRequest, usePatchSwapRequest } from '../hooks/mutations';
 import React from 'react';
+import { Separator } from './ui/separator';
 
 const MatchCard = (match: { match: SeatProps[] }) => {
   const matchStatus = useMatchStatus(match.match[0].id, match.match[1].id);
@@ -32,7 +33,6 @@ const MatchCard = (match: { match: SeatProps[] }) => {
         swap_id: matchStatus.data.swap_id,
       },
     });
-    console.log((e.target as HTMLButtonElement).value);
   };
 
   const handleSwapRequest = () => {
@@ -45,14 +45,17 @@ const MatchCard = (match: { match: SeatProps[] }) => {
   };
   return (
     <>
-      <Card className='w-fit flex flex-row'>
-        <div className='flex flex-row items-center'>
-          <SeatCardSwap seat={match.match[0]} />
+      <div className='flex flex-col md:min-w-[450px]'>
+        <div className='flex flex-row items-center md:justify-between md:min-w-[450px] py-2'>
+          <div className='text-lg'>
+            <span className='hidden lg:inline-block mr-1'>Seat </span>
+            {match.match[0].seat_row}
+            {match.match[0].seat_letter}
+          </div>
           <span className='mb-1'>
             <ArrowForwardIcon />
           </span>
           <SeatCardSwap seat={match.match[1]} />
-          <div>{match.match[0].id + ' - ' + match.match[1].id}</div>
           <>
             {matchStatus.data?.actions &&
               matchStatus.data.actions[0] !== 'accepted' && (
@@ -81,7 +84,8 @@ const MatchCard = (match: { match: SeatProps[] }) => {
             </Button>
           )}
         </div>
-      </Card>
+        <Separator />
+      </div>
     </>
   );
 };

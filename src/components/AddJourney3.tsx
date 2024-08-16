@@ -37,7 +37,6 @@ export default function AddJourney({ flight }: { flight: FlightProps | null }) {
     previous_user_id: null,
   };
   const [seat, setSeat] = useState<SeatProps | null>(newSeat);
-  console.log('🚀 ~ seat:', seat);
 
   const [showSeatForm, setShowSeatForm] = useState(true);
 
@@ -59,7 +58,6 @@ export default function AddJourney({ flight }: { flight: FlightProps | null }) {
       seats: seats,
       id: flight.id,
     };
-    console.log('🚀 ~ handleAddJourney ~ journey:', journey);
 
     mutateAddJourney.mutate({
       body: journey,

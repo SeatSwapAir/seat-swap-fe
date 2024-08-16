@@ -34,8 +34,6 @@ export default function Journey() {
 
   const mutateUpdateJourney = usePatchJourney();
 
-  console.log('🚀 ~ Journey ~ FindJourneyQuery:', FindJourneyQuery);
-
   const journey = {
     id: FindJourneyQuery.data?.id,
     airline: FindJourneyQuery.data?.airline,
@@ -235,9 +233,9 @@ export default function Journey() {
             {!showAddSeatForm && !showEditSeatForm && (
               <>
                 <CardHeader>
-                  <CardTitle>Add your seats!</CardTitle>
+                  <CardTitle>Request seats!</CardTitle>
                   <CardDescription>
-                    You cannot submit journey before adding all of your seats
+                    Use the filter below to help you choose a seat to swap with
                   </CardDescription>
                 </CardHeader>
               </>
@@ -258,7 +256,9 @@ export default function Journey() {
                 {cancelButton(() => setShowEditSeatForm(false))}
               </>
             )}
-            {all_seats && <FilterMatches allMatches={all_seats_formatted} />}
+            {all_seats.isSuccess && (
+              <FilterMatches allMatches={all_seats_formatted} />
+            )}
           </div>
         </div>
       </div>

@@ -1,110 +1,104 @@
 import { SeatProps } from 'lib/types';
 import { useState, useMemo } from 'react';
 import MatchCard from './MatchCard';
+import { Label } from './ui/label';
+import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
+import AircraftSeatAisle from '@/components/ui/icons/AircraftSeatAisle';
+import AircraftSeatMiddle from '@/components/ui/icons/AircraftSeatMiddle';
+import AircraftSeatWindow from '@/components/ui/icons/AircraftSeatWindow';
+import AircraftSeatExtraLegroom from '@/components/ui/icons/AircraftSeatExtraLegroom';
+import AircraftSeatReducedLegroom from '@/components/ui/icons/AircraftSeatReducedLegroom';
+import AircraftFrontSection from '@/components/ui/icons/AircraftFrontSection';
+import AircraftCenterSection from '@/components/ui/icons/AircraftCenterSection';
+import AircraftBackSection from '@/components/ui/icons/AircraftBackSection';
 
 const FilterMatches = ({
   allMatches,
 }: {
   allMatches: SeatProps[][] | undefined;
 }) => {
-  const [windowSeats, setWindowSeats] = useState(true);
-  const [middleSeats, setMiddleSeats] = useState(true);
-  const [aisleSeats, setAisleSeats] = useState(true);
-  const [frontSeats, setFrontSeats] = useState(true);
-  const [centerSeats, setCenterSeats] = useState(true);
-  const [backSeats, setBackSeats] = useState(true);
-  const [extraLegroomSeats, setExtraLegroomSeats] = useState(true);
-
-  const filteredMatches = useMemo(() => {
-    return allMatches?.filter((match) => {
-      const [, offerSeat] = match;
-      return (
-        (windowSeats || offerSeat.position !== 'window') &&
-        (middleSeats || offerSeat.position !== 'middle') &&
-        (aisleSeats || offerSeat.position !== 'aisle') &&
-        (frontSeats || offerSeat.location !== 'front') &&
-        (centerSeats || offerSeat.location !== 'center') &&
-        (backSeats || offerSeat.location !== 'back') &&
-        (extraLegroomSeats || !offerSeat.extraLegroom)
-      );
-    });
-  }, [
-    allMatches,
-    windowSeats,
-    middleSeats,
-    aisleSeats,
-    frontSeats,
-    centerSeats,
-    backSeats,
-    extraLegroomSeats,
+  const [selectedFilters, setselectedFilters] = useState<string[]>([
+    'front',
+    'center',
+    'back',
+    'aisle',
+    'middle',
+    'window',
+    'extra',
+    'standard',
   ]);
 
-  return (
-    <div>
-      <div>
-        <label>
-          <input
-            type='checkbox'
-            checked={windowSeats}
-            onChange={(e) => setWindowSeats(e.target.checked)}
-          />
-          Window Seats
-        </label>
-        <label>
-          <input
-            type='checkbox'
-            checked={middleSeats}
-            onChange={(e) => setMiddleSeats(e.target.checked)}
-          />
-          Middle Seats
-        </label>
-        <label>
-          <input
-            type='checkbox'
-            checked={aisleSeats}
-            onChange={(e) => setAisleSeats(e.target.checked)}
-          />
-          Aisle Seat
-        </label>
-        <label>
-          <input
-            type='checkbox'
-            checked={frontSeats}
-            onChange={(e) => setFrontSeats(e.target.checked)}
-          />
-          Front Seat
-        </label>
-        <label>
-          <input
-            type='checkbox'
-            checked={centerSeats}
-            onChange={(e) => setCenterSeats(e.target.checked)}
-          />
-          Center Seat
-        </label>
-        <label>
-          <input
-            type='checkbox'
-            checked={backSeats}
-            onChange={(e) => setBackSeats(e.target.checked)}
-          />
-          Back Seat
-        </label>
-        <label>
-          <input
-            type='checkbox'
-            checked={extraLegroomSeats}
-            onChange={(e) => setExtraLegroomSeats(e.target.checked)}
-          />
-          Extra Legroom Seats
-        </label>
-      </div>
+  console.log(selectedFilters.includes('extra'));
 
-      {filteredMatches &&
-        filteredMatches.map((match: SeatProps[], index: number) => {
+  console.log('🚀 ~ selectedFilters:', selectedFilters);
+
+  const filteredSeats = useMemo(() => {
+    console.log(allMatches);
+    return allMatches?.filter((match) => {
+      const [, offerSeat] = match;
+      const { position, location, extraLegroom } = offerSeat;
+      return (
+        (selectedFilters.includes('window') || position !== 'window') &&
+        (selectedFilters.includes('middle') || position !== 'middle') &&
+        (selectedFilters.includes('aisle') || position !== 'aisle') &&
+        (selectedFilters.includes('front') || location !== 'front') &&
+        (selectedFilters.includes('center') || location !== 'center') &&
+        (selectedFilters.includes('back') || location !== 'back') &&
+        (selectedFilters.includes('extra') || !extraLegroom) &&
+        (selectedFilters.includes('standard') || extraLegroom)
+      );
+    });
+  }, [selectedFilters]);
+
+  console.log('🚀 ~ filteredSeats ~ filteredSeats:', filteredSeats);
+
+  return (
+    <>
+      <div className=' pb-1 '>
+        <Label htmlFor='filters'>Filters</Label>
+        <ToggleGroup
+          size={'sm'}
+          className='md:gap-1 gap-0'
+          id='filters'
+          type='multiple'
+          variant='outline'
+          aria-label='filters'
+          value={selectedFilters}
+          onValueChange={(value) => {
+            setselectedFilters(value);
+          }}
+        >
+          <ToggleGroupItem aria-label='Front of plane' value='front'>
+            <AircraftFrontSection className='w-6 h-6' />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label='Center of plane' value='center'>
+            <AircraftCenterSection className='w-6 h-6' />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label='Back of plane' value='back'>
+            <AircraftBackSection className='w-6 h-6' />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label='Aisle Seat' value='aisle'>
+            <AircraftSeatAisle className='w-6 h-6' />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label='Middle Seat' value='middle'>
+            <AircraftSeatMiddle className='w-6 h-6' />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label='Window Seat' value='window'>
+            <AircraftSeatWindow className='w-6 h-6' />
+          </ToggleGroupItem>
+          <ToggleGroupItem value='extra' aria-label='Extra Legroom Seat'>
+            <AircraftSeatExtraLegroom className='w-6 h-6' />
+          </ToggleGroupItem>
+          <ToggleGroupItem value='standard' aria-label='Reduced Legroom Seat'>
+            <AircraftSeatReducedLegroom className='w-6 h-6' />
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+      {filteredSeats &&
+        filteredSeats.map((match: SeatProps[], index: number) => {
           return <MatchCard key={index + 'filtered'} match={match} />;
         })}
-    </div>
+    </>
   );
 };
 

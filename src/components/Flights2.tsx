@@ -10,10 +10,7 @@ import { Button } from './ui/button';
 
 export default function Flights2() {
   const FlightsByUserIdQuery = useFlightsByUserId(21);
-  console.log(
-    '🚀 ~ Flights2 ~ FlightsByUserIdQuery:',
-    FlightsByUserIdQuery.data
-  );
+
   const navigate = useNavigate();
 
   const handleNavigate = (flight_id: string) => {

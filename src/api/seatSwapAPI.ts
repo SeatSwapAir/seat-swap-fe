@@ -33,7 +33,6 @@ export const deleteFlightByUserFlightId = (params: {
   return apiUrl
     .delete(`users/${user_id}/flights/${flight_id}`)
     .then((res) => {
-      console.log('🚀 ~ .then ~ res:', res);
       if (res.status === 204) {
         return 'Flight deleted successfully';
       }
@@ -54,7 +53,6 @@ export const updateFlightByUserFlightId = ({
   return apiUrl
     .patch(`users/${params.user_id}/flights/${params.flight_id}`, body)
     .then((res) => {
-      console.log(res);
       if (res.status === 200) {
         return res?.data;
       }
@@ -199,7 +197,6 @@ export const postSwapRequest = ({
     .post(`swap`, body)
     .then((res) => {
       if (res.status === 200) {
-        console.log(res.data);
         return res?.data;
       }
     })
@@ -222,14 +219,10 @@ export const patchSwapRequest = ({
   };
   canceled: [{}];
 }> => {
-  console.log('🚀 ~ params:', params);
-
-  console.log('🚀 ~ body:', body);
   return apiUrl
     .patch(`swap/${params.swap_id}`, body)
     .then((res) => {
       if (res.status === 200) {
-        console.log('🚀 ~ .then ~ res?.data:', res?.data);
         return res?.data;
       }
     })
@@ -317,7 +310,6 @@ export const getJourney = async ({
 }): Promise<FlightProps> => {
   // console.log('🚀 ~ flight_id:', flight_id);
   // console.log('🚀 ~ user_id:', user_id);
-  console.log('boom');
 
   try {
     const res = await apiUrl.get(`users/${user_id}/flights/${flight_id}`);

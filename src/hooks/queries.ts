@@ -42,9 +42,6 @@ export function useMatchStatus(your_seat_id: number, matched_seat_id: number) {
 }
 
 export function useJourney(user_id: number, flight_id: string) {
-  console.log('🚀 ~ useJourney ~ flight_id:', flight_id);
-  console.log('🚀 ~ useJourney ~ user_id:', user_id);
-
   return useQuery({
     queryFn: () =>
       getJourney({
