@@ -14,6 +14,7 @@ import FlightInfo from './FlightInfo';
 import AddSeatForm from './AddSeatForm';
 import EditSeatForm from './EditSeatForm';
 import Offers from './Offers';
+import Requests from './Requests';
 import { Separator } from '@/components/ui/separator';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useJourney } from '@/hooks/queries';
@@ -225,7 +226,24 @@ export default function Journey() {
             <Button onClick={() => handleUpdateJourney()}>
               Submit Changes
             </Button>
-            <Offers user_id={21} flight_id={flight_id} />
+            <>
+              <CardHeader>
+                <CardTitle>Offered seats!</CardTitle>
+                <CardDescription>
+                  Check out the seats that you have been offered to swap with
+                </CardDescription>
+              </CardHeader>
+              <Offers user_id={21} flight_id={flight_id} />
+            </>
+            <>
+              <CardHeader>
+                <CardTitle>Requested seats!</CardTitle>
+                <CardDescription>
+                  Check out the seats that you have requested to swap with
+                </CardDescription>
+              </CardHeader>
+              <Requests user_id={21} flight_id={flight_id} />
+            </>
           </div>
           <Separator
             className='my-4 lg:my-0 lg:mx-[50px] lg:h-auto lg:w-px max-w-[450px]'
