@@ -36,7 +36,7 @@ export default function Account() {
   };
   const handleDelteAccount = () => {
     setOpenDialog(false);
-    console.log('backend request to delete account');
+    // console.log('backend request to delete account');
   };
 
   const { email, firstname, lastname, gender, phone, rating, created_at } =

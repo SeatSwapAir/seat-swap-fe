@@ -13,6 +13,8 @@ import axios from 'axios';
 import FlightInfo from './FlightInfo';
 import AddSeatForm from './AddSeatForm';
 import EditSeatForm from './EditSeatForm';
+import Offers from './Offers';
+import Requests from './Requests';
 import { Separator } from '@/components/ui/separator';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useJourney } from '@/hooks/queries';
@@ -33,8 +35,6 @@ export default function Journey() {
   const FindJourneyQuery = useJourney(user_id, flight_id);
 
   const mutateUpdateJourney = usePatchJourney();
-
-  console.log('🚀 ~ Journey ~ FindJourneyQuery:', FindJourneyQuery);
 
   const journey = {
     id: FindJourneyQuery.data?.id,
@@ -226,6 +226,24 @@ export default function Journey() {
             <Button onClick={() => handleUpdateJourney()}>
               Submit Changes
             </Button>
+            <>
+              <CardHeader>
+                <CardTitle>Offered seats!</CardTitle>
+                <CardDescription>
+                  Check out the seats that you have been offered to swap with
+                </CardDescription>
+              </CardHeader>
+              <Offers user_id={21} flight_id={flight_id} />
+            </>
+            <>
+              <CardHeader>
+                <CardTitle>Requested seats!</CardTitle>
+                <CardDescription>
+                  Check out the seats that you have requested to swap with
+                </CardDescription>
+              </CardHeader>
+              <Requests user_id={21} flight_id={flight_id} />
+            </>
           </div>
           <Separator
             className='my-4 lg:my-0 lg:mx-[50px] lg:h-auto lg:w-px max-w-[450px]'
@@ -235,9 +253,9 @@ export default function Journey() {
             {!showAddSeatForm && !showEditSeatForm && (
               <>
                 <CardHeader>
-                  <CardTitle>Add your seats!</CardTitle>
+                  <CardTitle>Request seats!</CardTitle>
                   <CardDescription>
-                    You cannot submit journey before adding all of your seats
+                    Use the filter below to help you choose a seat to swap with
                   </CardDescription>
                 </CardHeader>
               </>
@@ -258,7 +276,9 @@ export default function Journey() {
                 {cancelButton(() => setShowEditSeatForm(false))}
               </>
             )}
-            {all_seats && <FilterMatches allMatches={all_seats_formatted} />}
+            {all_seats.isSuccess && (
+              <FilterMatches allMatches={all_seats_formatted} />
+            )}
           </div>
         </div>
       </div>

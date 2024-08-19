@@ -40,7 +40,6 @@ export default function AddFlight({
         departureDate?.format('YYYY-MM-DD');
       return flightNumberMatch && departureDateMatch;
     });
-    console.log('🚀 ~ existingJourneys ~ existingJourneys:', existingJourneys);
     if (existingJourneys.length > 0) {
       setFlightDetails(existingJourneys[0]);
       setDoesJourneyExists(true);
@@ -85,9 +84,9 @@ export default function AddFlight({
   //   setDepartureDate(null);
   //   setOpen(false);
   // };
-  console.log('LOCAL', flightDetails);
-  console.log('🚀 ~ SERVER:', FlightDetailsQuery.data);
-  console.log('🚀 ~ flightDetails:', flightDetails);
+  // console.log('LOCAL', flightDetails);
+  // console.log('🚀 ~ SERVER:', FlightDetailsQuery.data);
+  // console.log('🚀 ~ flightDetails:', flightDetails);
 
   return (
     <>

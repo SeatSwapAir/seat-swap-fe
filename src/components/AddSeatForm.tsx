@@ -31,7 +31,6 @@ export default function AddSeatForm({
     previous_user_name: null,
     previous_user_id: null,
   });
-  console.log('🚀 ~ file: AddSeatForm.tsx:32 ~ seat:', seat);
   const { extraLegroom, location, position, seat_letter, seat_row } = seat;
   return (
     <div className='p-4 flex flex-col gap-4 items-start min-w-[330px]'>

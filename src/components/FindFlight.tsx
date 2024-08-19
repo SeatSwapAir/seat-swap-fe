@@ -29,9 +29,6 @@ export default function FindFlight({
   );
   const navigate = useNavigate();
 
-  console.log(flightNumberAndCarrierCode);
-  console.log(departureDate);
-
   const findFlightDetails = () => {
     if (!flights || !departureDate) return;
     const existingJourneys = flights.filter((journey: FlightProps) => {
@@ -42,7 +39,6 @@ export default function FindFlight({
         departureDate?.format('YYYY-MM-DD');
       return flightNumberMatch && departureDateMatch;
     });
-    console.log('🚀 ~ existingJourneys ~ existingJourneys:', existingJourneys);
     if (existingJourneys.length > 0) {
       setFlightDetails(existingJourneys[0]);
       setDoesJourneyExists(true);
@@ -74,9 +70,9 @@ export default function FindFlight({
     // navigate('/addjourney', { state: { flight: flightDetails } })
   }, [FlightDetailsQuery.isSuccess, FlightDetailsQuery.data]);
 
-  console.log('LOCAL', flightDetails);
-  console.log('🚀 ~ SERVER:', FlightDetailsQuery.data);
-  console.log('🚀 ~ flightDetails:', flightDetails);
+  // console.log('LOCAL', flightDetails);
+  // console.log('🚀 ~ SERVER:', FlightDetailsQuery.data);
+  // console.log('🚀 ~ flightDetails:', flightDetails);
 
   return (
     <>

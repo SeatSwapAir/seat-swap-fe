@@ -34,8 +34,6 @@ export default function SeatForm2({
   handleSaveSeat: () => void;
   //   handleEditSeat: (newSeat: SeatProps) => void;
 }) {
-  console.log('🚀 ~ seat:', seat);
-
   return (
     <div className='flex w-full  items-center gap-1.5 justify-between'>
       <div className='w-12 pb-1'>

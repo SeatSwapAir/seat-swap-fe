@@ -32,7 +32,6 @@ export default function AddJourney() {
   const [showEditSeatForm, setShowEditSeatForm] = useState(false);
   const [showAddSeatForm, setShowAddSeatForm] = useState(false);
   const [seatError, setSeatError] = useState<string | null>(null);
-  console.log('🚀 ~ AddJourney ~ seatError:', seatError);
 
   const navigate = useNavigate();
 
