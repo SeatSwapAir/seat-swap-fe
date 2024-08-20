@@ -15,11 +15,14 @@ import AircraftBackSection from '@/components/ui/icons/AircraftBackSection';
 import { SeatProps, LocationProps, PositionProps } from '../../lib/types';
 import { useState } from 'react';
 import { CardDescription, CardHeader, CardTitle } from './ui/card';
+import { usePostSeat } from '@/hooks/mutations';
 
 export default function AddSeatForm({
-  handleAddSeat,
+  flight_id,
+  setShowAddSeatForm,
 }: {
-  handleAddSeat: (seat: SeatProps) => void;
+  flight_id: string;
+  setShowAddSeatForm: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [seat, setSeat] = useState<SeatProps>({
     id: Math.floor(Math.random() * 1000000000),
@@ -30,8 +33,19 @@ export default function AddSeatForm({
     seat_row: null,
     previous_user_name: null,
     previous_user_id: null,
+    current_user_id: 21,
+    flight_id: +flight_id,
   });
   const { extraLegroom, location, position, seat_letter, seat_row } = seat;
+
+  const mutateAddSeat = usePostSeat(seat.current_user_id, seat.flight_id);
+
+  const handleAddSeat = (): void | SeatProps => {
+    mutateAddSeat.mutate({
+      body: seat,
+    });
+    setShowAddSeatForm(false);
+  };
   return (
     <div className='p-4 flex flex-col gap-4 items-start min-w-[330px]'>
       <CardHeader>
@@ -170,7 +184,7 @@ export default function AddSeatForm({
         </div>
       </div>
       <div className='mt-auto py-2 '>
-        <Button className='w-[330px]' onClick={() => handleAddSeat(seat)}>
+        <Button className='w-[330px]' onClick={() => handleAddSeat()}>
           Save Seat
         </Button>
       </div>

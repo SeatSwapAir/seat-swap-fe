@@ -33,6 +33,7 @@ export default function Journey() {
   const user_id = location.state?.user_id as number;
 
   const FindJourneyQuery = useJourney(user_id, flight_id);
+  console.log('🚀 ~ Journey ~ FindJourneyQuery:', FindJourneyQuery.data);
 
   const mutateUpdateJourney = usePatchJourney();
 
@@ -197,13 +198,13 @@ export default function Journey() {
               seats.length > 0 &&
               seats.map((seat: SeatProps, index) => (
                 <SeatCard
+                  setShowAddSeatForm={setShowAddSeatForm}
                   key={
                     seat.seat_row !== null && seat.seat_letter !== null
                       ? `${seat.seat_row}${seat.seat_letter}`
                       : index
                   }
                   seat={seat}
-                  handleDeleteSeat={handleDeleteSeat}
                   handleEditSeat={handleEditSeat}
                 />
               ))
@@ -211,6 +212,7 @@ export default function Journey() {
             <Button
               onClick={() => {
                 setShowAddSeatForm(true);
+                setShowEditSeatForm(false);
               }}
             >
               Add Seat
@@ -262,14 +264,17 @@ export default function Journey() {
             )}
             {showAddSeatForm && (
               <>
-                <AddSeatForm handleAddSeat={handleAddSeat} />
+                <AddSeatForm
+                  setShowAddSeatForm={setShowAddSeatForm}
+                  flight_id={flight_id}
+                />
                 {cancelButton(() => setShowAddSeatForm(false))}
               </>
             )}
             {showEditSeatForm && seat && (
               <>
                 <EditSeatForm
-                  handleUpdateSeat={handleUpdateSeat}
+                  setShowEditSeatForm={setShowEditSeatForm}
                   seatToEdit={seat}
                   key={seat.id}
                 />

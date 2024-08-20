@@ -12,17 +12,26 @@ import { Button } from '@/components/ui/button';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Separator } from '@/components/ui/separator';
+import { useDeleteSeat } from '@/hooks/mutations';
 
 const SeatCard = ({
   seat,
-  handleDeleteSeat,
   handleEditSeat,
+  setShowAddSeatForm,
 }: {
   seat: SeatProps;
-  handleDeleteSeat: (seat: SeatProps) => void;
   handleEditSeat: (seat: SeatProps) => void;
+  setShowAddSeatForm: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { seat_row, seat_letter, position, location, extraLegroom } = seat;
+  const { id, seat_row, seat_letter, position, location, extraLegroom } = seat;
+
+  const mutateDeleteSeat = useDeleteSeat(seat.current_user_id, seat.flight_id);
+
+  const handleDeleteSeat = (): void | SeatProps => {
+    mutateDeleteSeat.mutate({
+      seat_id: id,
+    });
+  };
   return (
     <>
       <div className='flex flex-row p-0 py-2 justify-between items-center min-w-[330px]'>
@@ -66,13 +75,14 @@ const SeatCard = ({
             <EditIcon
               onClick={() => {
                 handleEditSeat(seat);
+                setShowAddSeatForm(false);
               }}
             />
           </Button>
           <Button
             disabled={seat.previous_user_id !== null}
             className='w-8 h-8'
-            onClick={() => handleDeleteSeat(seat)}
+            onClick={() => handleDeleteSeat()}
           >
             <DeleteIcon />
           </Button>

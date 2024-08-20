@@ -89,6 +89,8 @@ export default function FlightForm({
             previous_user_name: null,
             previous_user_id: null,
             isEditing: true,
+            current_user_id: 21,
+            flight_id: +flightDetails.id,
           },
         ],
       };

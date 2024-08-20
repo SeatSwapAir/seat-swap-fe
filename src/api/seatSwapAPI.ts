@@ -319,3 +319,63 @@ export const getJourney = async ({
     throw err;
   }
 };
+
+export const patchSeat = ({
+  body,
+  params,
+}: {
+  body: SeatProps;
+  params: { seat_id: number };
+}): Promise<{
+  seat: SeatProps;
+}> => {
+  console.log('🚀 ~ body:', body);
+  console.log('🚀 ~ params:', params);
+
+  return apiUrl
+    .patch(`seats/${params.seat_id}`, body)
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
+      }
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+export const postSeat = ({
+  body,
+}: {
+  body: SeatProps;
+}): Promise<SeatProps | void> => {
+  return apiUrl
+    .post(`seats`, body)
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
+      }
+    })
+    .catch((err) => {
+      console.error('Error adding seat:', err);
+      throw err;
+    });
+};
+
+export const deleteSeat = (params: {
+  seat_id: number;
+}): Promise<string | void> => {
+  const { seat_id } = params;
+
+  return apiUrl
+    .delete(`seats/${seat_id}`)
+    .then((res) => {
+      if (res.status === 204) {
+        return 'Seat deleted successfully';
+      }
+    })
+    .catch((err) => {
+      console.error('Error deleting seat:', err);
+      throw err;
+    });
+};

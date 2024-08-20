@@ -1,4 +1,8 @@
-import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationResult,
+  useQueryClient,
+} from '@tanstack/react-query';
 import {
   deleteFlightByUserFlightId,
   postJourney,
@@ -6,6 +10,9 @@ import {
   updateFlightByUserFlightId,
   patchSwapRequest,
   getSeat,
+  patchSeat,
+  postSeat,
+  deleteSeat,
 } from '../api/seatSwapAPI';
 import { FlightProps, SeatProps } from '../../lib/types';
 
@@ -115,16 +122,74 @@ export function usePatchSwapRequest(
   });
 }
 
+export function useCheckSeatAvailability(): UseMutationResult<
+  SeatProps | string,
+  Error,
+  { flightId: string; userId: number; seatLetter: string; seatRow: number }
+> {
+  return useMutation<
+    SeatProps | string,
+    Error,
+    { flightId: string; userId: number; seatLetter: string; seatRow: number }
+  >({
+    mutationFn: ({ flightId, userId, seatLetter, seatRow }) =>
+      getSeat({
+        flight_id: flightId,
+        user_id: userId,
+        seat_letter: seatLetter,
+        seat_row: seatRow,
+      }),
+  });
+}
 
-export function useCheckSeatAvailability(): UseMutationResult<SeatProps | string, Error, { flightId: string;
-  userId: number;
-  seatLetter: string;
-  seatRow: number;}> {
-  return useMutation<SeatProps | string, Error, { flightId: string;
-    userId: number;
-    seatLetter: string;
-    seatRow: number;}>({
-    mutationFn: ({ flightId, userId, seatLetter, seatRow }) => 
-      getSeat({ flight_id: flightId, user_id: userId, seat_letter: seatLetter, seat_row: seatRow }),
+export function usePatchSeat(user_id: number | null, flight_id: number | null) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: patchSeat,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['getJourney', user_id, flight_id],
+      });
+      return data;
+    },
+    onError: (err) => {
+      console.log('🚀 ~ usePatchSeat ~ err:', err);
+      throw err;
+    },
+  });
+}
+
+export function usePostSeat(user_id: number | null, flight_id: number | null) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: postSeat,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['getJourney', user_id, flight_id],
+      });
+      return data;
+    },
+    onError: (err) => {
+      console.log('🚀 ~ .onError ~ err:', err);
+    },
+  });
+}
+
+export function useDeleteSeat(
+  user_id: number | null,
+  flight_id: number | null
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteSeat,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['getJourney', user_id, flight_id],
+      });
+      return data;
+    },
+    onError: (err) => {
+      console.log('🚀 ~ .onError ~ err:', err);
+    },
   });
 }

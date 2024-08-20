@@ -14,16 +14,27 @@ import AircraftBackSection from '@/components/ui/icons/AircraftBackSection';
 import { SeatProps, LocationProps, PositionProps } from '../../lib/types';
 import { useState } from 'react';
 import { CardDescription, CardHeader, CardTitle } from './ui/card';
+import { usePatchSeat } from '@/hooks/mutations';
 
 export default function EditSeatForm({
-  handleUpdateSeat,
   seatToEdit,
+  setShowEditSeatForm,
 }: {
-  handleUpdateSeat: (seat: SeatProps) => void;
   seatToEdit: SeatProps;
+  setShowEditSeatForm: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [seat, setSeat] = useState<SeatProps>(seatToEdit);
   const { extraLegroom, location, position, seat_letter, seat_row } = seat;
+
+  const mutateUpdateSeat = usePatchSeat(seat.current_user_id, seat.flight_id);
+
+  const handleUpdateSeat = (): void | SeatProps => {
+    mutateUpdateSeat.mutate({
+      body: seat,
+      params: { seat_id: seat.id },
+    });
+    setShowEditSeatForm(false);
+  };
   return (
     <div className='p-4 flex flex-col gap-4 items-start min-w-[330px]'>
       <CardHeader>
@@ -138,7 +149,7 @@ export default function EditSeatForm({
         </div>
       </div>
       <div className='mt-auto py-2 '>
-        <Button className='w-[330px]' onClick={() => handleUpdateSeat(seat)}>
+        <Button className='w-[330px]' onClick={() => handleUpdateSeat()}>
           Update Seat {seat_row}
           {seat_letter}
         </Button>

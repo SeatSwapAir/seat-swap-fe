@@ -215,11 +215,7 @@ export default function AddJourney() {
             )}
             {showEditSeatForm && seat && (
               <>
-                <EditSeatForm
-                  handleUpdateSeat={handleUpdateSeat}
-                  seatToEdit={seat}
-                  key={seat.id}
-                />
+                <EditSeatForm seatToEdit={seat} key={seat.id} />
                 {cancelButton(() => setShowEditSeatForm(false))}
               </>
             )}

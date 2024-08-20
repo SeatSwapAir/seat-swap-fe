@@ -21,6 +21,8 @@ export type SeatProps = {
   isEditing?: boolean;
   previous_user_name: string | null;
   previous_user_id: number | null;
+  current_user_id: number | null;
+  flight_id: number | null;
 };
 
 export type FlightProps = {
