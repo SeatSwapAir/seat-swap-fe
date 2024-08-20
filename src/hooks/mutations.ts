@@ -11,6 +11,8 @@ import {
   patchSwapRequest,
   getSeat,
   patchSeat,
+  postSeat,
+  deleteSeat,
 } from '../api/seatSwapAPI';
 import { FlightProps, SeatProps } from '../../lib/types';
 
@@ -153,6 +155,41 @@ export function usePatchSeat(user_id: number | null, flight_id: number | null) {
     onError: (err) => {
       console.log('🚀 ~ usePatchSeat ~ err:', err);
       throw err;
+    },
+  });
+}
+
+export function usePostSeat(user_id: number | null, flight_id: number | null) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: postSeat,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['getJourney', user_id, flight_id],
+      });
+      return data;
+    },
+    onError: (err) => {
+      console.log('🚀 ~ .onError ~ err:', err);
+    },
+  });
+}
+
+export function useDeleteSeat(
+  user_id: number | null,
+  flight_id: number | null
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteSeat,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['getJourney', user_id, flight_id],
+      });
+      return data;
+    },
+    onError: (err) => {
+      console.log('🚀 ~ .onError ~ err:', err);
     },
   });
 }

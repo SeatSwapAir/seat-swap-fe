@@ -18,8 +18,10 @@ import { usePatchSeat } from '@/hooks/mutations';
 
 export default function EditSeatForm({
   seatToEdit,
+  setShowEditSeatForm,
 }: {
   seatToEdit: SeatProps;
+  setShowEditSeatForm: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [seat, setSeat] = useState<SeatProps>(seatToEdit);
   const { extraLegroom, location, position, seat_letter, seat_row } = seat;
@@ -31,6 +33,7 @@ export default function EditSeatForm({
       body: seat,
       params: { seat_id: seat.id },
     });
+    setShowEditSeatForm(false);
   };
   return (
     <div className='p-4 flex flex-col gap-4 items-start min-w-[330px]'>

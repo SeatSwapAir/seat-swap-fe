@@ -340,26 +340,42 @@ export const patchSeat = ({
       }
     })
     .catch((err) => {
-      if (err.response) {
-        // Server responded with a status other than 2xx
-        console.error('Error response data:', err.response.data);
-        console.error('Error response status:', err.response.status);
-        console.error('Error response headers:', err.response.headers);
-      } else if (err.request) {
-        // Request was made but no response was received
-        console.error('No response received:', err.request);
-        console.error(
-          'The server did not respond. This could be due to network issues or the server being down.'
-        );
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error('Error message:', err.message);
+      throw err;
+    });
+};
+
+export const postSeat = ({
+  body,
+}: {
+  body: SeatProps;
+}): Promise<SeatProps | void> => {
+  return apiUrl
+    .post(`seats`, body)
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
       }
+    })
+    .catch((err) => {
+      console.error('Error adding seat:', err);
+      throw err;
+    });
+};
 
-      // Log the configuration used for the request
-      console.error('Error config:', err.config);
+export const deleteSeat = (params: {
+  seat_id: number;
+}): Promise<string | void> => {
+  const { seat_id } = params;
 
-      // Re-throw the error to propagate it if needed
+  return apiUrl
+    .delete(`seats/${seat_id}`)
+    .then((res) => {
+      if (res.status === 204) {
+        return 'Seat deleted successfully';
+      }
+    })
+    .catch((err) => {
+      console.error('Error deleting seat:', err);
       throw err;
     });
 };
