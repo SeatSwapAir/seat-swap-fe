@@ -319,3 +319,47 @@ export const getJourney = async ({
     throw err;
   }
 };
+
+export const patchSeat = ({
+  body,
+  params,
+}: {
+  body: SeatProps;
+  params: { seat_id: number };
+}): Promise<{
+  seat: SeatProps;
+}> => {
+  console.log('🚀 ~ body:', body);
+  console.log('🚀 ~ params:', params);
+
+  return apiUrl
+    .patch(`seats/${params.seat_id}`, body)
+    .then((res) => {
+      if (res.status === 200) {
+        return res?.data;
+      }
+    })
+    .catch((err) => {
+      if (err.response) {
+        // Server responded with a status other than 2xx
+        console.error('Error response data:', err.response.data);
+        console.error('Error response status:', err.response.status);
+        console.error('Error response headers:', err.response.headers);
+      } else if (err.request) {
+        // Request was made but no response was received
+        console.error('No response received:', err.request);
+        console.error(
+          'The server did not respond. This could be due to network issues or the server being down.'
+        );
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error message:', err.message);
+      }
+
+      // Log the configuration used for the request
+      console.error('Error config:', err.config);
+
+      // Re-throw the error to propagate it if needed
+      throw err;
+    });
+};

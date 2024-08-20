@@ -30,6 +30,8 @@ export default function AddSeatForm({
     seat_row: null,
     previous_user_name: null,
     previous_user_id: null,
+    current_user_id: 21,
+    flight_id: 8,
   });
   const { extraLegroom, location, position, seat_letter, seat_row } = seat;
   return (

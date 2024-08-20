@@ -33,6 +33,7 @@ export default function Journey() {
   const user_id = location.state?.user_id as number;
 
   const FindJourneyQuery = useJourney(user_id, flight_id);
+  console.log('🚀 ~ Journey ~ FindJourneyQuery:', FindJourneyQuery.data);
 
   const mutateUpdateJourney = usePatchJourney();
 
@@ -268,11 +269,7 @@ export default function Journey() {
             )}
             {showEditSeatForm && seat && (
               <>
-                <EditSeatForm
-                  handleUpdateSeat={handleUpdateSeat}
-                  seatToEdit={seat}
-                  key={seat.id}
-                />
+                <EditSeatForm seatToEdit={seat} key={seat.id} />
                 {cancelButton(() => setShowEditSeatForm(false))}
               </>
             )}
