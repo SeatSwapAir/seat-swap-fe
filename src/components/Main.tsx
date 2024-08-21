@@ -1,7 +1,7 @@
 import FindFlight from './FindFlight';
 import { useFlightsByUserId } from '../hooks/queries';
 import { Separator } from '@/components/ui/separator';
-import Flights2 from './Flights2';
+import Flights from './Flights';
 
 export default function Main() {
   const FlightsByUserIdQuery = useFlightsByUserId(21);
@@ -19,7 +19,7 @@ export default function Main() {
             orientation='horizontal'
           />
           <div className='min-w-[45%]'>
-            <Flights2 />
+            <Flights />
           </div>
         </div>
       </div>

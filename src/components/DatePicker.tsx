@@ -1,6 +1,3 @@
-'use client';
-
-import * as React from 'react';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 
@@ -12,7 +9,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { UpdateDisabledTwoTone } from '@mui/icons-material';
 import { useState } from 'react';
 
 export function DatePicker2({

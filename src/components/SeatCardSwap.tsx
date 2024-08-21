@@ -1,7 +1,4 @@
 import { SeatProps } from '../../lib/types';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from './ui/button';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import AircraftSeatAisle from '@/components/ui/icons/AircraftSeatAisle';
 import AircraftSeatMiddle from '@/components/ui/icons/AircraftSeatMiddle';
@@ -22,7 +19,7 @@ const SeatCardSwap = ({ seat }: { seat: SeatProps }) => {
           {seat.seat_row}
           {seat.seat_letter}
         </li>
-        <li className=' flex items-center p-0 p-1 border-2 rounded-md mr-2'>
+        <li className=' flex items-center  p-1 border-2 rounded-md mr-2'>
           {seat.location === 'front' ? (
             <AircraftFrontSection className='w-6 h-6' />
           ) : seat.location === 'center' ? (
@@ -31,7 +28,7 @@ const SeatCardSwap = ({ seat }: { seat: SeatProps }) => {
             <AircraftBackSection className='w-6 h-6  ' />
           )}
         </li>
-        <li className=' flex items-center p-0 p-1 border-2 rounded-md mr-2'>
+        <li className=' flex items-center  p-1 border-2 rounded-md mr-2'>
           {seat.position === 'aisle' ? (
             <AircraftSeatAisle className='w-6 h-6 ' />
           ) : seat.position === 'middle' ? (
@@ -40,7 +37,7 @@ const SeatCardSwap = ({ seat }: { seat: SeatProps }) => {
             <AircraftSeatWindow className='w-6 h-6 ' />
           )}
         </li>
-        <li className='flex items-center p-0 p-1 border-2 rounded-md mr-2'>
+        <li className='flex items-center  p-1 border-2 rounded-md mr-2'>
           {seat.extraLegroom ? (
             <AircraftSeatExtraLegroom className='w-6 h-6 ' />
           ) : (

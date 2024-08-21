@@ -1,4 +1,3 @@
-import DeleteIcon from '@mui/icons-material/Delete';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
