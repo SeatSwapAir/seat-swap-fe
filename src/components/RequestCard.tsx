@@ -9,19 +9,13 @@ import { Separator } from './ui/separator';
 
 const RequestCard = (match: { match: SeatProps[] }) => {
   const matchStatus = useMatchStatus(match.match[0].id, match.match[1].id);
-  //   const postSwapRequest = usePostSwapRequest(
-  //     match.match[0].id,
-  //     match.match[1].id
-  //   );
+
   const patchSwapRequest = usePatchSwapRequest(
     match.match[0].id,
     match.match[1].id
   );
 
   const handleRequest: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    // if (!matchStatus.data?.swap_id) {
-    //   handleSwapRequest();
-    // }
     if (!matchStatus.data?.swap_id) return;
     patchSwapRequest.mutate({
       body: {
@@ -33,14 +27,6 @@ const RequestCard = (match: { match: SeatProps[] }) => {
     });
   };
 
-  //   const handleSwapRequest = () => {
-  //     // postSwapRequest.mutate({
-  //     //   body: {
-  //     //     requester_seat_id: match.match[0].id,
-  //     //     respondent_seat_id: match.match[1].id,
-  //     //   },
-  //     // });
-  //   };
   return (
     <>
       <div className='flex flex-col md:min-w-[450px]'>

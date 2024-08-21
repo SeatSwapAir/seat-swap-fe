@@ -1,9 +1,6 @@
 import { MouseEventHandler, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  useCheckSeatAvailability,
-  useOptimisticDeleteFlight,
-} from '@/hooks/mutations';
+import { useOptimisticDeleteFlight } from '@/hooks/mutations';
 
 import SeatCard from './SeatCard';
 
@@ -13,7 +10,6 @@ import { FlightProps, MatchProps, SeatProps } from '../../lib/types';
 
 import { useNavigate } from 'react-router-dom';
 
-import { usePostJourney } from '@/hooks/mutations';
 import axios from 'axios';
 import FlightInfo from './FlightInfo';
 import AddSeatForm from './AddSeatForm';
@@ -40,27 +36,8 @@ export default function Journey() {
   const navigate = useNavigate();
 
   const FindJourneyQuery = useJourney(user_id, flight_id);
-  console.log('🚀 ~ Journey ~ FindJourneyQuery:', FindJourneyQuery.data);
 
   const mutateUpdateJourney = usePatchJourney();
-
-  const journey = {
-    id: FindJourneyQuery.data?.id,
-    airline: FindJourneyQuery.data?.airline,
-    arrivalairport: FindJourneyQuery.data?.arrivalairport,
-    arrivalairportname: FindJourneyQuery.data?.arrivalairportname,
-    arrivaltime: FindJourneyQuery.data?.arrivaltime,
-    departureairport: FindJourneyQuery.data?.departureairport,
-    departureairportname: FindJourneyQuery.data?.departureairportname,
-    departuretime: FindJourneyQuery.data?.departuretime,
-    flightnumber: FindJourneyQuery.data?.flightnumber,
-    seats: seats,
-  };
-
-  //   if (!flight) {
-  //     return <div>No flight details available</div>;
-  //   }
-
   const [seat, setSeat] = useState<SeatProps | null>(null);
   const [showEditSeatForm, setShowEditSeatForm] = useState(false);
   const [showAddSeatForm, setShowAddSeatForm] = useState(false);
@@ -83,25 +60,6 @@ export default function Journey() {
     setShowEditSeatForm(true);
   };
 
-  const handleUpdateSeat = (seat: SeatProps) => {
-    if (!seat || !FindJourneyQuery.data) return;
-    setSeats((prevSeats) =>
-      prevSeats.map((s) => (s.id === seat.id ? seat : s))
-    );
-    setShowEditSeatForm(false);
-  };
-
-  const handleDeleteSeat = (seat: SeatProps): void => {
-    if (!seat.seat_row || !seat.seat_letter) return;
-    const updatedSeats = seats.filter(
-      (s) =>
-        !(s.seat_row === seat.seat_row && s.seat_letter === seat.seat_letter)
-    );
-    setSeats(updatedSeats);
-  };
-
-  const checkSeatAvailability = useCheckSeatAvailability();
-
   const cancelButton = (
     func: MouseEventHandler<HTMLButtonElement>
   ): JSX.Element => {
@@ -114,37 +72,6 @@ export default function Journey() {
     );
   };
 
-  const handleAddSeat = async (seat: SeatProps) => {
-    if (!seat || !FindJourneyQuery.data) return;
-
-    const { seat_row, seat_letter } = seat;
-    if (!seat_row || !seat_letter) return;
-    try {
-      await checkSeatAvailability.mutateAsync({
-        flightId: flight_id,
-        userId: 21,
-        seatLetter: seat_letter,
-        seatRow: seat_row,
-      });
-      const doesSeatExist =
-        seats.filter(
-          (s) => s.seat_row === seat_row && s.seat_letter === seat_letter
-        ).length > 0;
-      if (doesSeatExist) {
-        setSeatError(`Seat ${seat_row}${seat_letter} already exists`);
-        return;
-      }
-      setSeats((prevSeats) => [...prevSeats, seat]);
-      setShowAddSeatForm(false);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setSeatError(error.response?.data?.msg || 'An error occurred');
-      } else {
-        setSeatError('An unexpected error occurred');
-      }
-    }
-  };
-
   const handleUpdateJourney = (): void | FlightProps => {
     if (!FindJourneyQuery.data) return;
     mutateUpdateJourney.mutate({
@@ -155,9 +82,7 @@ export default function Journey() {
 
   const deleteJourneyMutation = useOptimisticDeleteFlight();
 
-  const handleDeleteJourney: React.MouseEventHandler<HTMLButtonElement> = (
-    event
-  ) => {
+  const handleDeleteJourney = () => {
     deleteJourneyMutation.mutate({ user_id: 21, flight_id: +flight_id });
   };
 
@@ -174,8 +99,6 @@ export default function Journey() {
 
   useEffect(() => {
     if (mutateUpdateJourney.isSuccess) {
-      // setSeats(mutateUpdateJourney.data.seats)
-      console.log('🚀 ~ useEffect ~ mutateUpdateJourney:', mutateUpdateJourney);
       setShowEditSeatForm(false);
     }
   }, [mutateUpdateJourney.isSuccess, setShowEditSeatForm]);
@@ -246,7 +169,9 @@ export default function Journey() {
             >
               Delete Flight
             </Button>
-
+            <Button onClick={() => handleUpdateJourney()}>
+              Submit Changes
+            </Button>
             <>
               <CardHeader>
                 <CardTitle>Offered seats!</CardTitle>

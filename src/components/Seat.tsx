@@ -1,5 +1,3 @@
-import { Typography } from '@mui/material';
-
 import { SeatProps } from '../../lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AirlineSeatLegroomExtraIcon from '@mui/icons-material/AirlineSeatLegroomExtra';

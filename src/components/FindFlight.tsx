@@ -70,10 +70,6 @@ export default function FindFlight({
     // navigate('/addjourney', { state: { flight: flightDetails } })
   }, [FlightDetailsQuery.isSuccess, FlightDetailsQuery.data]);
 
-  // console.log('LOCAL', flightDetails);
-  // console.log('🚀 ~ SERVER:', FlightDetailsQuery.data);
-  // console.log('🚀 ~ flightDetails:', flightDetails);
-
   return (
     <>
       {!flightDetails && (

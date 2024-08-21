@@ -1,59 +1,40 @@
-import { Typography, CardContent, Card } from '@mui/material';
+import FlightInfo from './FlightInfo';
 
-import FlightCard from './FlightCard';
-import FindFlight from './FindFlight';
 import { useFlightsByUserId } from '../hooks/queries';
-import { useOptimisticDeleteFlight } from '../hooks/mutations';
-import axios from 'axios';
 
-const Flights = () => {
+import { Separator } from '@/components/ui/separator';
+import { CardDescription, CardHeader, CardTitle } from './ui/card';
+
+import { useNavigate } from 'react-router-dom';
+import { Button } from './ui/button';
+
+export default function Flights2() {
   const FlightsByUserIdQuery = useFlightsByUserId(21);
 
-  const deleteFlightMutation = useOptimisticDeleteFlight();
+  const navigate = useNavigate();
 
-  const handleRemoveFlight: React.MouseEventHandler<HTMLButtonElement> = (
-    event
-  ) => {
-    const flight_id = Number(event.currentTarget.value);
-    deleteFlightMutation.mutate({ user_id: 21, flight_id });
+  const handleNavigate = (flight_id: string) => {
+    navigate('/journey', { state: { user_id: 21, flight_id: flight_id } });
   };
 
   return (
-    <Card>
-      <CardContent>
-        <Typography variant='h2' gutterBottom>
-          Flights
-        </Typography>
-        {deleteFlightMutation.isError &&
-          axios.isAxiosError(deleteFlightMutation.error) && (
-            <Typography variant='body1' color='error'>
-              {deleteFlightMutation.error.response?.data?.msg ||
-                deleteFlightMutation.error.message}
-            </Typography>
-          )}
+    <>
+      <div className='grid-flow-row max-w-[450px]'>
+        <CardHeader>
+          <CardTitle>Or manage Your Journeys!</CardTitle>
+          <CardDescription>Just click to manage</CardDescription>
+        </CardHeader>
         {FlightsByUserIdQuery.isSuccess &&
-          FlightsByUserIdQuery.data?.map((flight) => {
-            return (
-              <FlightCard
-                key={flight.id}
-                flight={flight}
-                handleRemoveFlight={handleRemoveFlight}
-              />
-            );
-          })}
-        {FlightsByUserIdQuery.isError &&
-          axios.isAxiosError(FlightsByUserIdQuery.error) && (
-            <Typography variant='body1' color='error'>
-              {FlightsByUserIdQuery.error.response?.data?.msg ||
-                FlightsByUserIdQuery.error.message}
-            </Typography>
-          )}
-        {/* <AddFlight flights={FlightsByUserIdQuery.data || []} /> */}
-        {/* can the default of FlightsByUserIdQuery be an empty array so that its not the or condition here? */}
-        <FindFlight flights={FlightsByUserIdQuery.data || []} />
-      </CardContent>
-    </Card>
+          FlightsByUserIdQuery.data?.map((flight) => (
+            <>
+              <FlightInfo key={flight.id} flight={flight} />
+              <Button onClick={() => handleNavigate(flight.id)}>
+                Manage Journey
+              </Button>
+              <Separator className='my-2' />
+            </>
+          ))}
+      </div>
+    </>
   );
-};
-
-export default Flights;
+}
