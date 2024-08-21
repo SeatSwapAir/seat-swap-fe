@@ -1,5 +1,4 @@
 import { SeatProps } from '../../lib/types';
-import { Card } from '@/components/ui/card';
 import { Button } from './ui/button';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SeatCardSwap from './SeatCardSwap';

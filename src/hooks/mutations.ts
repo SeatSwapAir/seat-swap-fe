@@ -85,6 +85,9 @@ export function usePostSwapRequest(
       queryClient.invalidateQueries({
         queryKey: ['getMatchStatus', your_seat_id, matched_seat_id],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['offers'],
+      });
       return data;
     },
     onError: (err) => {
