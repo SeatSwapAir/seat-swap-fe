@@ -1,12 +1,17 @@
 import { MouseEventHandler, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useCheckSeatAvailability } from '@/hooks/mutations';
+import {
+  useCheckSeatAvailability,
+  useOptimisticDeleteFlight,
+} from '@/hooks/mutations';
 
 import SeatCard from './SeatCard';
 
 import { useLocation } from 'react-router-dom';
 
 import { FlightProps, MatchProps, SeatProps } from '../../lib/types';
+
+import { useNavigate } from 'react-router-dom';
 
 import { usePostJourney } from '@/hooks/mutations';
 import axios from 'axios';
@@ -31,6 +36,8 @@ export default function Journey() {
 
   const flight_id = location.state?.flight_id as string;
   const user_id = location.state?.user_id as number;
+
+  const navigate = useNavigate();
 
   const FindJourneyQuery = useJourney(user_id, flight_id);
   console.log('🚀 ~ Journey ~ FindJourneyQuery:', FindJourneyQuery.data);
@@ -146,6 +153,14 @@ export default function Journey() {
     });
   };
 
+  const deleteJourneyMutation = useOptimisticDeleteFlight();
+
+  const handleDeleteJourney: React.MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
+    deleteJourneyMutation.mutate({ user_id: 21, flight_id: +flight_id });
+  };
+
   useEffect(() => {
     if (FindJourneyQuery.isLoading) {
       setIsLoading(true);
@@ -174,6 +189,12 @@ export default function Journey() {
       }
     }
   }, [mutateUpdateJourney.isError]);
+
+  useEffect(() => {
+    if (deleteJourneyMutation.isSuccess) {
+      navigate('/');
+    }
+  }, [deleteJourneyMutation.isSuccess]);
 
   return (
     <div className='grid-flow-row'>
@@ -221,7 +242,7 @@ export default function Journey() {
             <Button
               className='my-4'
               disabled={seatsSwapped.length > 0}
-              //   onClick={() => handleAddJourney()}
+              onClick={handleDeleteJourney}
             >
               Delete Flight
             </Button>
@@ -254,12 +275,23 @@ export default function Journey() {
           <div className='min-w-[45%] m-auto'>
             {!showAddSeatForm && !showEditSeatForm && (
               <>
-                <CardHeader>
-                  <CardTitle>Request seats!</CardTitle>
-                  <CardDescription>
-                    Use the filter below to help you choose a seat to swap with
-                  </CardDescription>
-                </CardHeader>
+                {seats.length > 0 && (
+                  <CardHeader>
+                    <CardTitle>Request seats!</CardTitle>
+                    <CardDescription>
+                      Use the filter below to help you choose a seat to swap
+                      with
+                    </CardDescription>
+                  </CardHeader>
+                )}
+                {seats.length === 0 && (
+                  <CardHeader>
+                    <CardTitle>Add seats!</CardTitle>
+                    <CardDescription>
+                      Add seats to request swaps
+                    </CardDescription>
+                  </CardHeader>
+                )}
               </>
             )}
             {showAddSeatForm && (

@@ -63,27 +63,27 @@ export default function AddJourney() {
       params: { user_id: 21, flight_id: Number(flight.id) },
     });
   };
-  const handleEditSeat = (seat: SeatProps) => {
-    setSeat(seat);
-    setShowEditSeatForm(true);
-  };
+  // const handleEditSeat = (seat: SeatProps) => {
+  //   setSeat(seat);
+  //   setShowEditSeatForm(true);
+  // };
 
-  const handleUpdateSeat = (seat: SeatProps) => {
-    if (!seat || !flight) return;
-    setSeats((prevSeats) =>
-      prevSeats.map((s) => (s.id === seat.id ? seat : s))
-    );
-    setShowEditSeatForm(false);
-  };
+  // const handleUpdateSeat = (seat: SeatProps) => {
+  //   if (!seat || !flight) return;
+  //   setSeats((prevSeats) =>
+  //     prevSeats.map((s) => (s.id === seat.id ? seat : s))
+  //   );
+  //   setShowEditSeatForm(false);
+  // };
 
-  const handleDeleteSeat = (seat: SeatProps): void => {
-    if (!seat.seat_row || !seat.seat_letter) return;
-    const updatedSeats = seats.filter(
-      (s) =>
-        !(s.seat_row === seat.seat_row && s.seat_letter === seat.seat_letter)
-    );
-    setSeats(updatedSeats);
-  };
+  // const handleDeleteSeat = (seat: SeatProps): void => {
+  //   if (!seat.seat_row || !seat.seat_letter) return;
+  //   const updatedSeats = seats.filter(
+  //     (s) =>
+  //       !(s.seat_row === seat.seat_row && s.seat_letter === seat.seat_letter)
+  //   );
+  //   setSeats(updatedSeats);
+  // };
 
   const checkSeatAvailability = useCheckSeatAvailability();
 
@@ -99,36 +99,36 @@ export default function AddJourney() {
     );
   };
 
-  const handleAddSeat = async (seat: SeatProps) => {
-    if (!seat || !flight) return;
+  // const handleAddSeat = async (seat: SeatProps) => {
+  //   if (!seat || !flight) return;
 
-    const { seat_row, seat_letter } = seat;
-    if (!seat_row || !seat_letter) return;
-    try {
-      await checkSeatAvailability.mutateAsync({
-        flightId: flight.id,
-        userId: 21,
-        seatLetter: seat_letter,
-        seatRow: seat_row,
-      });
-      const doesSeatExist =
-        seats.filter(
-          (s) => s.seat_row === seat_row && s.seat_letter === seat_letter
-        ).length > 0;
-      if (doesSeatExist) {
-        setSeatError(`Seat ${seat_row}${seat_letter} already exists`);
-        return;
-      }
-      setSeats((prevSeats) => [...prevSeats, seat]);
-      setShowAddSeatForm(false);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setSeatError(error.response?.data?.msg || 'An error occurred');
-      } else {
-        setSeatError('An unexpected error occurred');
-      }
-    }
-  };
+  //   const { seat_row, seat_letter } = seat;
+  //   if (!seat_row || !seat_letter) return;
+  //   try {
+  //     await checkSeatAvailability.mutateAsync({
+  //       flightId: flight.id,
+  //       userId: 21,
+  //       seatLetter: seat_letter,
+  //       seatRow: seat_row,
+  //     });
+  //     const doesSeatExist =
+  //       seats.filter(
+  //         (s) => s.seat_row === seat_row && s.seat_letter === seat_letter
+  //       ).length > 0;
+  //     if (doesSeatExist) {
+  //       setSeatError(`Seat ${seat_row}${seat_letter} already exists`);
+  //       return;
+  //     }
+  //     setSeats((prevSeats) => [...prevSeats, seat]);
+  //     setShowAddSeatForm(false);
+  //   } catch (error) {
+  //     if (axios.isAxiosError(error)) {
+  //       setSeatError(error.response?.data?.msg || 'An error occurred');
+  //     } else {
+  //       setSeatError('An unexpected error occurred');
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     if (mutateAddJourney.isSuccess) {
@@ -162,7 +162,7 @@ export default function AddJourney() {
             {flight && <FlightInfo flight={flight} />}
             <Separator orientation='horizontal' />
             {seatError && <div>{seatError}</div>}
-            {seats.length > 0 &&
+            {/* {seats.length > 0 &&
               seats.map((seat: SeatProps, index) => (
                 <SeatCard
                   key={
@@ -174,16 +174,12 @@ export default function AddJourney() {
                   handleDeleteSeat={handleDeleteSeat}
                   handleEditSeat={handleEditSeat}
                 />
-              ))}{' '}
-            <Button
-              className='my-4'
-              disabled={!seats.length}
-              onClick={() => handleAddJourney()}
-            >
-              Submit your journey!
+              ))}{' '} */}
+            <Button className='my-4' onClick={() => handleAddJourney()}>
+              Confirm your journey!
             </Button>
           </div>
-          <Separator
+          {/* <Separator
             className='my-4 lg:my-0 lg:mx-[50px] lg:h-auto lg:w-px max-w-[450px]'
             orientation='horizontal'
           />
@@ -206,8 +202,8 @@ export default function AddJourney() {
                   Add Seat
                 </Button>
               </>
-            )}
-            {showAddSeatForm && (
+            )} */}
+          {/* {showAddSeatForm && (
               <>
                 <AddSeatForm handleAddSeat={handleAddSeat} />
                 {cancelButton(() => setShowAddSeatForm(false))}
@@ -218,8 +214,8 @@ export default function AddJourney() {
                 <EditSeatForm seatToEdit={seat} key={seat.id} />
                 {cancelButton(() => setShowEditSeatForm(false))}
               </>
-            )}
-          </div>
+            )} */}
+          {/* </div> */}
         </div>
       </div>
     </div>
