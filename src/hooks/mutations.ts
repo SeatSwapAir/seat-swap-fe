@@ -85,6 +85,9 @@ export function usePostSwapRequest(
       queryClient.invalidateQueries({
         queryKey: ['getMatchStatus', your_seat_id, matched_seat_id],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['offers'],
+      });
       return data;
     },
     onError: (err) => {
@@ -103,6 +106,7 @@ export function usePatchSwapRequest(
       queryClient.invalidateQueries({
         queryKey: ['getMatchStatus', your_seat_id, matched_seat_id],
       });
+      queryClient.invalidateQueries({ queryKey: ['offers'] });
       if (variables.body.action === 'accept') {
         Promise.all([
           queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] }),
@@ -111,7 +115,6 @@ export function usePatchSwapRequest(
           queryClient.invalidateQueries({
             queryKey: ['neighbouring_rows_matches'],
           }),
-          queryClient.invalidateQueries({ queryKey: ['offers'] }),
         ]);
       }
       return data;
