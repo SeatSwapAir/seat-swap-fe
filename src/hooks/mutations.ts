@@ -107,6 +107,8 @@ export function usePatchSwapRequest(
         queryKey: ['getMatchStatus', your_seat_id, matched_seat_id],
       });
       queryClient.invalidateQueries({ queryKey: ['offers'] });
+      queryClient.invalidateQueries({ queryKey: ['getJourney'] });
+      queryClient.invalidateQueries({ queryKey: ['all_matches'] });
       if (variables.body.action === 'accept') {
         Promise.all([
           queryClient.invalidateQueries({ queryKey: ['getFlightsByUser'] }),

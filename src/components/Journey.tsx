@@ -6,7 +6,7 @@ import SeatCard from './SeatCard';
 
 import { useLocation } from 'react-router-dom';
 
-import { FlightProps, MatchProps, SeatProps } from '../../lib/types';
+import { FlightProps, SeatProps } from '../../lib/types';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -20,7 +20,6 @@ import { Separator } from '@/components/ui/separator';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useJourney } from '@/hooks/queries';
 import { usePatchJourney } from '@/hooks/mutations';
-import { useAllSeats } from '@/hooks/queries';
 import FilterMatches from './FilterMatches';
 
 export default function Journey() {
@@ -42,16 +41,6 @@ export default function Journey() {
   const [showEditSeatForm, setShowEditSeatForm] = useState(false);
   const [showAddSeatForm, setShowAddSeatForm] = useState(false);
   const [seatError, setSeatError] = useState<string | null>(null);
-
-  const transformMatches = (matches: MatchProps[] | undefined) => {
-    if (!matches) return;
-    return matches.flatMap((seat) =>
-      seat.offer_seats.map((offer_seat) => [seat.current_seats, offer_seat])
-    );
-  };
-
-  const all_seats = useAllSeats(21, flight_id);
-  const all_seats_formatted = transformMatches(all_seats.data?.all_matches);
 
   const seatsSwapped = seats.filter((seat) => seat.previous_user_id !== null);
 
@@ -236,9 +225,7 @@ export default function Journey() {
                 {cancelButton(() => setShowEditSeatForm(false))}
               </>
             )}
-            {all_seats.isSuccess && (
-              <FilterMatches allMatches={all_seats_formatted} />
-            )}
+            <FilterMatches />
           </div>
         </div>
       </div>

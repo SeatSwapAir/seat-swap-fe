@@ -10,7 +10,6 @@ const Offers = ({
   flight_id: string;
 }) => {
   const offers = useOffers(user_id, flight_id);
-  console.log('🚀 ~ Offers ~ offers:', offers.data?.offers);
   const transformMatches = (matches: MatchProps[] | undefined) => {
     if (!matches) return;
     return matches.flatMap((seat) =>

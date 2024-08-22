@@ -1,4 +1,4 @@
-import { SeatProps } from 'lib/types';
+import { MatchProps, SeatProps } from 'lib/types';
 import { useState, useMemo } from 'react';
 import MatchCard from './MatchCard';
 import { Label } from './ui/label';
@@ -11,12 +11,9 @@ import AircraftSeatReducedLegroom from '@/components/ui/icons/AircraftSeatReduce
 import AircraftFrontSection from '@/components/ui/icons/AircraftFrontSection';
 import AircraftCenterSection from '@/components/ui/icons/AircraftCenterSection';
 import AircraftBackSection from '@/components/ui/icons/AircraftBackSection';
+import { useAllSeats } from '@/hooks/queries';
 
-const FilterMatches = ({
-  allMatches,
-}: {
-  allMatches: SeatProps[][] | undefined;
-}) => {
+const FilterMatches = () => {
   const [selectedFilters, setselectedFilters] = useState<string[]>([
     'front',
     'center',
@@ -27,9 +24,18 @@ const FilterMatches = ({
     'extra',
     'standard',
   ]);
+  const all_seats = useAllSeats(21, '8');
+  const transformMatches = (matches: MatchProps[] | undefined) => {
+    if (!matches) return;
+    return matches.flatMap((seat) =>
+      seat.offer_seats.map((offer_seat) => [seat.current_seats, offer_seat])
+    );
+  };
+
+  const all_seats_formatted = transformMatches(all_seats.data?.all_matches);
 
   const filteredSeats = useMemo(() => {
-    return allMatches?.filter((match) => {
+    return all_seats_formatted?.filter((match) => {
       const [, offerSeat] = match;
       const { position, location, extraLegroom } = offerSeat;
       return (
@@ -43,7 +49,7 @@ const FilterMatches = ({
         (selectedFilters.includes('standard') || extraLegroom)
       );
     });
-  }, [selectedFilters]);
+  }, [selectedFilters, all_seats_formatted]);
 
   return (
     <>
