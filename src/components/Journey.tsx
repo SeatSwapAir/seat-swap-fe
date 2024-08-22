@@ -148,25 +148,27 @@ export default function Journey() {
             >
               Delete Flight
             </Button>
-            <>
-              <CardHeader>
-                <CardTitle>Offered seats!</CardTitle>
-                <CardDescription>
-                  Check out the seats that you have been offered to swap with
-                </CardDescription>
-              </CardHeader>
-              <Offers user_id={21} flight_id={flight_id} />
-            </>
-            <>
-              <CardHeader>
-                <CardTitle>Requested seats!</CardTitle>
-                <CardDescription>
-                  Check out the seats that you have requested to swap with
-                </CardDescription>
-              </CardHeader>
-              <Requests user_id={21} flight_id={flight_id} />
-            </>
+            {!showAddSeatForm && !showEditSeatForm && (
+              <>
+                <CardHeader>
+                  <CardTitle>Offered seats!</CardTitle>
+                  <CardDescription>
+                    Check out the seats that you have been offered to swap with
+                  </CardDescription>
+                </CardHeader>
+                <Offers user_id={21} flight_id={flight_id} />
+
+                <CardHeader>
+                  <CardTitle>Requested seats!</CardTitle>
+                  <CardDescription>
+                    Check out the seats that you have requested to swap with
+                  </CardDescription>
+                </CardHeader>
+                <Requests user_id={21} flight_id={flight_id} />
+              </>
+            )}
           </div>
+
           <Separator
             className='my-4 lg:my-0 lg:mx-[50px] lg:h-auto lg:w-px max-w-[450px]'
             orientation='horizontal'
@@ -212,7 +214,9 @@ export default function Journey() {
                 {cancelButton(() => setShowEditSeatForm(false))}
               </>
             )}
-            <FilterMatches flight_id={flight_id} />
+            {!showAddSeatForm && !showEditSeatForm && (
+              <FilterMatches flight_id={flight_id} />
+            )}
           </div>
         </div>
       </div>
