@@ -6,7 +6,7 @@ import SeatCard from './SeatCard';
 
 import { useLocation } from 'react-router-dom';
 
-import { FlightProps, SeatProps } from '../../lib/types';
+import { SeatProps } from '../../lib/types';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -59,14 +59,6 @@ export default function Journey() {
         </Button>
       </div>
     );
-  };
-
-  const handleUpdateJourney = (): void | FlightProps => {
-    if (!FindJourneyQuery.data) return;
-    mutateUpdateJourney.mutate({
-      body: { ...FindJourneyQuery.data, seats },
-      params: { user_id: 21, flight_id: Number(flight_id) },
-    });
   };
 
   const deleteJourneyMutation = useOptimisticDeleteFlight();
