@@ -3,7 +3,7 @@ import { Button } from './ui/button';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SeatCardSwap from './SeatCardSwap';
 import { useMatchStatus } from '../hooks/queries';
-import { usePostSwapRequest, usePatchSwapRequest } from '../hooks/mutations';
+import { usePatchSwapRequest } from '../hooks/mutations';
 import React from 'react';
 import { Separator } from './ui/separator';
 
@@ -30,7 +30,7 @@ const RequestCard = (match: { match: SeatProps[] }) => {
   return (
     <>
       <div className='flex flex-col md:min-w-[450px]'>
-        <div className='flex flex-row items-center md:justify-between md:min-w-[450px] py-2'>
+        <div className='flex flex-row items-center justify-between md:min-w-[450px] py-2 px-2'>
           <div className='text-lg'>
             <span className='hidden lg:inline-block mr-1'>Seat </span>
             {match.match[0].seat_row}

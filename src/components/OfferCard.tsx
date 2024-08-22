@@ -29,7 +29,7 @@ const OfferCard = (match: { match: SeatProps[] }) => {
   return (
     <>
       <div className='flex flex-col md:min-w-[450px]'>
-        <div className='flex flex-row items-center md:justify-between md:min-w-[450px] py-2'>
+        <div className='flex flex-row items-center justify-between md:min-w-[450px] py-2 px-0 xs:px-2'>
           <div className='text-lg'>
             <span className='hidden lg:inline-block mr-1'>Seat </span>
             {match.match[0].seat_row}
