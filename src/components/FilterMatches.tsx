@@ -14,7 +14,7 @@ import AircraftBackSection from '@/components/ui/icons/AircraftBackSection';
 import { useAllSeats } from '@/hooks/queries';
 import axios from 'axios';
 
-const FilterMatches = () => {
+const FilterMatches = ({ flight_id }: { flight_id: string }) => {
   const [selectedFilters, setselectedFilters] = useState<string[]>([
     'front',
     'center',
@@ -25,7 +25,7 @@ const FilterMatches = () => {
     'extra',
     'standard',
   ]);
-  const all_seats = useAllSeats(21, '8');
+  const all_seats = useAllSeats(21, flight_id);
   const transformMatches = (matches: MatchProps[] | undefined) => {
     if (!matches) return;
     return matches.flatMap((seat) =>

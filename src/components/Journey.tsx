@@ -214,7 +214,7 @@ export default function Journey() {
                 {cancelButton(() => setShowEditSeatForm(false))}
               </>
             )}
-            <FilterMatches />
+            <FilterMatches flight_id={flight_id} />
           </div>
         </div>
       </div>
