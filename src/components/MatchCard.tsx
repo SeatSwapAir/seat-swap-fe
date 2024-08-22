@@ -75,7 +75,7 @@ const MatchCard = (match: { match: SeatProps[] }) => {
   return (
     <>
       <div className='flex flex-col md:min-w-[450px]'>
-        <div className='flex flex-row items-center md:justify-between md:min-w-[450px] py-2'>
+        <div className='flex flex-row items-center justify-between md:min-w-[450px] py-2 px-0 xs:px-2'>
           <div className='text-lg'>
             <span className='hidden lg:inline-block mr-1'>Seat </span>
             {match.match[0].seat_row}
@@ -113,7 +113,8 @@ const MatchCard = (match: { match: SeatProps[] }) => {
                 Cancel
               </Button>
             )}
-            {matchStatus.data?.actions[0] === 'request' && (
+            {(matchStatus.data?.actions[0] === 'request' ||
+              matchStatus.data?.actions[0] === 'rejected') && (
               <Button
                 className='p-0.5 px-1.5 mr-1 h-7 text-sm'
                 onClick={handleRequest}

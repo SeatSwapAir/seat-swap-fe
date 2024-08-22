@@ -103,13 +103,12 @@ export default function Journey() {
   return (
     <div className='grid-flow-row'>
       <div className='grid justify-items-center'>
-        <h3 className='text-3xl py-6'>Add seats and submit!</h3>
         <div className='grid lg:flex lg:flex-row lg:w-[1000px] justify-center'>
           <div className='min-w-[45%]'>
             <CardHeader className='mt-4'>
-              <CardTitle>Heres your flight!</CardTitle>
+              <CardTitle>Heres your journey!</CardTitle>
               <CardDescription>
-                Submit your journey after adding all seats
+                Add seats, request swaps and accept offers
               </CardDescription>
             </CardHeader>
             {FindJourneyQuery?.data && (
@@ -141,8 +140,7 @@ export default function Journey() {
               }}
             >
               Add Seat
-            </Button>
-
+            </Button>{' '}
             <Button
               className='my-4'
               disabled={seatsSwapped.length > 0}

@@ -34,7 +34,7 @@ const SeatCard = ({
   };
   return (
     <>
-      <div className='flex flex-row p-0 py-2 justify-between items-center min-w-[330px]'>
+      <div className='flex flex-row p-2 justify-between items-center min-w-[330px]'>
         <div className='mr-3'>
           Seat {seat_row}
           {seat_letter}
