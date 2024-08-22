@@ -158,9 +158,6 @@ export default function Journey() {
             >
               Delete Flight
             </Button>
-            <Button onClick={() => handleUpdateJourney()}>
-              Submit Changes
-            </Button>
             <>
               <CardHeader>
                 <CardTitle>Offered seats!</CardTitle>
