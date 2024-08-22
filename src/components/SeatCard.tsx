@@ -124,13 +124,6 @@ const SeatCard = ({
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          {/* <Button
-            disabled={seat.previous_user_id !== null}
-            className='w-8 h-8'
-            onClick={() => handleDeleteSeat()}
-          >
-            <DeleteIcon />
-          </Button> */}
         </div>
       </div>
       <Separator />
