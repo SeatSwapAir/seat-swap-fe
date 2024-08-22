@@ -8,7 +8,7 @@ import { CardDescription, CardHeader, CardTitle } from './ui/card';
 import { useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 
-export default function Flights2() {
+export default function Flights() {
   const FlightsByUserIdQuery = useFlightsByUserId(21);
 
   const navigate = useNavigate();
@@ -16,7 +16,6 @@ export default function Flights2() {
   const handleNavigate = (flight_id: string) => {
     navigate('/journey', { state: { user_id: 21, flight_id: flight_id } });
   };
-
   return (
     <>
       <div className='grid-flow-row max-w-[450px]'>
@@ -26,13 +25,13 @@ export default function Flights2() {
         </CardHeader>
         {FlightsByUserIdQuery.isSuccess &&
           FlightsByUserIdQuery.data?.map((flight) => (
-            <>
-              <FlightInfo key={flight.id} flight={flight} />
+            <div key={flight.id}>
+              <FlightInfo flight={flight} />
               <Button onClick={() => handleNavigate(flight.id)}>
                 Manage Journey
               </Button>
               <Separator className='my-2' />
-            </>
+            </div>
           ))}
       </div>
     </>
