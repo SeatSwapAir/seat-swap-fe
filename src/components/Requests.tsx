@@ -1,6 +1,7 @@
 import { MatchProps, SeatProps } from 'lib/types';
 import RequestCard from './RequestCard';
 import { useOffers } from '@/hooks/queries';
+import axios from 'axios';
 
 const Requests = ({
   user_id,
@@ -19,7 +20,9 @@ const Requests = ({
   };
 
   const offers_formatted = transformMatches(offers.data?.requested);
-
+  if (axios.isAxiosError(offers.error)) {
+    return <div>{offers.error.response?.data?.msg || 'An error occurred'}</div>;
+  }
   return (
     <>
       {offers_formatted &&

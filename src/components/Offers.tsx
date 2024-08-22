@@ -1,6 +1,7 @@
 import { MatchProps, SeatProps } from 'lib/types';
 import OfferCard from './OfferCard';
 import { useOffers } from '@/hooks/queries';
+import axios from 'axios';
 
 const Offers = ({
   user_id,
@@ -10,6 +11,7 @@ const Offers = ({
   flight_id: string;
 }) => {
   const offers = useOffers(user_id, flight_id);
+
   const transformMatches = (matches: MatchProps[] | undefined) => {
     if (!matches) return;
     return matches.flatMap((seat) =>
@@ -17,6 +19,9 @@ const Offers = ({
     );
   };
   const offers_formatted = transformMatches(offers.data?.offers);
+  if (axios.isAxiosError(offers.error)) {
+    return <div>{offers.error.response?.data?.msg || 'An error occurred'}</div>;
+  }
   return (
     <>
       {offers_formatted &&
