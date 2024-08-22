@@ -12,6 +12,7 @@ import AircraftFrontSection from '@/components/ui/icons/AircraftFrontSection';
 import AircraftCenterSection from '@/components/ui/icons/AircraftCenterSection';
 import AircraftBackSection from '@/components/ui/icons/AircraftBackSection';
 import { useAllSeats } from '@/hooks/queries';
+import axios from 'axios';
 
 const FilterMatches = () => {
   const [selectedFilters, setselectedFilters] = useState<string[]>([
@@ -32,6 +33,8 @@ const FilterMatches = () => {
     );
   };
 
+  console.log(all_seats?.error);
+  console.log(all_seats.isError);
   const all_seats_formatted = transformMatches(all_seats.data?.all_matches);
 
   const filteredSeats = useMemo(() => {
@@ -51,6 +54,11 @@ const FilterMatches = () => {
     });
   }, [selectedFilters, all_seats_formatted]);
 
+  if (axios.isAxiosError(all_seats.error)) {
+    return (
+      <div>{all_seats.error.response?.data?.msg || 'An error occurred'}</div>
+    );
+  }
   return (
     <>
       <div className=' pb-1 '>

@@ -188,6 +188,7 @@ export function useDeleteSeat(
   return useMutation({
     mutationFn: deleteSeat,
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['all_matches'] });
       queryClient.invalidateQueries({
         queryKey: ['getJourney', user_id, flight_id],
       });
