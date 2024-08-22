@@ -2,6 +2,17 @@ import { MouseEventHandler, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useOptimisticDeleteFlight } from '@/hooks/mutations';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+
 import SeatCard from './SeatCard';
 
 import { useLocation } from 'react-router-dom';
@@ -141,13 +152,30 @@ export default function Journey() {
             >
               Add Seat
             </Button>{' '}
-            <Button
-              className='my-4'
-              disabled={seatsSwapped.length > 0}
-              onClick={handleDeleteJourney}
-            >
-              Delete Flight
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className='my-4' disabled={seatsSwapped.length > 0}>
+                  Delete Flight
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to delete this flight?
+                  </AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel asChild>
+                    <Button variant='outline'>Cancel</Button>
+                  </AlertDialogCancel>
+                  <AlertDialogAction asChild>
+                    <Button variant='destructive' onClick={handleDeleteJourney}>
+                      Delete
+                    </Button>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             {!showAddSeatForm && !showEditSeatForm && (
               <>
                 <CardHeader>
