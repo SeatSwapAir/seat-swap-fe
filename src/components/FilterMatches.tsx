@@ -33,8 +33,6 @@ const FilterMatches = () => {
     );
   };
 
-  console.log(all_seats?.error);
-  console.log(all_seats.isError);
   const all_seats_formatted = transformMatches(all_seats.data?.all_matches);
 
   const filteredSeats = useMemo(() => {
