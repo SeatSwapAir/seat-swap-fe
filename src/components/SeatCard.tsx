@@ -14,6 +14,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Separator } from '@/components/ui/separator';
 import { useDeleteSeat } from '@/hooks/mutations';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  AlertDialogDescription,
+} from '@/components/ui/alert-dialog';
+
 const SeatCard = ({
   seat,
   handleEditSeat,
@@ -79,13 +91,46 @@ const SeatCard = ({
               }}
             />
           </Button>
-          <Button
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                disabled={seat.previous_user_id !== null}
+                className='w-8 h-8'
+              >
+                <DeleteIcon />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Are you sure you want to delete this seat?
+                </AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogDescription>
+                This will delete the seat and all requests.
+              </AlertDialogDescription>
+              <AlertDialogFooter>
+                <AlertDialogCancel asChild>
+                  <Button variant='outline'>Cancel</Button>
+                </AlertDialogCancel>
+                <AlertDialogAction asChild>
+                  <Button
+                    variant='destructive'
+                    onClick={() => handleDeleteSeat()}
+                  >
+                    Delete Seat!
+                  </Button>
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          {/* <Button
             disabled={seat.previous_user_id !== null}
             className='w-8 h-8'
             onClick={() => handleDeleteSeat()}
           >
             <DeleteIcon />
-          </Button>
+          </Button> */}
         </div>
       </div>
       <Separator />

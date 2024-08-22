@@ -11,6 +11,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
+  AlertDialogDescription,
 } from '@/components/ui/alert-dialog';
 
 import SeatCard from './SeatCard';
@@ -164,6 +165,9 @@ export default function Journey() {
                     Are you sure you want to delete this flight?
                   </AlertDialogTitle>
                 </AlertDialogHeader>
+                <AlertDialogDescription>
+                  This will delete all of your seats and this flight.
+                </AlertDialogDescription>
                 <AlertDialogFooter>
                   <AlertDialogCancel asChild>
                     <Button variant='outline'>Cancel</Button>
