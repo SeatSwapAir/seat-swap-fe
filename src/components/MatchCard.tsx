@@ -113,7 +113,8 @@ const MatchCard = (match: { match: SeatProps[] }) => {
                 Cancel
               </Button>
             )}
-            {matchStatus.data?.actions[0] === 'request' && (
+            {(matchStatus.data?.actions[0] === 'request' ||
+              matchStatus.data?.actions[0] === 'rejected') && (
               <Button
                 className='p-0.5 px-1.5 mr-1 h-7 text-sm'
                 onClick={handleRequest}
