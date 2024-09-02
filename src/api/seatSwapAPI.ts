@@ -10,7 +10,8 @@ import {
 } from '../../lib/types';
 
 const apiUrl = axios.create({
-  baseURL: 'http://localhost:9090/api',
+  // baseURL: 'http://localhost:9090/api',
+  baseURL: 'https://9ouvdqgigj.execute-api.eu-north-1.amazonaws.com',
 });
 
 export const getFlightsByUserId = async (

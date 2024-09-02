@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import Home from '../components/Home';
 import Login from '../components/Login';
 import Account from '../components/Account';
@@ -14,37 +15,25 @@ type User = {
 
 type AuthContextType = {
   user: User;
-  login: (userName: string, password: string) => Promise<unknown>;
+  login: () => void;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
   user: { name: '', isAuthenticated: false },
-  login: async () => '',
+  login: () => {},
   logout: () => {},
 });
 export const AuthData = () => useContext(AuthContext);
 
-export const AuthWrapper = () => {
-  const [user, setUser] = useState({ name: '', isAuthenticated: false });
-
-  const login = (userName: string, password: string) => {
-    return new Promise((resolve, reject) => {
-      if (password === 'bob') {
-        setUser({ name: userName, isAuthenticated: true });
-        resolve('success');
-      } else {
-        reject('Incorrect password');
-      }
-    });
-  };
-
-  const logout = () => {
-    setUser({ ...user, isAuthenticated: false });
-  };
+const AuthWrapperContent = () => {
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const authUser = { name: user?.name || '', isAuthenticated: isAuthenticated };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{ user: authUser, login: loginWithRedirect, logout }}
+    >
       <>
         <Header />
         <Routes>
@@ -59,5 +48,17 @@ export const AuthWrapper = () => {
         </Routes>
       </>
     </AuthContext.Provider>
+  );
+};
+
+export const AuthWrapper = () => {
+  return (
+    <Auth0Provider
+      domain={import.meta.env.VITE_AUTH0_DOMAIN}
+      clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+      authorizationParams={{ redirect_uri: window.location.origin }}
+    >
+      <AuthWrapperContent />
+    </Auth0Provider>
   );
 };
