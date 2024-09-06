@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { AuthData } from '../auth/AuthWrapper';
+import apiUrl from '@/components/ApiUrl';
 import {
   FlightProps,
   SideBySideMatchesProps,
@@ -9,18 +11,16 @@ import {
   SeatProps,
 } from '../../lib/types';
 
-const apiUrl = axios.create({
-  // baseURL: 'http://localhost:9090/api',
-  baseURL: 'https://9ouvdqgigj.execute-api.eu-north-1.amazonaws.com',
-});
-
 export const getFlightsByUserId = async (
   user_id: Number
 ): Promise<FlightProps[]> => {
   try {
+    console.log('reached');
     const res = await apiUrl.get(`users/${user_id}/flights`);
+    console.log('Received response:', res.data);
     return res.data.flights;
   } catch (err) {
+    console.log(err);
     // Ensure that any error is thrown so that useQuery can handle it
     throw err;
   }
