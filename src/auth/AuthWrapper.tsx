@@ -18,6 +18,7 @@ type AuthContextType = {
   logout: () => void;
 };
 
+
 const AuthContext = createContext<AuthContextType>({
   user: { name: '', isAuthenticated: false },
   login: async () => '',
