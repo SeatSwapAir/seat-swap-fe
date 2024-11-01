@@ -12,6 +12,12 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV="production"
 
+RUN --mount=type=secret,id=VITE_AUTH0_DOMAIN \
+    VITE_AUTH0_DOMAIN="$(cat /run/secrets/VITE_AUTH0_DOMAIN)" \
+    --mount=type=secret,id=VITE_AUTH0_CLIENT_ID \
+    VITE_AUTH0_CLIENT_ID="$(cat /run/secrets/VITE_AUTH0_CLIENT_ID)" \
+    --mount=type=secret,id=VITE_AUTH0_AUDIENCE \
+    VITE_AUTH0_AUDIENCE="$(cat /run/secrets/VITE_AUTH0_AUDIENCE)"
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
