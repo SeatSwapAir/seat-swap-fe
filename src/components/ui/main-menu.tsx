@@ -14,10 +14,10 @@ export default function MainMenu() {
   return isDesktop ? (
     <div className=''>
       <ul className='flex flex-row gap-4 p-4'>
-        <li>Account</li>
+        {/* <li>Account</li>
         <li>Your Journeys</li>
         <li>Add Journey</li>
-        <li>Reviews</li>
+        <li>Reviews</li> */}
         <li>
           <button onClick={handleLogout}>Logout</button>
         </li>
@@ -31,10 +31,10 @@ export default function MainMenu() {
         </DrawerTrigger>
         <DrawerContent>
           <ul className='flex flex-col gap-4 p-4'>
-            <li>Account</li>
+            {/* <li>Account</li>
             <li>Your Journeys</li>
             <li>Add Journey</li>
-            <li>Reviews</li>
+            <li>Reviews</li> */}
             <li>
               <button onClick={handleLogout}>Logout</button>
             </li>
