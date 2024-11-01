@@ -8,10 +8,21 @@ import {
   getOffers,
 } from '../api/seatSwapAPI';
 
+import axios from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
+
 export function useFlightsByUserId(id: number) {
+  const { isLoading } = useAuth0();
+  console.log('🚀 ~ file: queries token', axios.defaults.headers.common);
   return useQuery({
     queryFn: () => getFlightsByUserId(id),
     queryKey: ['getFlightsByUser'],
+    enabled: isLoading,
+    retry: 10,
+    retryDelay: 1000,
+    refetchOnWindowFocus: true,
+
+    // enabled: axios.defaults.headers.common.Authorization !== undefined,
   });
 }
 

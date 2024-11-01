@@ -1,5 +1,8 @@
-import { createContext, useContext, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+
 import Home from '../components/Home';
 import Login from '../components/Login';
 import Account from '../components/Account';
@@ -7,57 +10,53 @@ import Header from '@/components/Header';
 import AddJourney from '@/components/AddJourney';
 import Journey from '@/components/Journey';
 
-type User = {
-  name: string;
-  isAuthenticated: boolean;
-};
-
-type AuthContextType = {
-  user: User;
-  login: (userName: string, password: string) => Promise<unknown>;
-  logout: () => void;
-};
-
-const AuthContext = createContext<AuthContextType>({
-  user: { name: '', isAuthenticated: false },
-  login: async () => '',
-  logout: () => {},
-});
-export const AuthData = () => useContext(AuthContext);
-
 export const AuthWrapper = () => {
-  const [user, setUser] = useState({ name: '', isAuthenticated: false });
+  const { getAccessTokenSilently, isAuthenticated, isLoading } = useAuth0();
 
-  const login = (userName: string, password: string) => {
-    return new Promise((resolve, reject) => {
-      if (password === 'bob') {
-        setUser({ name: userName, isAuthenticated: true });
-        resolve('success');
-      } else {
-        reject('Incorrect password');
+  useEffect(() => {
+    console.log(
+      '🚀 ~ file: AuthWrapper.tsx:18 ~ useEffect ~ isLoading:',
+      isLoading
+    );
+    if (isLoading) {
+      return;
+    }
+    // if (!isAuthenticated && !isLoading) {return <div>Loading...</div>};
+    const setAuthToken = async () => {
+      try {
+        const token = await getAccessTokenSilently({
+          authorizationParams: {
+            audience: `https://seatswap.api`,
+          },
+        });
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        console.log('🚀 ~', axios.defaults.headers.common['Authorization']);
+      } catch (error) {
+        console.error('!!!Error fetching access token', error);
       }
-    });
-  };
+    };
 
-  const logout = () => {
-    setUser({ ...user, isAuthenticated: false });
-  };
+    setAuthToken();
+  }, [getAccessTokenSilently, isAuthenticated, isLoading]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      <>
-        <Header />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/addjourney' element={<AddJourney />} />
-          <Route path='/journey' element={<Journey />} />
-          <Route path='/signup' element={<h1>SignUp</h1>} />
-          <Route path='/account' element={<Account />} />
-          <Route path='/review' element={<h1>Review</h1>} />
-          <Route path='/reviews' element={<h1>Reviews</h1>} />
-        </Routes>
-      </>
-    </AuthContext.Provider>
+    <>
+      <Header />
+      <Routes>
+        <Route
+          path='/'
+          element={
+            <Home token={axios.defaults.headers.common['Authorization']} />
+          }
+        />
+        <Route path='/login' element={<Login />} />
+        <Route path='/addjourney' element={<AddJourney />} />
+        <Route path='/journey' element={<Journey />} />
+        <Route path='/signup' element={<h1>SignUp</h1>} />
+        <Route path='/account' element={<Account />} />
+        <Route path='/review' element={<h1>Review</h1>} />
+        <Route path='/reviews' element={<h1>Reviews</h1>} />
+      </Routes>
+    </>
   );
 };

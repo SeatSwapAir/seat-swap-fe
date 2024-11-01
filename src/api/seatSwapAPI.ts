@@ -9,17 +9,32 @@ import {
   SeatProps,
 } from '../../lib/types';
 
+import { useAuth0 } from '@auth0/auth0-react';
+
 const apiUrl = axios.create({
   baseURL: 'http://localhost:9090/api',
+  // withCredentials: true,
 });
 
 export const getFlightsByUserId = async (
   user_id: Number
 ): Promise<FlightProps[]> => {
+  // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+  // console.log('🚀 ~ file: seatSwapAPI.ts:42 ~ token:', token);
+  // console.log(axios.defaults.headers.common.Authorization);
   try {
+    const { getAccessTokenSilently } = useAuth0();
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: `https://seatswap.api`,
+      },
+    });
+    console.log('🚀 ~ file: seatSwapAPI.ts:43 ~ token:', token);
     const res = await apiUrl.get(`users/${user_id}/flights`);
     return res.data.flights;
   } catch (err) {
+    console.log('🚀 ~ file: seatSwapAPI.ts: 24 ~ err:', err);
     // Ensure that any error is thrown so that useQuery can handle it
     throw err;
   }
@@ -162,6 +177,7 @@ export const getNeighbouringRowsMatches = ({
       throw err;
     });
 };
+
 export const getMatchStatus = ({
   your_seat_id,
   matched_seat_id,
@@ -205,6 +221,7 @@ export const postSwapRequest = ({
       throw err;
     });
 };
+
 export const patchSwapRequest = ({
   body,
   params,
