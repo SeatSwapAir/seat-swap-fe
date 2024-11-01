@@ -10,7 +10,7 @@ import Header from '@/components/Header';
 import AddJourney from '@/components/AddJourney';
 import Journey from '@/components/Journey';
 import { useAuth0, Auth0Provider } from '@auth0/auth0-react';
-import { ReactNode, Suspense } from 'react';
+import { Suspense } from 'react';
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -10,10 +10,6 @@ import {
 } from '../../lib/types';
 import { AxiosInstance } from 'axios';
 
-const apiUrl = axios.create({
-  baseURL: 'http://localhost:9090/api',
-});
-
 export const getFlightsByUserId = async (
   user_id: Number,
   authAxios: AxiosInstance | null
