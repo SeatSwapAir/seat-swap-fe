@@ -6,8 +6,8 @@ import Seat from './Seat';
 import FlightForm from './FlightForm';
 import FlightInfo from './FlightInfo';
 import { useState } from 'react';
-import GroupSeatOffers from './GroupSeatOffers';
-import SoloSeatOffers from './SoloSeatOffers';
+// import GroupSeatOffers from './GroupSeatOffers';
+// import SoloSeatOffers from './SoloSeatOffers';
 
 export default function FlightCard({
   flight,
@@ -56,8 +56,8 @@ export default function FlightCard({
               Remove Flight
             </Button>
             <Typography variant='h5'>Seats Offers</Typography>
-            {numberOfSeats > 1 && <GroupSeatOffers flight_id={rest.id} />}
-            {numberOfSeats === 1 && <SoloSeatOffers flight_id={rest.id} />}
+            {/* {numberOfSeats > 1 && <GroupSeatOffers flight_id={rest.id} />} */}
+            {/* {numberOfSeats === 1 && <SoloSeatOffers flight_id={rest.id} />} */}
             {numberOfSeats === 0 && <div>Add your seats to get offers</div>}
           </Typography>
         </CardContent>
