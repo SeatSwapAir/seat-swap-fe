@@ -14,6 +14,7 @@ const FetchContext = createContext<{ authAxios: AxiosInstance | null }>({
 const { Provider } = FetchContext;
 
 const FetchProvider = ({ children }: { children: ReactNode }) => {
+  const [isTokenReady, setIsTokenReady] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string | undefined>();
   const { getAccessTokenSilently } = useAuth0();
 
@@ -21,8 +22,10 @@ const FetchProvider = ({ children }: { children: ReactNode }) => {
     try {
       const token = await getAccessTokenSilently();
       setAccessToken(token);
+      setIsTokenReady(true);
     } catch (err) {
       console.log(err);
+      setIsTokenReady(false);
     }
   }, [getAccessTokenSilently]);
 
@@ -36,7 +39,9 @@ const FetchProvider = ({ children }: { children: ReactNode }) => {
 
   authAxios.interceptors.request.use(
     (config) => {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+      if (isTokenReady && accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+      }
       return config;
     },
     (error) => {
