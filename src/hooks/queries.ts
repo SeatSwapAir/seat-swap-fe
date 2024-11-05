@@ -11,10 +11,11 @@ import {
 } from '../api/seatSwapAPI';
 
 export function useFlightsByUserId(id: number) {
-  const { authAxios } = useContext(FetchContext);
+  const { authAxios, isTokenReady } = useContext(FetchContext);
   return useQuery({
     queryFn: () => getFlightsByUserId(id, authAxios),
     queryKey: ['getFlightsByUser'],
+    enabled: isTokenReady,
   });
 }
 

@@ -8,8 +8,12 @@ import {
 import { useAuth0 } from '@auth0/auth0-react';
 import axios, { AxiosInstance } from 'axios';
 
-const FetchContext = createContext<{ authAxios: AxiosInstance | null }>({
+const FetchContext = createContext<{
+  authAxios: AxiosInstance | null;
+  isTokenReady: boolean; // Add isTokenReady to the context
+}>({
   authAxios: null,
+  isTokenReady: false, // Provide a default value for isTokenReady
 });
 const { Provider } = FetchContext;
 
@@ -66,6 +70,7 @@ const FetchProvider = ({ children }: { children: ReactNode }) => {
     <Provider
       value={{
         authAxios,
+        isTokenReady,
       }}
     >
       {children}
