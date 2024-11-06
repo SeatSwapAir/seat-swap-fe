@@ -20,7 +20,7 @@ export function useFlightsByUserId(id: number) {
 }
 
 export function useFlightDetails(flightNumber: string, date: string) {
-  const { authAxios, isTokenReady } = useContext(FetchContext);
+  const { authAxios } = useContext(FetchContext);
   return useQuery({
     queryFn: () =>
       getFlightDetails(
@@ -32,7 +32,7 @@ export function useFlightDetails(flightNumber: string, date: string) {
       ),
     initialData: null,
     queryKey: ['getFlightDetails', flightNumber, date],
-    enabled: isTokenReady && !!flightNumber && !!date,
+    enabled: false,
     refetchOnWindowFocus: false,
   });
 }
