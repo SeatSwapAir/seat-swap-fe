@@ -21,7 +21,7 @@ export default function FindFlight({
   flights: FlightProps[] | null;
 }) {
   const [flightNumberAndCarrierCode, setFlightNumberAndCarrierCode] =
-    useState('FR9336');
+    useState('FR2715');
   const [departureDate, setDepartureDate] = useState<Dayjs | null>(dayjs());
   const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
   const [doesJourneyExists, setDoesJourneyExists] = useState<boolean | null>(
@@ -78,6 +78,10 @@ export default function FindFlight({
             <CardTitle>Find Your Journey!</CardTitle>
             <CardDescription>Adventure is calling!</CardDescription>
           </CardHeader>
+          <div>
+            For demo purposes, please enter flight FR2715, date: September 29
+            2025
+          </div>
           <div className='pb-6 grid'>
             <Label className='justify-self-start pb-3' htmlFor='Flight Number'>
               Flight Number
