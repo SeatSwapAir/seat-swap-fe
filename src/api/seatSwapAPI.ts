@@ -385,3 +385,15 @@ export const deleteSeat = async (
     throw err;
   }
 };
+
+export const getSeed = async (
+  authAxios: AxiosInstance | null
+): Promise<string | void> => {
+  try {
+    const res = await authAxios?.get(`seed`);
+    return res?.data;
+  } catch (err) {
+    console.error('Error running seed file:', err);
+    throw err;
+  }
+};

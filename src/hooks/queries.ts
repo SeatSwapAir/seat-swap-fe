@@ -8,6 +8,7 @@ import {
   getJourney,
   getAllSeats,
   getOffers,
+  getSeed,
 } from '../api/seatSwapAPI';
 
 export function useFlightsByUserId(id: number) {
@@ -88,6 +89,16 @@ export function useOffers(user_id: number, flight_id: string) {
     queryKey: ['offers', flight_id, user_id],
     queryFn: () => getOffers({ flight_id, user_id }, authAxios),
     enabled: isTokenReady,
+    // initialData:
+  });
+}
+
+export function useSeed() {
+  const { authAxios, isTokenReady } = useContext(FetchContext);
+  return useQuery({
+    queryKey: ['seed'],
+    queryFn: () => getSeed(authAxios),
+    enabled: false,
     // initialData:
   });
 }
