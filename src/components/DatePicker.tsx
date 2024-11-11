@@ -16,7 +16,7 @@ export function DatePicker2({
 }: {
   handleDateChange: (date: Date) => void;
 }) {
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [date, setDate] = useState<Date | undefined>(new Date('2025-09-29'));
 
   const updateDate = (selected: Date | undefined) => {
     setDate(selected);
