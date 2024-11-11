@@ -22,7 +22,9 @@ export default function FindFlight({
 }) {
   const [flightNumberAndCarrierCode, setFlightNumberAndCarrierCode] =
     useState('FR2715');
-  const [departureDate, setDepartureDate] = useState<Dayjs | null>(dayjs());
+  const [departureDate, setDepartureDate] = useState<Dayjs | null>(
+    dayjs('2025-09-29')
+  );
   const [flightDetails, setFlightDetails] = useState<FlightProps | null>(null);
   const [doesJourneyExists, setDoesJourneyExists] = useState<boolean | null>(
     null
