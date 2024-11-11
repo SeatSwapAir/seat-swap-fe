@@ -94,7 +94,7 @@ export function useOffers(user_id: number, flight_id: string) {
 }
 
 export function useSeed() {
-  const { authAxios, isTokenReady } = useContext(FetchContext);
+  const { authAxios } = useContext(FetchContext);
   return useQuery({
     queryKey: ['seed'],
     queryFn: () => getSeed(authAxios),

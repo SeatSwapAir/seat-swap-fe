@@ -1,6 +1,5 @@
 import { useSeed } from '@/hooks/queries';
-import { Box, Button, Card, CardHeader, Container, Grid } from '@mui/material';
-import { red } from '@mui/material/colors';
+import { Box, Button, Container } from '@mui/material';
 import { CardDescription, CardTitle } from './ui/card';
 
 export default function SeedPrompt() {
