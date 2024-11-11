@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { FetchContext } from '@/context/FetchContext';
 import {
@@ -95,9 +95,15 @@ export function useOffers(user_id: number, flight_id: string) {
 
 export function useSeed() {
   const { authAxios } = useContext(FetchContext);
+  const queryClient = useQueryClient();
+
   return useQuery({
     queryKey: ['seed'],
-    queryFn: () => getSeed(authAxios),
+    queryFn: async () => {
+      const response = await getSeed(authAxios);
+      await queryClient.invalidateQueries();
+      return response;
+    },
     enabled: false,
     // initialData:
   });
