@@ -3,7 +3,7 @@ import { Box, Button, Container } from '@mui/material';
 import { CardDescription, CardTitle } from './ui/card';
 
 export default function SeedPrompt() {
-  const { refetch } = useSeed(); // Disable auto-fetch on mount
+  const { refetch } = useSeed();
 
   return (
     <div>
@@ -14,10 +14,10 @@ export default function SeedPrompt() {
           border: '2px dashed',
           borderColor: '#CC6666',
           borderRadius: '8px',
-          margin: '15px auto', // Centers the container horizontally
-          paddingLeft: '20px', // Adds padding on the left side
-          paddingRight: '20px', // Adds padding on the right side
-          width: '90%', // Makes the container width responsive
+          margin: '15px auto',
+          paddingLeft: '20px',
+          paddingRight: '20px',
+          width: '90%',
         }}
       >
         <CardTitle>This is a demo!</CardTitle>
