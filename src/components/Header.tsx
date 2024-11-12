@@ -9,7 +9,7 @@ const Header = () => {
         <Link to={`/`} style={{ color: 'inherit', textDecoration: 'none' }}>
           <div className='font-bold text-xl flex align-middle items-center'>
             <img
-              src='/SeatSwapIconMono.png'
+              src='public/SeatSwapIconMono.png'
               alt='logo'
               className='h-10 w-10 mr-2'
             />{' '}
