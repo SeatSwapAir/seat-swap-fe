@@ -14,7 +14,7 @@ const SeatCardSwap = ({ seat }: { seat: SeatProps }) => {
     <div className='p-0'>
       <ul className='flex flex-row list-none p-0 items-center'>
         <li className='text-lg ml-2 mr-2'>
-          <span className='hidden lg:inline-block mr-1'>Seat </span>
+          {/* <span className='hidden lg:inline-block mr-1'>Seat </span> */}
 
           {seat.seat_row}
           {seat.seat_letter}
