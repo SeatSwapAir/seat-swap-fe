@@ -5,7 +5,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 export default function MainMenu() {
   const isDesktop = useMediaQuery('(min-width: 768px)');
-  const { logout } = useAuth0();
+  const { logout, isAuthenticated } = useAuth0();
+  console.log('🚀 ~ main-menu.tsx:9 ~ isAuthenticated:', isAuthenticated);
 
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
@@ -18,9 +19,13 @@ export default function MainMenu() {
         <li>Your Journeys</li>
         <li>Add Journey</li>
         <li>Reviews</li> */}
-        <li>
-          <button onClick={handleLogout}>Logout</button>
-        </li>
+        {isAuthenticated ? (
+          <li>
+            <button onClick={handleLogout}>Logout</button>
+          </li>
+        ) : (
+          ' '
+        )}
       </ul>
     </div>
   ) : (
@@ -35,9 +40,13 @@ export default function MainMenu() {
             <li>Your Journeys</li>
             <li>Add Journey</li>
             <li>Reviews</li> */}
-            <li>
-              <button onClick={handleLogout}>Logout</button>
-            </li>
+            {isAuthenticated ? (
+              <li>
+                <button onClick={handleLogout}>Logout</button>
+              </li>
+            ) : (
+              ' '
+            )}
           </ul>
         </DrawerContent>
       </Drawer>
