@@ -56,7 +56,7 @@ export default function FindFlight({
     setDoesJourneyExists(false);
   };
 
-  if (!departureDate) return;
+  if (!departureDate) return null;
 
   const scheduledDepartureDate = departureDate?.format('YYYY-MM-DD');
 
