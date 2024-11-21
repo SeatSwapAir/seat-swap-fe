@@ -46,7 +46,12 @@ export default function FindFlight({
       setDoesJourneyExists(true);
       return;
     }
-    FlightDetailsQuery.refetch(); //Should I add qury key to refetch only 'getFlightDetails' not 'getFlightsByUser'?
+    FlightDetailsQuery.refetch();
+
+    if (FlightDetailsQuery.isSuccess && FlightDetailsQuery.data) {
+      setFlightDetails(FlightDetailsQuery.data);
+      navigate('/addjourney', { state: { flight: FlightDetailsQuery.data } });
+    }
 
     setDoesJourneyExists(false);
   };
@@ -63,14 +68,6 @@ export default function FindFlight({
   const handleDateChange = (date: Date) => {
     setDepartureDate(dayjs(date));
   };
-
-  useEffect(() => {
-    if (FlightDetailsQuery.isSuccess && FlightDetailsQuery.data) {
-      setFlightDetails(FlightDetailsQuery.data);
-      navigate('/addjourney', { state: { flight: FlightDetailsQuery.data } });
-    }
-    // navigate('/addjourney', { state: { flight: flightDetails } })
-  }, [FlightDetailsQuery.isSuccess, FlightDetailsQuery.data]);
 
   return (
     <>
