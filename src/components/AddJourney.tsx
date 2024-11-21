@@ -49,6 +49,10 @@ export default function AddJourney() {
     });
   };
 
+  const handleCancelJourney = () => {
+    navigate('/');
+  };
+
   useEffect(() => {
     if (mutateAddJourney.isSuccess) {
       navigate('/journey', { state: { user_id: 21, flight_id: flight.id } });
@@ -82,6 +86,13 @@ export default function AddJourney() {
             {seatError && <div>{seatError}</div>}
             <Button className='my-4' onClick={() => handleAddJourney()}>
               Confirm your journey!
+            </Button>{' '}
+            <Button
+              className='my-4'
+              variant='outline'
+              onClick={() => handleCancelJourney()}
+            >
+              Cancel
             </Button>
           </div>
         </div>
